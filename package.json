@@ -1,0 +1,13 @@
+{
+  "name": "stacksignal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tech & AI blog: zero-dependency static site generator built for SEO experiments",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs && npx --yes serve dist -l 8080",
+    "serve": "python3 -m http.server 8080 -d dist"
+  }
+}

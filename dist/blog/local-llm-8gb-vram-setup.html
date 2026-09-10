@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ai">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run a Local LLM on 8GB VRAM: Practical 2026 Setup Guide</title>
+<meta name="description" content="A practical guide to running a local LLM on 8GB VRAM: model choices, quantisation levels, context limits, throughput expectations and tuning tips.">
+<meta name="keywords" content="local llm 8gb vram, quantization guide, run llm locally, gguf models">
+<link rel="canonical" href="https://your-domain.com/blog/local-llm-8gb-vram-setup.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="author" content="Shaurya">
+<meta name="theme-color" content="#07080d">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="StackSignal">
+<meta property="og:title" content="Run a Local LLM on 8GB VRAM: Practical 2026 Setup Guide">
+<meta property="og:description" content="A practical guide to running a local LLM on 8GB VRAM: model choices, quantisation levels, context limits, throughput expectations and tuning tips.">
+<meta property="og:url" content="https://your-domain.com/blog/local-llm-8gb-vram-setup.html">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://your-domain.com/assets/img/og-ai.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@stacksignal">
+<meta name="twitter:title" content="Run a Local LLM on 8GB VRAM: Practical 2026 Setup Guide">
+<meta name="twitter:description" content="A practical guide to running a local LLM on 8GB VRAM: model choices, quantisation levels, context limits, throughput expectations and tuning tips.">
+<meta name="twitter:image" content="https://your-domain.com/assets/img/og-ai.svg">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/icon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/img/icon-180.png">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="alternate" type="application/rss+xml" title="StackSignal feed" href="https://your-domain.com/rss.xml">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="../assets/css/style.css">
+<script>window.SITE_BASE="../";</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Run a Local LLM on 8GB VRAM: Practical Setup","description":"A practical guide to running a local LLM on 8GB VRAM: model choices, quantisation levels, context limits, throughput expectations and tuning tips.","datePublished":"2026-09-03","dateModified":"2026-09-03","author":{"@type":"Person","name":"Shaurya"},"publisher":{"@type":"Organization","name":"StackSignal","logo":{"@type":"ImageObject","url":"https://your-domain.com/assets/img/favicon.svg"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://your-domain.com/blog/local-llm-8gb-vram-setup.html"},"articleSection":"AI","keywords":"Local LLM, Quantisation, Hardware","wordCount":1537,"inLanguage":"en","image":"https://your-domain.com/assets/img/og-ai.svg"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://your-domain.com/index.html"},{"@type":"ListItem","position":2,"name":"AI","item":"https://your-domain.com/ai.html"},{"@type":"ListItem","position":3,"name":"Run a Local LLM on 8GB VRAM: Practical Setup","item":"https://your-domain.com/blog/local-llm-8gb-vram-setup.html"}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
+<header class="hdr">
+  <div class="wrap hdr__in">
+    <a class="logo" href="../index.html" aria-label="StackSignal home">
+  <span class="logo__mark" aria-hidden="true"><span class="logo__cube"><span class="logo__face"></span><span class="logo__face"></span><span class="logo__face"></span></span></span>
+  <span class="logo__txt">StackSignal<small>Tech &amp; AI</small></span>
+</a>
+    <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
+    <nav class="nav" id="nav" aria-label="Primary">
+      <a href="../index.html">Home</a>
+      <a href="../tech.html">Tech</a>
+      <a href="../ai.html" aria-current="page">AI</a>
+      <a href="../blog/index.html">All posts</a>
+      <a href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> / <a href="../ai.html">AI</a> / <span>Run a Local LLM on 8GB VRAM: Practical Setup</span></nav>
+    <div class="article-grid">
+    <article class="article">
+      <span class="badge badge--ai">AI</span>
+      <h1>Run a Local LLM on 8GB VRAM: Practical Setup</h1>
+      <div class="article__meta">
+        <span>By Shaurya</span><span aria-hidden="true">•</span>
+        <time datetime="2026-09-03">Sep 3, 2026</time><span aria-hidden="true">•</span>
+        <span>7 min read</span><span aria-hidden="true">•</span>
+        <span>Updated Sep 3, 2026</span>
+      </div>
+      <p class="article__lede">A mid-range GPU runs a genuinely useful assistant — if you respect the memory maths.</p>
+      <div class="prose"><div class="takeaways"><h4>Key takeaways</h4><ul><li>8GB comfortably runs 7B–8B models at four-bit quantisation — genuinely useful territory.</li><li>Prefer a larger model at Q4 over a smaller model at Q8.</li><li>The moment any layer spills to system memory, speed falls off a cliff. Staying inside VRAM matters more than any other tweak.</li></ul></div>
+<h2>What 8GB of VRAM can realistically do</h2>
+<div class="stat-strip"><div><b>7–8B</b><span>comfortable</span></div><div><b>13–14B</b><span>tight</span></div><div><b>~5.5GB</b><span>weight budget</span></div><div><b>30–60</b><span>tokens/sec</span></div></div>
+
+<p>Eight gigabytes of video memory is the most common configuration among enthusiast graphics cards, and it sits at an awkward point for language models. It is comfortably enough to run capable models well, and not nearly enough to run the largest ones at all. Knowing exactly where that boundary falls saves a great deal of wasted downloading.</p>
+<p>The practical summary is straightforward. With 8GB you can run 7B and 8B parameter models comfortably at good quality, 13B and 14B models with tighter quantisation and reduced context, and anything substantially larger only by offloading layers to system memory, which slows generation to the point of frustration for interactive use.</p>
+<p>This is genuinely useful territory. Modern 7B and 8B models handle summarisation, drafting, code assistance, classification, extraction and conversational tasks at a quality that would have required a data centre a few years ago.</p>
+
+<h2>Understanding quantisation, briefly but properly</h2>
+<div class="table-wrap"><table><thead><tr><th>Format</th><th>Size (7B)</th><th>Use when</th></tr></thead><tbody><tr><td>Q4_K_M</td><td>~4.0 GB</td><td>Default choice</td></tr><tr><td>Q5_K_M</td><td>~5.0 GB</td><td>You have headroom</td></tr><tr><td>Q8_0</td><td>~7.5 GB</td><td>Rarely fits</td></tr><tr><td>Q3 and below</td><td>~3.0 GB</td><td>Last resort only</td></tr></tbody></table></div>
+
+<p>Model weights are stored at some numeric precision. Full precision uses sixteen bits per parameter, so a 7B model needs roughly 14GB of memory for weights alone &mdash; already beyond your budget before accounting for context or overhead.</p>
+<p>Quantisation reduces that precision. Four-bit quantisation stores each weight in roughly a quarter of the space, bringing the same 7B model down to approximately 4GB. The trade is a small loss of accuracy, and modern quantisation methods make that loss remarkably small.</p>
+<p>The common formats, in the order most people encounter them:</p>
+<ul>
+<li><strong>Q4_K_M</strong> &mdash; the standard recommendation. Roughly four and a half bits per weight, with a well-judged balance of quality and size. Start here unless you have a reason not to.</li>
+<li><strong>Q5_K_M</strong> &mdash; noticeably better fidelity at around 25% more memory. Worth it for a 7B model on an 8GB card, where the headroom exists.</li>
+<li><strong>Q8_0</strong> &mdash; near-lossless, but roughly double the size of Q4. Generally impractical here except for very small models.</li>
+<li><strong>Q3 and below</strong> &mdash; use only when the alternative is not running the model at all. Quality degradation becomes obvious, particularly in reasoning and instruction following.</li>
+</ul>
+<p>A useful mental model: dropping from Q8 to Q4 costs far less quality than dropping from a 13B model to a 7B model. Prefer a larger model at Q4 over a smaller model at Q8 when both fit.</p>
+
+<h2>Budgeting your 8GB honestly</h2>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Model weights are not the only consumer.</strong> The KV cache, compute overhead and your desktop environment together claim 1–2GB before the model loads. This is why most first attempts fail.</p></div></div>
+
+<p>Model weights are not the only consumer of video memory, and this is where most first attempts fail.</p>
+<ul>
+<li><strong>Model weights</strong> &mdash; the figure quoted on the download page.</li>
+<li><strong>KV cache</strong> &mdash; memory holding the attention state for the current context. This scales linearly with context length and is frequently underestimated. A long context window can consume more than a gigabyte on its own.</li>
+<li><strong>Compute overhead</strong> &mdash; activations and working buffers during inference, typically a few hundred megabytes.</li>
+<li><strong>Your desktop environment</strong> &mdash; on Linux with a desktop running, expect 400MB to 1GB already occupied before you start. On Windows the figure is often higher.</li>
+</ul>
+<p>A workable budget for an 8GB card looks like this: reserve roughly 1GB for the system, allow around 1GB for cache and overhead at moderate context, and target model weights of approximately 5.5GB or less. That comfortably accommodates a 7B or 8B model at Q4_K_M or Q5_K_M.</p>
+<p>If a model loads but generation is dramatically slower than expected, you have almost certainly exceeded VRAM and silently spilled into system memory.</p>
+
+<h2>Choosing your runtime</h2>
+<p>Three approaches cover nearly all practical use, and they differ mainly in how much control they expose.</p>
+<h3>Ollama</h3>
+<p>The simplest path. It manages downloads, quantisation selection and serving behind a single command, and exposes an HTTP API compatible with common client libraries. Sensible defaults, minimal configuration, and by far the fastest route from nothing to a working model. The trade-off is less granular control over inference parameters.</p>
+<h3>llama.cpp</h3>
+<p>The engine underneath much of the ecosystem. Running it directly gives complete control over layer offloading, context size, batch size, cache quantisation and threading. If you are trying to squeeze a slightly-too-large model onto the card, this is where the knobs are. It requires reading documentation and accepting some trial and error.</p>
+<h3>LM Studio or a similar GUI</h3>
+<p>A graphical interface over the same engines, with model browsing, an estimate of whether a given file will fit, and a chat interface. Excellent for exploration and for sharing a setup with someone who does not use a terminal.</p>
+<p>A reasonable progression is to start with Ollama, confirm the hardware works and the quality is acceptable, then move to llama.cpp if you find yourself needing finer control.</p>
+
+<h2>Getting more out of the same card</h2>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">✓</span><div><p><strong>Close the browser.</strong> Genuinely. A modern browser with hardware acceleration can hold a gigabyte of VRAM — sometimes exactly the gigabyte you need.</p></div></div>
+
+<p>Several adjustments materially improve throughput without new hardware.</p>
+<ul>
+<li><strong>Reduce context length to what you actually use.</strong> This is the single largest lever. Many defaults allocate a very large window; if your prompts are short, reducing it frees substantial memory for the model itself.</li>
+<li><strong>Quantise the KV cache.</strong> Storing cache at eight bits rather than sixteen roughly halves its footprint with minimal quality impact, which can be the difference between fitting and not fitting.</li>
+<li><strong>Offload deliberately, not accidentally.</strong> If a model slightly exceeds VRAM, explicitly place a specific number of layers on the GPU and the remainder on the CPU. Controlled offloading is far better than an automatic fallback.</li>
+<li><strong>Enable flash attention</strong> where supported. It reduces memory use during attention computation and typically improves speed.</li>
+<li><strong>Close the browser.</strong> Genuinely. A modern browser with hardware acceleration can hold a gigabyte or more of VRAM, and reclaiming it sometimes lets a model fit that otherwise does not.</li>
+<li><strong>On Linux, consider stopping the desktop session</strong> for a long batch job and running from a console. This can free close to a full gigabyte.</li>
+</ul>
+
+<h2>What to expect in terms of speed</h2>
+<p>Generation speed is measured in tokens per second. For interactive use, anything above roughly fifteen tokens per second feels acceptable, since it comfortably exceeds normal reading speed.</p>
+<p>On a typical 8GB consumer card with a 7B model fully resident in VRAM at four-bit quantisation, generation speeds in the range of thirty to sixty tokens per second are common. Prompt processing is usually much faster than generation, so long inputs cost less time than long outputs.</p>
+<p>The moment any layers spill to system memory, expect a severe drop &mdash; frequently to single-digit tokens per second, because data must cross the PCIe bus for every token. This cliff is why staying within VRAM matters far more than any other optimisation.</p>
+<p>Measure your own numbers rather than trusting published benchmarks. Report the model, quantisation, context length, and whether the entire model was resident in VRAM, since a benchmark missing those details is not reproducible.</p>
+
+<h2>Choosing which model to run</h2>
+<p>Rather than naming specific models, which change constantly, use selection criteria that stay valid:</p>
+<ul>
+<li><strong>Prefer recent releases.</strong> The rate of improvement at small parameter counts remains high; a current 7B model often outperforms a considerably larger model from eighteen months earlier.</li>
+<li><strong>Match the model to the task.</strong> Code-specialised models outperform general models on code by a wide margin at the same size. The same applies to instruction-tuned versus base models &mdash; use instruction-tuned unless you are building something unusual.</li>
+<li><strong>Check the licence</strong> if there is any chance of commercial use. Open weights and open licences are not the same thing.</li>
+<li><strong>Test on your actual workload.</strong> Public leaderboards measure aggregate ability on academic benchmarks. Assemble twenty prompts representative of your real use and compare candidates on those. The result frequently disagrees with the leaderboard.</li>
+</ul>
+
+<h2>When local stops making sense</h2>
+<p>Running locally is compelling for privacy, offline operation, zero marginal cost and freedom to experiment. It stops making sense in identifiable situations, and recognising them early saves frustration.</p>
+<ul>
+<li>You need frontier-level reasoning quality. No 8GB-class model matches the largest hosted models on genuinely hard tasks, and quantisation cannot close that gap.</li>
+<li>You need to serve many concurrent users. A single consumer card handles one conversation well and several poorly.</li>
+<li>Your workload is occasional. Hosted API costs for light, intermittent use are frequently lower than the electricity and hardware amortisation.</li>
+<li>You need very long context windows. Memory requirements scale with context, and this is exactly where 8GB runs out first.</li>
+</ul>
+<p>A common and sensible arrangement is hybrid: run a local model for high-volume, privacy-sensitive or routine work, and route genuinely difficult requests to a hosted model. If you are building retrieval on top of a local model, the architectural considerations are covered in <a href="./rag-vs-fine-tuning.html">RAG versus fine-tuning</a>.</p>
+      
+      </div>
+      <ul class="tags" style="margin-top:2rem"><li>#Local LLM</li><li>#Quantisation</li><li>#Hardware</li></ul>
+    </article>
+    <aside class="toc" data-toc aria-label="Table of contents"></aside>
+    </div>
+  </div>
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><div><h2>Latest updates</h2><p>The four most recent posts across StackSignal.</p></div><a class="btn" href="../blog/index.html">All posts</a></div>
+      <div class="grid" data-feed="" data-limit="4" data-exclude="blog/local-llm-8gb-vram-setup.html"><article class="card reveal">
+  <span class="badge badge--ai">AI</span>
+  <h3><a href="../blog/rag-vs-fine-tuning.html">RAG vs Fine-Tuning: How to Choose</a></h3>
+  <p>RAG vs fine-tuning explained with a clear decision framework: cost, freshness, accuracy, latency and when to combine both approaches.</p>
+  <div class="card__meta"><time datetime="2026-09-09">Sep 9, 2026</time><span aria-hidden="true">•</span><span>6 min read</span></div>
+</article><article class="card reveal">
+  <span class="badge badge--tech">Tech</span>
+  <h3><a href="../blog/core-web-vitals-checklist-2026.html">Core Web Vitals Checklist for 2026 (INP, LCP, CLS)</a></h3>
+  <p>A field-tested Core Web Vitals checklist for 2026: how to pass INP, LCP and CLS on real devices, with the exact fixes that move the numbers.</p>
+  <div class="card__meta"><time datetime="2026-09-08">Sep 8, 2026</time><span aria-hidden="true">•</span><span>7 min read</span></div>
+</article><article class="card reveal">
+  <span class="badge badge--ai">AI</span>
+  <h3><a href="../blog/ai-seo-topical-authority.html">AI SEO: Building Topical Authority That Ranks #1</a></h3>
+  <p>How to build topical authority with AI-assisted workflows: entity coverage, internal linking clusters, structured data and content that survives AI search.</p>
+  <div class="card__meta"><time datetime="2026-09-06">Sep 6, 2026</time><span aria-hidden="true">•</span><span>7 min read</span></div>
+</article><article class="card reveal">
+  <span class="badge badge--tech">Tech</span>
+  <h3><a href="../blog/cut-javascript-bundle-size.html">How to Cut JavaScript Bundle Size by 60%</a></h3>
+  <p>A repeatable process to cut JavaScript bundle size by 60%: measure, split, replace heavy dependencies and delete dead code — without losing features.</p>
+  <div class="card__meta"><time datetime="2026-09-05">Sep 5, 2026</time><span aria-hidden="true">•</span><span>6 min read</span></div>
+</article></div>
+    </div>
+  </section>
+</main>
+<footer class="foot">
+  <div class="wrap foot__grid">
+    <div>
+      <a class="logo" href="../index.html" aria-label="StackSignal home">
+  <span class="logo__mark" aria-hidden="true"><span class="logo__cube"><span class="logo__face"></span><span class="logo__face"></span><span class="logo__face"></span></span></span>
+  <span class="logo__txt">StackSignal<small>Tech &amp; AI</small></span>
+</a>
+      <p style="margin-top:.8rem">StackSignal publishes deeply practical engineering and AI guides: performance, architecture, LLMs and applied machine learning.</p>
+    </div>
+    <div><h4>Categories</h4><ul>
+      <li><a href="../tech.html">Tech</a></li>
+      <li><a href="../ai.html">AI</a></li>
+      <li><a href="../blog/index.html">All posts</a></li>
+    </ul></div>
+    <div><h4>Site</h4><ul>
+      <li><a href="../about.html">About</a></li>    </ul></div>
+    <div><h4>Popular topics</h4><ul>
+      <li>Core Web Vitals</li><li>Performance</li><li>SEO</li><li>JavaScript</li><li>Bundling</li>
+    </ul></div>
+  </div>
+  <div class="wrap" style="margin-top:2rem;font-size:.82rem">© 2026 StackSignal. Built as a static site — Tech & AI, decoded.</div>
+</footer>
+<button class="to-top" type="button" aria-label="Scroll back to top" title="Back to top">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+</button>
+<script src="../assets/js/hero3d.js" defer></script>
+<script src="../assets/js/app.js" defer></script>
+</body>
+</html>

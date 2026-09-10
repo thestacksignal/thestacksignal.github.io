@@ -1,0 +1,94 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>Serverless wins on spiky and very low traffic. Always-on wins on steady, substantial load.</li><li>Serverless does not remove operations — it swaps infrastructure work for platform expertise.</li><li>Measure your peak-to-median ratio before choosing. Above ~5 favours serverless.</li></ul></div>
+<h2>The comparison nobody publishes honestly</h2>
+<p>Most self-hosting versus serverless comparisons are written by someone selling one of the two. The vendor content shows serverless costing almost nothing at low traffic. The independent blog posts show a horror story where a misconfigured function generated a five-figure invoice overnight. Both are real, and neither tells you what your workload will cost.</p>
+<p>The honest answer is that the decision hinges on three variables specific to you: how spiky your traffic is, how much operational time you can afford, and how predictable your costs need to be. Get those three right and the architecture follows.</p>
+
+<h2>What each model actually means</h2>
+<div class="table-wrap"><table><thead><tr><th>Factor</th><th>Self-hosting</th><th>Serverless</th></tr></thead><tbody><tr><td>You pay for</td><td>Time (always on)</td><td>Invocations + duration</td></tr><tr><td>Steady traffic</td><td>Cheaper</td><td>Expensive</td></tr><tr><td>Spiky traffic</td><td>Wasteful</td><td>Excellent</td></tr><tr><td>Cost predictability</td><td>Fixed</td><td>Variable</td></tr><tr><td>Ops burden</td><td>Yours</td><td>Platform’s</td></tr><tr><td>Cold starts</td><td>None</td><td>Possible</td></tr></tbody></table></div>
+
+<p>The vocabulary has drifted, so it is worth being precise.</p>
+<p><strong>Self-hosting</strong> here means you rent compute that runs continuously &mdash; a virtual private server, a dedicated machine, or a managed container platform where you choose the instance count. You pay for time, whether or not anyone visits. You are responsible for the operating system, runtime, deployment, monitoring and security patching.</p>
+<p><strong>Serverless</strong> means you deploy functions or containers that the platform starts on demand and stops when idle. You pay for invocations and execution duration. The platform handles capacity, patching and scaling. You give up control over the runtime environment and accept constraints on execution time, memory and local state.</p>
+<p>The critical difference is not technical. It is that one model converts operations work into money, and the other converts money into operations work.</p>
+
+<h2>Cost: where the crossover actually sits</h2>
+<p>Serverless pricing is genuinely excellent at two extremes: very low traffic and very spiky traffic. It becomes expensive in the middle, where load is steady and substantial.</p>
+<p>Consider the shape rather than the exact numbers, which change constantly.</p>
+<ul>
+<li><strong>A hobby project</strong> serving a few thousand requests a month usually costs nothing on serverless free tiers, versus a fixed monthly fee for the smallest VPS. Serverless wins clearly.</li>
+<li><strong>A steady production API</strong> handling sustained traffic around the clock frequently costs several times more on per-invocation pricing than on two modest always-on instances. Self-hosting wins clearly.</li>
+<li><strong>A spiky workload</strong> &mdash; a ticketing system, a campaign landing page, a service with a daily batch peak &mdash; is where serverless earns its premium. Provisioning always-on capacity for the peak means paying for idle capacity the rest of the time.</li>
+</ul>
+<p>Two costs are consistently underestimated in serverless budgets. The first is data transfer, particularly egress, which is often billed separately and can exceed compute cost for media-heavy applications. The second is the surrounding managed services &mdash; managed databases, queues, object storage, API gateways and log retention &mdash; which the function itself needs to be useful.</p>
+<p>Two costs are consistently underestimated in self-hosting budgets as well. The first is your time: patching, certificate renewal, log rotation, upgrades and the occasional 3am incident are real expenses even when no invoice arrives. The second is redundancy. A single server is not a production architecture; comparing one VPS against a globally distributed serverless platform is not comparing like with like.</p>
+
+<h2>Cold starts, and when they genuinely matter</h2>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>Cold starts are the <strong>most discussed</strong> serverless drawback and frequently the <strong>least relevant</strong> one. For background jobs and webhooks, nobody is waiting.</p></div></div>
+
+<p>Cold starts are the most discussed serverless drawback and frequently the least relevant one.</p>
+<p>A cold start occurs when a request arrives with no warm instance available, so the platform must initialise a runtime. The penalty ranges from a few milliseconds for lightweight edge runtimes to several seconds for a large container with a heavy dependency tree and a database connection to establish.</p>
+<p>Whether that matters depends entirely on context:</p>
+<ul>
+<li><strong>It matters a great deal</strong> for user-facing requests on the critical path, where an occasional multi-second delay is visible and damaging.</li>
+<li><strong>It matters very little</strong> for background jobs, webhooks, scheduled tasks and asynchronous processing, where nobody is waiting.</li>
+<li><strong>It is largely solved</strong> by edge runtimes for simple request handling, and by provisioned concurrency &mdash; which reintroduces a fixed cost and therefore erodes the original economic argument.</li>
+</ul>
+<p>You can substantially reduce cold-start impact by minimising dependencies, avoiding heavyweight initialisation at module scope, and using connection pooling proxies for databases rather than opening a new connection per invocation.</p>
+
+<h2>Operational burden is the real deciding factor</h2>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p>Teams choose infrastructure on price, then live with the operational consequences for years. Reverse that order and the decision usually becomes obvious.</p></div></div>
+
+<p>Teams choose infrastructure on price and then live with the operational consequences for years. Reverse that order and the decision usually becomes obvious.</p>
+<p>Self-hosting means you own:</p>
+<ul>
+<li>Operating system and runtime patching, on a schedule you actually keep</li>
+<li>TLS certificate provisioning and renewal</li>
+<li>Log collection, rotation and retention</li>
+<li>Monitoring, alerting and someone to receive the alerts</li>
+<li>Backup creation and, more importantly, tested restoration</li>
+<li>Capacity planning and the response when you get it wrong</li>
+</ul>
+<p>None of this is difficult in isolation. Collectively, it is a steady tax that scales with the number of services you run, and it is paid by whoever is least able to refuse it.</p>
+<p>Serverless removes most of that list and replaces it with a smaller but sharper one: understanding the platform's limits, debugging distributed execution across many short-lived invocations, managing cold paths, and controlling spend. Observability is genuinely harder because there is no long-lived process to inspect.</p>
+<p>The honest summary is that serverless does not eliminate operations. It substitutes infrastructure operations for platform expertise.</p>
+
+<h2>Lock-in, and how much to worry about it</h2>
+<p>Lock-in concerns are frequently overstated for stateless compute and understated for everything else.</p>
+<p>A function containing ordinary application logic is straightforward to move. A system built around a specific provider's queues, event bus, identity service, managed database dialect and infrastructure-as-code definitions is not. The compute layer is rarely the trap; the surrounding services are.</p>
+<p>If portability matters, keep business logic in plain, framework-agnostic modules and confine provider-specific code to a thin adapter layer at the edges. This is good design regardless of hosting model, and it makes migration a matter of rewriting adapters rather than rewriting the product.</p>
+
+<h2>A decision framework you can apply in ten minutes</h2>
+<p><strong>Choose serverless when:</strong></p>
+<ul>
+<li>Traffic is unpredictable, seasonal or heavily spiked</li>
+<li>The team is small and has no dedicated operations capacity</li>
+<li>Workloads are event-driven, asynchronous or scheduled</li>
+<li>You are validating an idea and want to avoid fixed costs before product-market fit</li>
+<li>Global low-latency delivery matters and you do not want to manage regions</li>
+</ul>
+<p><strong>Choose self-hosting when:</strong></p>
+<ul>
+<li>Traffic is steady and reasonably predictable</li>
+<li>Costs must be fixed and forecastable, with no possibility of a runaway bill</li>
+<li>Workloads are long-running, stateful, or require persistent connections such as WebSockets</li>
+<li>You need specific runtimes, GPU access, or unusual system-level dependencies</li>
+<li>Data residency or compliance requirements constrain where and how data is processed</li>
+</ul>
+<p><strong>Choose static hosting</strong> &mdash; a third option people forget &mdash; when your application is fundamentally content. A blog, documentation site or marketing site rendered to static HTML and served from a CDN is faster than both alternatives, costs almost nothing, and has essentially no operational surface. Reach for compute only for the parts that genuinely need it, such as a contact form or a search endpoint.</p>
+
+<h2>The hybrid pattern most mature teams end up with</h2>
+<blockquote><p>This is not fence-sitting. It is matching each workload’s shape to the pricing model that suits it.</p></blockquote>
+
+<p>In practice the answer is rarely exclusive. A common and sensible arrangement looks like this:</p>
+<ul>
+<li>Static assets and pre-rendered pages on a CDN, because that is unbeatable on cost and latency</li>
+<li>The steady core API on always-on instances, because predictable load is cheaper that way</li>
+<li>Spiky, bursty or scheduled work on serverless functions, because that is exactly what they are good at</li>
+<li>Managed services for databases and object storage, because self-managing stateful systems is where most operational pain concentrates</li>
+</ul>
+<p>This is not fence-sitting. It is matching each workload's shape to the pricing model that suits it.</p>
+
+<h2>How to decide without guessing</h2>
+<p>Instrument before you architect. Collect two weeks of request data and answer three questions: what is the peak-to-median ratio, what is the median response duration, and what proportion of requests are user-facing?</p>
+<p>A peak-to-median ratio above roughly five makes serverless economics attractive. A ratio near one, with meaningful sustained volume, makes always-on capacity cheaper. Short durations favour per-invocation pricing; long ones penalise it heavily.</p>
+<p>Then model the cost of both options against those numbers rather than against a generic example. The calculation takes an afternoon and prevents a migration you would otherwise perform twice.</p>

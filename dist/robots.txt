@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /404.html
+
+# AI crawlers — allow (remove a line to block that bot)
+User-agent: GPTBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+
+Sitemap: https://your-domain.com/sitemap.xml

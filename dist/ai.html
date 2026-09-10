@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ai">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Blog — LLMs, RAG &amp; Applied ML | StackSignal</title>
+<meta name="description" content="Practical AI guides: RAG vs fine-tuning, local LLM setups, evaluation, prompt architecture and AI-era SEO.">
+<meta name="keywords" content="ai blog, LLM, RAG, Fine-Tuning, SEO, AI, Content Strategy, Local LLM, Quantisation, Hardware">
+<link rel="canonical" href="https://your-domain.com/ai.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="author" content="Shaurya">
+<meta name="theme-color" content="#07080d">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="StackSignal">
+<meta property="og:title" content="AI Blog — LLMs, RAG &amp; Applied ML | StackSignal">
+<meta property="og:description" content="Practical AI guides: RAG vs fine-tuning, local LLM setups, evaluation, prompt architecture and AI-era SEO.">
+<meta property="og:url" content="https://your-domain.com/ai.html">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://your-domain.com/assets/img/og-ai.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@stacksignal">
+<meta name="twitter:title" content="AI Blog — LLMs, RAG &amp; Applied ML | StackSignal">
+<meta name="twitter:description" content="Practical AI guides: RAG vs fine-tuning, local LLM setups, evaluation, prompt architecture and AI-era SEO.">
+<meta name="twitter:image" content="https://your-domain.com/assets/img/og-ai.svg">
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" href="./assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="./assets/img/icon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./assets/img/icon-180.png">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="alternate" type="application/rss+xml" title="StackSignal feed" href="https://your-domain.com/rss.xml">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="./assets/css/style.css">
+<script>window.SITE_BASE="./";</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"AI Blog — LLMs, RAG & Applied ML","description":"Practical AI guides: RAG vs fine-tuning, local LLM setups, evaluation, prompt architecture and AI-era SEO.","url":"https://your-domain.com/ai.html","isPartOf":{"@type":"WebSite","name":"StackSignal","url":"https://your-domain.com"},"mainEntity":{"@type":"ItemList","itemListElement":[{"@type":"ListItem","position":1,"url":"https://your-domain.com/blog/rag-vs-fine-tuning.html","name":"RAG vs Fine-Tuning: How to Choose"},{"@type":"ListItem","position":2,"url":"https://your-domain.com/blog/ai-seo-topical-authority.html","name":"AI SEO: Building Topical Authority That Ranks #1"},{"@type":"ListItem","position":3,"url":"https://your-domain.com/blog/local-llm-8gb-vram-setup.html","name":"Run a Local LLM on 8GB VRAM: Practical Setup"}]}}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr__in">
+    <a class="logo" href="./index.html" aria-label="StackSignal home">
+  <span class="logo__mark" aria-hidden="true"><span class="logo__cube"><span class="logo__face"></span><span class="logo__face"></span><span class="logo__face"></span></span></span>
+  <span class="logo__txt">StackSignal<small>Tech &amp; AI</small></span>
+</a>
+    <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
+    <nav class="nav" id="nav" aria-label="Primary">
+      <a href="./index.html">Home</a>
+      <a href="./tech.html">Tech</a>
+      <a href="./ai.html" aria-current="page">AI</a>
+      <a href="./blog/index.html">All posts</a>
+      <a href="./about.html">About</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section class="hero">
+    <canvas class="hero__canvas" data-shape="network" aria-hidden="true"></canvas>
+    <div class="wrap hero__in">
+      <span class="kicker">AI category</span>
+      <h1><span class="grad">Applied intelligence</span></h1>
+      <p class="lede">LLM systems, retrieval, evaluation and the workflows that make models useful instead of impressive.</p>
+      <div class="search" data-scope="ai" role="search">
+  <label class="sr" for="q-ai">Search articles</label>
+  <div class="search__box">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q-ai" type="search" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="res-ai" placeholder="Search AI articles…">
+    <kbd>/</kbd>
+  </div>
+  <ul class="search__results" id="res-ai" role="listbox"></ul>
+</div>
+      <ul class="hero__stats"><li><b>8GB</b><span>VRAM local LLM</span></li><li><b>3x</b><span>retrieval accuracy</span></li><li><b>0</b><span>hype tolerated</span></li></ul>
+    </div>
+  </section>
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><div><h2>All AI articles</h2><p>3 in-depth AI guides, newest first.</p></div><a class="btn" href="./blog/index.html">All posts →</a></div>
+      <div class="grid"><article class="card reveal">
+  <span class="badge badge--ai">AI</span>
+  <h3><a href="./blog/rag-vs-fine-tuning.html">RAG vs Fine-Tuning: How to Choose</a></h3>
+  <p>RAG vs fine-tuning explained with a clear decision framework: cost, freshness, accuracy, latency and when to combine both approaches.</p>
+  <div class="card__meta"><time datetime="2026-09-09">Sep 9, 2026</time><span aria-hidden="true">•</span><span>6 min read</span></div>
+</article><article class="card reveal">
+  <span class="badge badge--ai">AI</span>
+  <h3><a href="./blog/ai-seo-topical-authority.html">AI SEO: Building Topical Authority That Ranks #1</a></h3>
+  <p>How to build topical authority with AI-assisted workflows: entity coverage, internal linking clusters, structured data and content that survives AI search.</p>
+  <div class="card__meta"><time datetime="2026-09-06">Sep 6, 2026</time><span aria-hidden="true">•</span><span>7 min read</span></div>
+</article><article class="card reveal">
+  <span class="badge badge--ai">AI</span>
+  <h3><a href="./blog/local-llm-8gb-vram-setup.html">Run a Local LLM on 8GB VRAM: Practical Setup</a></h3>
+  <p>A practical guide to running a local LLM on 8GB VRAM: model choices, quantisation levels, context limits, throughput expectations and tuning tips.</p>
+  <div class="card__meta"><time datetime="2026-09-03">Sep 3, 2026</time><span aria-hidden="true">•</span><span>7 min read</span></div>
+</article></div>
+    </div>
+  </section>
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><div><h2>Latest updates in AI</h2><p>Maximum four newest AI posts, generated automatically.</p></div></div>
+      <div class="grid" data-feed="ai" data-limit="4"><article class="card reveal">
+  <span class="badge badge--ai">AI</span>
+  <h3><a href="./blog/rag-vs-fine-tuning.html">RAG vs Fine-Tuning: How to Choose</a></h3>
+  <p>RAG vs fine-tuning explained with a clear decision framework: cost, freshness, accuracy, latency and when to combine both approaches.</p>
+  <div class="card__meta"><time datetime="2026-09-09">Sep 9, 2026</time><span aria-hidden="true">•</span><span>6 min read</span></div>
+</article><article class="card reveal">
+  <span class="badge badge--ai">AI</span>
+  <h3><a href="./blog/ai-seo-topical-authority.html">AI SEO: Building Topical Authority That Ranks #1</a></h3>
+  <p>How to build topical authority with AI-assisted workflows: entity coverage, internal linking clusters, structured data and content that survives AI search.</p>
+  <div class="card__meta"><time datetime="2026-09-06">Sep 6, 2026</time><span aria-hidden="true">•</span><span>7 min read</span></div>
+</article><article class="card reveal">
+  <span class="badge badge--ai">AI</span>
+  <h3><a href="./blog/local-llm-8gb-vram-setup.html">Run a Local LLM on 8GB VRAM: Practical Setup</a></h3>
+  <p>A practical guide to running a local LLM on 8GB VRAM: model choices, quantisation levels, context limits, throughput expectations and tuning tips.</p>
+  <div class="card__meta"><time datetime="2026-09-03">Sep 3, 2026</time><span aria-hidden="true">•</span><span>7 min read</span></div>
+</article></div>
+      <p style="margin-top:1.6rem">Looking for the other side of the site? Read the <a href="./tech.html">Tech category</a>.</p>
+    </div>
+  </section>
+</main>
+<footer class="foot">
+  <div class="wrap foot__grid">
+    <div>
+      <a class="logo" href="./index.html" aria-label="StackSignal home">
+  <span class="logo__mark" aria-hidden="true"><span class="logo__cube"><span class="logo__face"></span><span class="logo__face"></span><span class="logo__face"></span></span></span>
+  <span class="logo__txt">StackSignal<small>Tech &amp; AI</small></span>
+</a>
+      <p style="margin-top:.8rem">StackSignal publishes deeply practical engineering and AI guides: performance, architecture, LLMs and applied machine learning.</p>
+    </div>
+    <div><h4>Categories</h4><ul>
+      <li><a href="./tech.html">Tech</a></li>
+      <li><a href="./ai.html">AI</a></li>
+      <li><a href="./blog/index.html">All posts</a></li>
+    </ul></div>
+    <div><h4>Site</h4><ul>
+      <li><a href="./about.html">About</a></li>    </ul></div>
+    <div><h4>Popular topics</h4><ul>
+      <li>Core Web Vitals</li><li>Performance</li><li>SEO</li><li>JavaScript</li><li>Bundling</li>
+    </ul></div>
+  </div>
+  <div class="wrap" style="margin-top:2rem;font-size:.82rem">© 2026 StackSignal. Built as a static site — Tech & AI, decoded.</div>
+</footer>
+<button class="to-top" type="button" aria-label="Scroll back to top" title="Back to top">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+</button>
+<script src="./assets/js/hero3d.js" defer></script>
+<script src="./assets/js/app.js" defer></script>
+</body>
+</html>

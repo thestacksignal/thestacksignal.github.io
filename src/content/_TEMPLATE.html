@@ -1,0 +1,121 @@
+<!-- =========================================================================
+     COPY-PASTE BLOCKS  —  StackSignal article components
+     -------------------------------------------------------------------------
+     This file is NOT published. It exists only so you can copy blocks out of
+     it. Its filename starts with _ so it never matches a post slug.
+
+     HOW TO ADD A NEW POST
+     1. Open build.mjs, copy an existing object inside POSTS, paste it, and
+        change: slug, category ('tech' or 'ai'), title, seoTitle, description,
+        date, tags, keywords, hero, faq.
+     2. Create src/content/<your-slug>.html  (same name as the slug).
+     3. Write the article using the blocks below.
+     4. Run:  node build.mjs
+     Everything else — theme, table of contents, cards, sitemap, RSS, search,
+     reading time, SEO tags — is generated automatically.
+     ========================================================================= -->
+
+
+<!-- 1 ─── KEY TAKEAWAYS — put this at the very top of the article ───────── -->
+
+<div class="takeaways">
+  <h4>Key takeaways</h4>
+  <ul>
+    <li>First main point, one sentence.</li>
+    <li>Second point with <strong>a bolded phrase</strong>.</li>
+    <li>Third point.</li>
+  </ul>
+</div>
+
+
+<!-- 2 ─── HEADINGS — H2 becomes a TOC entry, H3 does not ──────────────── -->
+
+<h2>A main section heading</h2>
+<p>A normal paragraph. Use <strong>strong</strong> for emphasis, <code>code</code>
+for code words, and <a href="./other-post-slug.html">links to other posts</a>.</p>
+
+<h3>A sub-heading inside that section</h3>
+<p>More text.</p>
+
+
+<!-- 3 ─── CALLOUT BOXES — four colours ────────────────────────────────── -->
+
+<!-- Neutral / info (accent colour) -->
+<div class="callout">
+  <span class="callout__icon" aria-hidden="true">i</span>
+  <div><p>A neutral note that adds useful context.</p></div>
+</div>
+
+<!-- Warning (orange) -->
+<div class="callout callout--warn">
+  <span class="callout__icon" aria-hidden="true">!</span>
+  <div><p><strong>Watch out:</strong> the thing people usually get wrong.</p></div>
+</div>
+
+<!-- Tip (green) -->
+<div class="callout callout--tip">
+  <span class="callout__icon" aria-hidden="true">&#10003;</span>
+  <div><p>A practical tip the reader can apply immediately.</p></div>
+</div>
+
+<!-- Mistake / don't do this (red) -->
+<div class="callout callout--stop">
+  <span class="callout__icon" aria-hidden="true">&#215;</span>
+  <div><p>A common mistake, stated plainly.</p></div>
+</div>
+
+
+<!-- 4 ─── STAT STRIP — 2 to 4 numbers, auto-fits on mobile ────────────── -->
+
+<div class="stat-strip">
+  <div><b>2.5s</b><span>label under the number</span></div>
+  <div><b>200ms</b><span>another label</span></div>
+  <div><b>60%</b><span>third label</span></div>
+</div>
+
+
+<!-- 5 ─── PULL QUOTE — one strong sentence ────────────────────────────── -->
+
+<blockquote><p>A single memorable sentence that summarises the section.</p></blockquote>
+
+
+<!-- 6 ─── TABLE — always wrap it so it scrolls on mobile ──────────────── -->
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Column A</th><th>Column B</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Row 1</td><td>Value</td></tr>
+      <tr><td>Row 2</td><td>Value</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- 7 ─── LISTS — styled automatically, no classes needed ─────────────── -->
+
+<ul>
+  <li>Bullet items get a glowing dot.</li>
+  <li>Use these for unordered points.</li>
+</ul>
+
+<ol>
+  <li>Numbered items get a gradient circle.</li>
+  <li>Use these for steps in order.</li>
+</ol>
+
+
+<!-- 8 ─── DIVIDER ─────────────────────────────────────────────────────── -->
+
+<hr>
+
+
+<!-- =========================================================================
+     RULES
+     • Do NOT add an <h1> — the title from build.mjs already provides it.
+     • Aim for 1,500+ words and 8+ H2 sections for competitive keywords.
+     • Use 3–5 callouts per article. More than that and they stop standing out.
+     • Link to 1–2 of your other posts. This builds topical authority.
+     ========================================================================= -->

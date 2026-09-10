@@ -1,0 +1,93 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>RAG changes <strong>what the model knows</strong>. Fine-tuning changes <strong>how it behaves</strong>.</li><li>Most “RAG does not work” verdicts are actually retrieval failures, not generation failures.</li><li>Exhaust prompting first, then retrieval, then fine-tuning — in that order.</li></ul></div>
+<h2>The question behind the question</h2>
+<div class="table-wrap"><table><thead><tr><th>Problem</th><th>Fix</th></tr></thead><tbody><tr><td>Model does not know a fact</td><td>Retrieval (RAG)</td></tr><tr><td>Model knows it but formats badly</td><td>Fine-tuning</td></tr><tr><td>Facts change weekly</td><td>Retrieval</td></tr><tr><td>Output must match a strict schema</td><td>Fine-tuning</td></tr><tr><td>You need citations</td><td>Retrieval</td></tr></tbody></table></div>
+
+<p>"Should we use RAG or fine-tuning?" is usually the wrong framing, because the two techniques solve different problems. Retrieval-augmented generation changes <em>what the model knows</em> at the moment it answers. Fine-tuning changes <em>how the model behaves</em> across every answer it produces.</p>
+<p>Once you internalise that distinction, most architecture debates resolve themselves. If your failure mode is the model not knowing a fact, retrieval is the fix. If your failure mode is the model knowing the fact but presenting it badly, fine-tuning is the fix. If both are failing, you need both, and you should build the retrieval layer first.</p>
+
+<h2>How RAG actually works</h2>
+<p>Retrieval-augmented generation inserts a search step before generation. At query time the system embeds the user's question, searches a vector index for semantically similar chunks of your content, and places the best matches into the prompt as context. The model then answers using that context rather than relying purely on parameters learned during training.</p>
+<p>The pipeline has four stages, and the quality of the final answer is capped by the weakest one.</p>
+<ol>
+<li><strong>Chunking.</strong> Source documents are split into passages. Too large and retrieval becomes imprecise; too small and passages lose the context needed to be meaningful.</li>
+<li><strong>Embedding.</strong> Each chunk is converted into a vector that encodes its meaning, then stored in a vector database.</li>
+<li><strong>Retrieval.</strong> The query is embedded and the nearest chunks are returned, often combined with keyword search in a hybrid approach.</li>
+<li><strong>Generation.</strong> Retrieved passages are inserted into the prompt with instructions to answer from the provided context and to say so when the answer is absent.</li>
+</ol>
+<p>The dominant advantage is freshness. Update a document, re-index it, and the system is current within minutes. No retraining, no model deployment, no evaluation cycle. For any domain where facts change &mdash; pricing, policies, documentation, inventory, regulations &mdash; this is decisive.</p>
+<p>The second advantage is attribution. Because you know which chunks were retrieved, you can cite sources. In regulated, enterprise or support contexts this is frequently a hard requirement rather than a nice feature.</p>
+
+<h2>Where RAG systems actually fail</h2>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">×</span><div><p><strong>Before blaming the model, print the retrieved chunks for twenty failing queries.</strong> In most audits the correct passage was never retrieved — no prompt engineering could have saved that answer.</p></div></div>
+
+<p>Teams often conclude that RAG does not work when what they have built is a poor retrieval system attached to a capable model. The generation step is rarely the problem.</p>
+<ul>
+<li><strong>Chunking that ignores document structure.</strong> Splitting on a fixed character count cuts tables in half and separates headings from the content they describe. Split on semantic boundaries &mdash; sections, headings, paragraphs &mdash; and keep a small overlap.</li>
+<li><strong>Pure vector search for keyword-shaped queries.</strong> Embeddings capture meaning but handle exact identifiers, error codes and product names poorly. Hybrid search combining BM25 keyword matching with vector similarity fixes a large class of failures cheaply.</li>
+<li><strong>No reranking.</strong> Initial retrieval optimises for recall. A cross-encoder reranker applied to the top twenty results substantially improves precision, and precision is what the model consumes.</li>
+<li><strong>Stuffing too much context.</strong> More retrieved passages is not better. Irrelevant context dilutes attention and measurably increases hallucination. Retrieve broadly, rerank, then pass only the best three to five passages.</li>
+<li><strong>Stale or duplicated indexes.</strong> Near-duplicate documents crowd out diverse results, and an index that drifts from the source is worse than no retrieval at all because it looks authoritative.</li>
+</ul>
+<p>A practical rule: before blaming the model, print the retrieved chunks for twenty failing queries. In most audits, the correct passage was never retrieved, which means no amount of prompt engineering could have saved the answer.</p>
+
+<h2>What fine-tuning is genuinely good at</h2>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p>Fine-tuning does <strong>not</strong> reliably teach facts. Training on documents shifts probability distributions; it does not create a lookup table. When it is wrong, it is wrong fluently and without citation.</p></div></div>
+
+<p>Fine-tuning continues training on your examples, adjusting weights so the model internalises patterns of behaviour. Modern practice overwhelmingly uses parameter-efficient methods such as LoRA, which train a small set of adapter weights rather than the full network, reducing cost and hardware requirements by orders of magnitude.</p>
+<p>Fine-tuning excels at:</p>
+<ul>
+<li><strong>Consistent output format.</strong> If you need reliable JSON conforming to a specific schema, or a consistent document structure, training on a few hundred examples outperforms increasingly elaborate prompts.</li>
+<li><strong>Tone and voice.</strong> Matching a brand's writing style, a clinical register, or a particular level of formality is a behavioural property, not a factual one.</li>
+<li><strong>Domain-specific language.</strong> Specialist jargon, internal terminology and unusual abbreviations become natural rather than something the model reasons around.</li>
+<li><strong>Classification and extraction.</strong> Narrow, well-defined tasks with abundant labelled examples often reach higher accuracy with a fine-tuned smaller model than with prompting a larger one.</li>
+<li><strong>Latency and cost reduction.</strong> A fine-tuned small model that no longer needs a lengthy system prompt with examples can be dramatically cheaper per request at scale.</li>
+</ul>
+<p>What fine-tuning is <em>not</em> good at is reliably teaching facts. Training on documents does not create a lookup table; it shifts probability distributions. The model becomes more likely to produce text resembling your documents, which is subtly different from knowing their contents &mdash; and when it is wrong, it is wrong fluently and without citation.</p>
+
+<h2>The cost and effort comparison</h2>
+<p>The two approaches distribute effort very differently across time.</p>
+<p><strong>RAG</strong> has a moderate initial build &mdash; ingestion, chunking, embedding, a vector store, retrieval logic and evaluation &mdash; and then ongoing per-query costs, because every request pays for embedding, retrieval and a longer prompt. Maintenance is mostly data hygiene: keeping the index synchronised with the source.</p>
+<p><strong>Fine-tuning</strong> front-loads the effort into dataset construction, which is the part teams consistently underestimate. Producing several hundred high-quality, consistent examples is slow, and quality matters far more than quantity. Training itself is comparatively cheap with LoRA. Inference is then cheaper per request. The recurring cost is retraining whenever behaviour needs to change.</p>
+<p>A useful heuristic: RAG cost scales with query volume, fine-tuning cost scales with change frequency.</p>
+
+<h2>A decision framework</h2>
+<p><strong>Choose RAG when:</strong></p>
+<ul>
+<li>The information changes regularly</li>
+<li>You must cite sources or show provenance</li>
+<li>The knowledge base is large or continuously growing</li>
+<li>Different users should see different subsets of data, enforced by access control at retrieval time</li>
+<li>You need to add or remove knowledge quickly, including for compliance deletion requests</li>
+</ul>
+<p><strong>Choose fine-tuning when:</strong></p>
+<ul>
+<li>Output structure or format must be highly consistent</li>
+<li>Tone, voice or style is central to the product</li>
+<li>The task is narrow, repetitive and well-represented by examples</li>
+<li>Prompt length has become a meaningful cost or latency problem</li>
+<li>You want a smaller model to match a larger one on a specific task</li>
+</ul>
+<p><strong>Use both when</strong> you need a system that speaks in a consistent, domain-appropriate voice about facts that change &mdash; which describes most serious production assistants. The fine-tune governs behaviour; retrieval supplies truth.</p>
+
+<h2>Start with prompting, and be honest about it</h2>
+<p>Before either approach, exhaust prompt engineering. A carefully constructed system prompt with three or four well-chosen examples solves a surprising proportion of problems at zero infrastructure cost, and it establishes the baseline you will measure everything else against.</p>
+<p>The recommended progression is deliberately boring:</p>
+<ol>
+<li>Prompt engineering with few-shot examples</li>
+<li>Add retrieval when the failure mode is missing knowledge</li>
+<li>Improve retrieval quality &mdash; hybrid search, reranking, better chunking</li>
+<li>Fine-tune only when the remaining failures are behavioural</li>
+</ol>
+<p>Most teams that jump straight to fine-tuning discover afterwards that their real problem was retrieval, and they have now built an expensive artefact that must be maintained.</p>
+
+<h2>Evaluate, or you are guessing</h2>
+<blockquote><p>An end-to-end score tells you the system is wrong without telling you which half to fix.</p></blockquote>
+
+<p>Whichever path you take, the deciding factor is measurement. Build an evaluation set of at least a hundred representative queries with known-good answers before you build the system, not after.</p>
+<p>Track retrieval and generation separately:</p>
+<ul>
+<li><strong>Retrieval metrics:</strong> recall at k, mean reciprocal rank, and the proportion of queries where the correct passage appeared at all.</li>
+<li><strong>Generation metrics:</strong> factual accuracy against the source, citation correctness, refusal rate on unanswerable questions, and format compliance.</li>
+</ul>
+<p>Separating these is essential, because an end-to-end score tells you the system is wrong without telling you which half to fix. Teams that measure both consistently converge on working systems far faster than teams iterating on intuition.</p>
+<p>If you are running local models while experimenting, the hardware constraints are covered in <a href="./local-llm-8gb-vram-setup.html">running a local LLM on 8GB of VRAM</a>.</p>
