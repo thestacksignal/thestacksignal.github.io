@@ -9,7 +9,7 @@ const OUT = 'dist';
 
 /* ===== 1. GLOBAL SITE CONFIG — edit these before deploying ================ */
 const SITE = {
-  url: 'https://your-domain.com',            // <-- REPLACE with your real domain
+  url: 'ttps://thestacksignal.github.io',            // <-- REPLACE with your real domain
   name: 'StackSignal',
   tagline: 'Tech & AI, decoded.',
   description: 'StackSignal publishes deeply practical engineering and AI guides: performance, architecture, LLMs and applied machine learning.',
