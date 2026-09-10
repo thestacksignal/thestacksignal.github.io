@@ -312,7 +312,7 @@ ${jsonld.map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</sc
 }
 
 const logo = (base) => `<a class="logo" href="${base}index.html" aria-label="${SITE.name} home">
-  <span class="logo__mark" aria-hidden="true"><span class="logo__cube"><span class="logo__face"></span><span class="logo__face"></span><span class="logo__face"></span></span></span>
+  <img src="${base}assets/img/logo.png" alt="StackSignal" width="34" height="34" style="width:34px;height:34px;flex:none;display:block">
   <span class="logo__txt">${SITE.name}<small>Tech &amp; AI</small></span>
 </a>`;
 
