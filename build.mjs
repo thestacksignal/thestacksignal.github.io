@@ -545,23 +545,6 @@ ${header('./', 'home')}
       <div class="grid" data-feed="" data-limit="4">${sorted.slice(0, 4).map((p) => cardOf(p, './')).join('')}</div>
     </div>
   </section>
-
-  <section id="why">
-    <div class="wrap">
-      <div class="sec-head"><div><h2>Built as an SEO test bench</h2><p>Every page ships server-rendered HTML, one stylesheet, ~8KB of JavaScript, full schema.org markup and a clean internal link graph — so ranking experiments measure your content, not your framework.</p></div></div>
-      <div class="grid">
-        <article class="card reveal"><h3>Static HTML, zero hydration</h3><p>Crawlers get the full text on first byte. No client-side rendering to debug in Search Console.</p></article>
-        <article class="card reveal"><h3>Schema on every template</h3><p>BlogPosting, BreadcrumbList, CollectionPage, FAQPage and WebSite + SearchAction are generated automatically.</p></article>
-        <article class="card reveal"><h3>Instant on-site search</h3><p>A prebuilt JSON index powers keyword search with highlighting — useful for readers, and a strong engagement signal.</p></article>
-        <article class="card reveal"><h3>3D without the payload</h3><p>The hero visuals are hand-written canvas projection, so there is no 600KB WebGL library hurting LCP.</p></article>
-      </div>
-      <div class="orbit" aria-hidden="true">
-        <div class="orbit__ring"><span class="orbit__dot"></span></div>
-        <div class="orbit__ring"><span class="orbit__dot"></span></div>
-        <div class="orbit__ring"><span class="orbit__dot"></span></div>
-      </div>
-    </div>
-  </section>
 </main>
 ${footer('./')}`;
 }
