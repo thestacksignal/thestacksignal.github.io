@@ -9,7 +9,7 @@ const OUT = 'dist';
 
 /* ===== 1. GLOBAL SITE CONFIG — edit these before deploying ================ */
 const SITE = {
-  url: 'ttps://thestacksignal.github.io',            // <-- REPLACE with your real domain
+  url: 'https://thestacksignal.github.io',            // <-- REPLACE with your real domain
   name: 'StackSignal',
   tagline: 'Tech & AI, decoded.',
   description: 'StackSignal publishes deeply practical engineering and AI guides: performance, architecture, LLMs and applied machine learning.',
@@ -284,8 +284,12 @@ ${keywords ? `<meta name="keywords" content="${esc(keywords)}">` : ''}
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${SITE.url}/${canonical}">
 <meta property="og:locale" content="${SITE.locale}">
-<meta property="og:image" content="${SITE.url}/assets/img/og-${theme}.svg">
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="${SITE.url}/assets/img/og-${theme}.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${esc(SITE.name)} — ${esc(SITE.tagline)}">
+<meta name="twitter:image" content="${SITE.url}/assets/img/og-${theme}.png">
 <meta name="twitter:site" content="${SITE.twitter}">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(description)}">
@@ -388,7 +392,7 @@ function postPage(p) {
       publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: `${SITE.url}/assets/img/favicon.svg` } },
       mainEntityOfPage: { '@type': 'WebPage', '@id': url },
       articleSection: c.name, keywords: p.tags.join(', '), wordCount: p.body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length,
-      inLanguage: SITE.lang, image: `${SITE.url}/assets/img/og-${c.theme}.svg`
+      inLanguage: SITE.lang, image: `${SITE.url}/assets/img/og-${c.theme}.png`
     },
     {
       '@context': 'https://schema.org', '@type': 'BreadcrumbList',
