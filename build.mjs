@@ -514,7 +514,7 @@ function homePage() {
     <span class="btn btn--primary">Explore ${c.name} →</span>
   </a>`;
 
-  return `${head({ title: `${SITE.name} — Tech & AI Blog for Engineers`, description: SITE.description, canonical: 'index.html', base: './', theme: 'default', keywords: 'tech blog, ai blog, web performance, llm guides, seo, core web vitals', jsonld })}
+  return `${head({ title: `${SITE.name} — Practical Tech & AI Guides for Engineers`, description: SITE.description, canonical: 'index.html', base: './', theme: 'default', keywords: 'tech blog, ai blog, web performance, llm guides, seo, core web vitals', jsonld })}
 ${header('./', 'home')}
 <main id="main">
   <section class="hero">
