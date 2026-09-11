@@ -270,7 +270,7 @@ function head({ title, description, canonical, base, theme, keywords = '', jsonl
 <html lang="${SITE.lang}" data-theme="${theme}">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="google-site-verification" content="FiMCatCEiTf1EalryWxrZlbAbu8dzmmsaXsjYCkXz0Y" />
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 ${keywords ? `<meta name="keywords" content="${esc(keywords)}">` : ''}
