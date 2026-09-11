@@ -1,0 +1,220 @@
+<h2>The 30 prompts, and why most prompt lists are useless</h2>
+<p>Every prompt here is one I use in an actual work week. Copy the block, paste it, replace the text in square brackets. That's it. The ones that save the most time are boring: reformatting, summarising, and turning messy notes into something a human can read. Nothing here writes a blog post for you, because that output is always worse than writing it yourself.</p>
+
+<p>A warning before the list. I tracked my own usage for two weeks in August, and about eight of these account for nearly all the time saved. The rest are useful occasionally. Prompt lists that claim all thirty will change your life are written by people who have never used thirty prompts.</p>
+
+<h2>Email (5 prompts)</h2>
+
+<h3>1. The reply that takes 40 seconds instead of ten minutes</h3>
+<pre><code>Here is an email I received:
+[PASTE EMAIL]
+
+Write a reply. My position: [WHAT YOU WANT TO SAY IN 5-10 WORDS].
+Keep it under 90 words. Plain, direct, no pleasantries beyond one line.
+Do not apologise unless I actually did something wrong.</code></pre>
+<p>That last line matters more than it looks. Without it you get "I sincerely apologise for any confusion" pasted onto emails where nothing went wrong.</p>
+
+<h3>2. Saying no without a three-paragraph justification</h3>
+<pre><code>Write a short decline. Request: [WHAT THEY ASKED FOR].
+Reason: [YOUR REAL REASON].
+Rules: polite, two sentences maximum, no fake enthusiasm,
+do not offer an alternative unless I say so.</code></pre>
+
+<h3>3. The chase-up that isn't passive aggressive</h3>
+<pre><code>I emailed [PERSON] on [DATE] about [TOPIC] and got no reply.
+Write a follow-up in under 50 words. Assume they are busy, not rude.
+Include one specific question they can answer in one line.</code></pre>
+<p>The "one specific question" instruction roughly doubled my reply rate. Vague follow-ups get ignored because answering them is work.</p>
+
+<h3>4. Cleaning up something you wrote angry</h3>
+<pre><code>Rewrite this so it is firm but not hostile. Keep every factual point.
+Remove sarcasm, exclamation marks, and anything I would regret in a week.
+
+[PASTE YOUR DRAFT]</code></pre>
+
+<h3>5. The intro email</h3>
+<pre><code>Write an introduction email connecting [PERSON A, role] and [PERSON B, role].
+Reason for the intro: [WHY].
+Under 80 words, one line on each person, end by stepping out of the thread.</code></pre>
+
+<h2>Meetings and notes (5 prompts)</h2>
+
+<h3>6. Raw notes to something readable</h3>
+<pre><code>Turn these meeting notes into: (1) a 3-line summary,
+(2) decisions made, (3) action items with owner and deadline.
+If an owner or deadline is missing, write "UNASSIGNED" instead of guessing.
+
+[PASTE NOTES]</code></pre>
+<p>The UNASSIGNED rule is the whole trick. Left to itself the model invents plausible owners and deadlines, which is worse than having no notes at all.</p>
+
+<h3>7. Transcript to decisions</h3>
+<pre><code>Here is a meeting transcript. Extract only the decisions that were
+actually agreed, not things that were discussed and dropped.
+Quote the line where each decision was made.
+
+[PASTE TRANSCRIPT]</code></pre>
+
+<h3>8. Agenda from a vague request</h3>
+<pre><code>I need to run a [LENGTH] meeting about [TOPIC] with [WHO].
+Build an agenda with time boxes. Include one item that gets a decision
+made rather than just discussed. Flag anything better handled over email.</code></pre>
+
+<h3>9. Catching up on a thread you ignored</h3>
+<pre><code>Summarise this thread in under 120 words. Tell me specifically:
+what is being asked of me, what I have already agreed to,
+and what is still open.
+
+[PASTE THREAD]</code></pre>
+
+<h3>10. Pre-mortem before a plan goes out</h3>
+<pre><code>Here is my plan: [PASTE PLAN].
+List the five most likely ways this fails, ordered by probability,
+not by how dramatic they sound. Be blunt. Skip anything obvious.</code></pre>
+
+<h2>Spreadsheets and data (5 prompts)</h2>
+
+<h3>11. Formula from a description</h3>
+<pre><code>In Google Sheets, column A has dates, column B has amounts,
+column C has a category name. I want [DESCRIBE THE RESULT].
+Give me the formula, then explain in one line what each part does.</code></pre>
+
+<h3>12. Debugging someone else's formula</h3>
+<pre><code>This formula returns [ERROR OR WRONG VALUE]. Explain why,
+then give the corrected version. Do not rewrite my whole approach.
+
+[PASTE FORMULA]</code></pre>
+<p>"Do not rewrite my whole approach" saves an argument. Without it you get a lecture about restructuring your sheet.</p>
+
+<h3>13. Messy data into clean columns</h3>
+<pre><code>Convert this messy text into a CSV with these exact columns:
+[COLUMN NAMES]. If a value is missing, leave the cell empty.
+Do not invent values. Return only the CSV, no commentary.
+
+[PASTE DATA]</code></pre>
+
+<h3>14. The pivot you can't remember how to build</h3>
+<pre><code>I have a sheet with columns: [LIST COLUMNS].
+I want to see [WHAT YOU WANT TO SEE].
+Give me click-by-click pivot table steps for Google Sheets.</code></pre>
+
+<h3>15. Sanity-checking numbers before you send them</h3>
+<pre><code>Here are figures I am about to put in a report: [PASTE].
+Point out anything internally inconsistent, any total that does not
+add up, and any number that looks implausible. Do not fix them, just flag them.</code></pre>
+
+<h2>Writing and editing (5 prompts)</h2>
+
+<h3>16. The cut</h3>
+<pre><code>Cut this by 40% without losing any information.
+Remove hedging, adverbs, and sentences that restate the previous one.
+Keep my voice. Do not add anything.
+
+[PASTE TEXT]</code></pre>
+<p>This is the prompt I use most. Roughly forty times a week.</p>
+
+<h3>17. Explain it to the person who has to approve it</h3>
+<pre><code>Rewrite this for [AUDIENCE: e.g. a non-technical manager].
+No jargon. Lead with what it means for them, not how it works.
+Maximum 150 words.
+
+[PASTE TEXT]</code></pre>
+
+<h3>18. Finding the hole in your own argument</h3>
+<pre><code>Here is my argument: [PASTE].
+What is the strongest objection someone could raise?
+Do not soften it and do not offer me a rebuttal.</code></pre>
+
+<h3>19. Five titles, not one</h3>
+<pre><code>Give me 5 titles for a piece about [TOPIC].
+Under 60 characters each. No colons, no "ultimate", no "guide".
+One should be a plain description, one a question, one a number.</code></pre>
+
+<h3>20. Consistency check across a long document</h3>
+<pre><code>Read this document and list every place where it contradicts itself,
+uses a term inconsistently, or promises something it never delivers.
+Give line references.
+
+[PASTE DOCUMENT]</code></pre>
+
+<h2>Research and reading (5 prompts)</h2>
+
+<h3>21. The 20-page PDF you don't want to read</h3>
+<pre><code>Summarise this document in three layers:
+one sentence, then five bullets, then the three details
+that would change a decision. Mark anything you are unsure about.
+
+[PASTE TEXT]</code></pre>
+
+<h3>22. Comparison table instead of prose</h3>
+<pre><code>Compare [OPTION A] and [OPTION B] for [MY SPECIFIC SITUATION].
+Output a table: criteria in rows, options in columns.
+End with a one-line recommendation and the condition under which
+the other option wins instead.</code></pre>
+<p>That final clause is the useful part. A recommendation without its boundary condition is just an opinion.</p>
+
+<h3>23. Vocabulary for an unfamiliar field</h3>
+<pre><code>I am new to [FIELD]. List the 15 terms I will see constantly,
+with a one-line definition each written for a beginner.
+Order them by how often they appear, not alphabetically.</code></pre>
+
+<h3>24. Questions you should be asking</h3>
+<pre><code>I am about to [DECISION OR PURCHASE].
+What are the 8 questions someone experienced would ask
+that a beginner would not think of?</code></pre>
+
+<h3>25. Stripping the marketing out</h3>
+<pre><code>Here is a product page: [PASTE].
+Tell me what it actually does in plain language,
+what it does not do, and which claims are unverifiable.</code></pre>
+
+<h2>Job and admin (5 prompts)</h2>
+
+<h3>26. Tailoring a CV without lying</h3>
+<pre><code>Here is my CV: [PASTE]. Here is the job description: [PASTE].
+Rewrite only my bullet points to match the language of the job description,
+using only things already in my CV. Do not invent experience.
+Flag any requirement I do not meet.</code></pre>
+
+<h3>27. Turning a task into an achievement line</h3>
+<pre><code>I did this at work: [DESCRIBE PLAINLY].
+Write three CV bullet points, each starting with a verb
+and including a measurable outcome. Ask me for the number if I have not given one.</code></pre>
+
+<h3>28. Interview prep that isn't generic</h3>
+<pre><code>Role: [TITLE]. Company: [NAME AND WHAT THEY DO].
+My background: [2 LINES].
+Give me the 10 questions most likely to come up for this specific role,
+including two I will find uncomfortable.</code></pre>
+
+<h3>29. The form-filling one</h3>
+<pre><code>I need to write [TYPE OF APPLICATION TEXT] in under [WORD LIMIT] words.
+Here are my raw notes: [PASTE].
+Stay under the limit. Count the words and tell me the count.</code></pre>
+<p>It will still get the count wrong sometimes. Check it yourself.</p>
+
+<h3>30. Weekly review in four minutes</h3>
+<pre><code>Here is everything I did this week: [PASTE ROUGH LIST].
+Group it into themes, tell me where the time actually went,
+and name the one thing that took the most time for the least result.</code></pre>
+
+<h2>The three I deleted</h2>
+<p>Worth saying what did not work, because prompt lists never do this.</p>
+<ul>
+  <li><strong>"Act as a world-class expert in..."</strong> — I tested this on about forty tasks. It changes the tone and almost nothing else. Describing the audience gets you a better answer than inflating the model's job title.</li>
+  <li><strong>Long personas.</strong> Three paragraphs establishing who the model is supposed to be, then one line of actual task. The task is the part that matters.</li>
+  <li><strong>"Think step by step" on everything.</strong> Useful for reasoning problems. On a rewrite request it just adds 300 words of preamble you then have to scroll past.</li>
+</ul>
+
+<h2>How to make any prompt better in one line</h2>
+<p>Four instructions do most of the heavy lifting, and they turn up in nearly every prompt above:</p>
+<ol>
+  <li><strong>State the length.</strong> "Under 90 words" beats "keep it brief" every single time.</li>
+  <li><strong>Say what not to do.</strong> No apologies, no jargon, no commentary, do not invent values.</li>
+  <li><strong>Name the audience,</strong> not the model's fake credentials.</li>
+  <li><strong>Give it an escape hatch.</strong> "Write UNASSIGNED if unknown" or "ask me if a number is missing" is the difference between a useful answer and a confident fabrication.</li>
+</ol>
+<p>That fourth one is the one people skip, and it causes most of the bad output I see. A model asked for action items with owners will produce owners. Give it permission to leave a gap and it will.</p>
+
+<h2>Where this actually lands</h2>
+<p>An hour a day is the honest number for me, and almost all of it comes from prompts 1, 6, 11, 16, 17 and 21. Six prompts. The other twenty-four are there for the weeks they come up.</p>
+<p>If you want to go further than copy-paste, the thing worth understanding next is how to evaluate whether an AI output is actually correct rather than just fluent — that is covered in <a href="./rag-vs-fine-tuning.html">RAG vs fine-tuning</a>, and if you are thinking about running a model on your own machine instead, see the <a href="./local-llm-8gb-vram-setup.html">8GB VRAM setup guide</a>.</p>
