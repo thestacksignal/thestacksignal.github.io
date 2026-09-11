@@ -585,6 +585,24 @@ ${header('./', 'about')}
     <p>A dependency-free Node generator turns a single content file into static HTML, a JSON search index, an RSS feed and a sitemap. There is no CMS, no tracking bloat and no client-side rendering — which keeps Core Web Vitals green and makes SEO experiments clean.</p>
     <h2>Experience, expertise, authority, trust</h2>
     <p>Author attribution, topic clustering, transparent update dates and cited first-hand testing are deliberate E-E-A-T choices. If you spot an error, corrections are published inline with a note.</p>
+    
+    <h2>Who writes this</h2>
+    <p>${SITE.name} is written and maintained by ${SITE.author}. It is a single-author site, which is deliberate: the recommendations here come from one person's experience shipping and maintaining real projects, so you always know whose judgement you are reading rather than an anonymous editorial voice.</p>
+    <p>That also sets the boundaries. Topics that fall outside hands-on experience are either skipped or clearly labelled as an outsider's reading of the situation, with links to people who know the area better. Nothing is padded out to look authoritative when the honest answer is that it has not been tested here.</p>
+
+    <h2>What gets published, and what does not</h2>
+    <p>An article is published when it answers a question that came up in real work, and the answer took long enough to find that writing it down saves someone else the same search. Every guide carries the working configuration or command, the version it was tested against, and the failure mode that led there in the first place.</p>
+    <p>What does not get published: press-release rewrites, roundups of tools nobody has actually run, and posts written purely to fill a keyword gap. Sponsored placements are not accepted, so nothing on this site appears because someone paid for it.</p>
+
+    <h2>How articles are kept current</h2>
+    <p>Published posts are reviewed when a major version of the tool they cover lands, when a recommended service changes its free tier or pricing, or when a reader reports that a step no longer works. Updates are applied to the original page so existing links keep working, and material changes are noted in the text rather than made silently.</p>
+    <p>If an approach stops being the right recommendation entirely, the post says so at the top and points to the current one, instead of being quietly deleted and leaving a dead URL behind.</p>
+
+    <h2>How the site is measured</h2>
+    <p>Success here is not pageviews. The measures that matter are whether a reader finds the specific fix they came for, whether the code still runs a year later, and whether people come back for the next problem. That is why posts stay short, reading times are calculated from actual length, and the archive stays small rather than being inflated with filler.</p>
+
+    <h2>Corrections and contact</h2>
+    <p>Corrections are welcome and applied quickly — a wrong command is worse than no article at all. If you find an error, a broken sample, or a step that fails on your setup, open an issue on the site's repository with the post URL and what you ran, and it will be looked at.</p>
   </div>
 </article></div></main>
 ${footer('./')}`;
@@ -695,7 +713,6 @@ written.push(await w('sitemap.xml', sitemap()));
 written.push(await w('robots.txt', robots()));
 written.push(await w('rss.xml', rss()));
 written.push(await w('manifest.webmanifest', manifest()));
-written.push(await w('assets/img/favicon.svg', favicon()));
 written.push(await w('favicon.ico', await readFile('src/assets/img/favicon.ico')));
 written.push(await w('assets/img/og-default.svg', ogCard(SITE.tagline, '#6ee7ff', '#7c8cff')));
 written.push(await w('assets/img/og-tech.svg', ogCard('Tech — performance & architecture', '#3ddc97', '#2dd4bf')));
