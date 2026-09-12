@@ -416,7 +416,7 @@ function postPage(p) {
     {
       '@context': 'https://schema.org', '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/index.html` },
+                { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
         { '@type': 'ListItem', position: 2, name: c.name, item: `${SITE.url}/${c.slug}.html` },
         { '@type': 'ListItem', position: 3, name: p.title, item: url }
       ]
@@ -533,7 +533,7 @@ function homePage() {
     <span class="btn btn--primary">Explore ${c.name} →</span>
   </a>`;
 
-  return `${head({ title: `${SITE.name} — Practical Tech & AI Guides for Engineers`, description: SITE.description, canonical: 'index.html', base: './', theme: 'default', keywords: 'tech blog, ai blog, web performance, llm guides, seo, core web vitals', jsonld })}
+      return `${head({ title: `${SITE.name} — Practical Tech & AI Guides for Engineers`, description: SITE.description, canonical: '', base: './', theme: 'default', keywords: 'tech blog, ai blog, web performance, llm guides, seo, core web vitals', jsonld })}
 ${header('./', 'home')}
 <main id="main">
   <section class="hero">
@@ -650,7 +650,7 @@ const searchIndex = sorted.map((p) => ({
 
 const sitemap = () => {
   const urls = [
-    ['index.html', '1.0', 'daily'], ['tech.html', '0.9', 'daily'], ['ai.html', '0.9', 'daily'],
+        ['', '1.0', 'daily'], ['tech.html', '0.9', 'daily'], ['ai.html', '0.9', 'daily'],
     ['blog/index.html', '0.8', 'daily'], ['about.html', '0.4', 'monthly'],
     ...sorted.map((p) => [postUrl(p), '0.8', 'weekly'])
   ];
