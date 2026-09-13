@@ -1,0 +1,12 @@
+<h2>Start with the real bottleneck</h2>
+<p>LLM latency is not one number. Time to first token, time per output token, total request time and throughput answer different questions. Measure each before choosing an optimization.</p>
+<h2>Quantization trades precision for memory</h2>
+<p>Lower-bit weights reduce memory footprint and often improve bandwidth efficiency. The exact quality loss depends on the model and quantization scheme, so evaluate a representative task set rather than assuming every four-bit model behaves the same.</p>
+<h2>Context length has a cost</h2>
+<p>The KV cache grows with sequence length. Long prompts can consume large amounts of memory even when the model weights fit comfortably. Trimming irrelevant history, retrieving only useful evidence and limiting output length can make a larger difference than changing the GPU.</p>
+<h2>Batching improves throughput — until memory says no</h2>
+<p>Batching lets the accelerator process multiple sequences together, which can raise tokens per second for server workloads. But larger batches also increase memory use and can make single-request latency worse. Tune for your workload, not for one benchmark screenshot.</p>
+<h2>Speculative decoding and smaller models</h2>
+<p>A fast draft model can propose tokens that a larger model verifies, reducing the work needed per accepted token. In many products, though, the biggest win is simply choosing a smaller model that meets the quality requirement.</p>
+<h2>The optimization order</h2>
+<ol><li>Choose the smallest acceptable model.</li><li>Limit unnecessary context.</li><li>Use sensible quantization.</li><li>Measure KV-cache pressure.</li><li>Tune batching for your actual traffic.</li><li>Only then explore advanced decoding tricks.</li></ol>

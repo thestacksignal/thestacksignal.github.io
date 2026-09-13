@@ -1,0 +1,17 @@
+<h2>Caching is a delivery strategy</h2>
+<p>A cache is useful because the browser or edge can reuse a response instead of fetching it from the origin again. For a static site, that can remove an enormous amount of repeat network work.</p>
+<h2>Separate HTML from fingerprinted assets</h2>
+<p>HTML changes more often than versioned CSS, JavaScript and images. Long-lived assets work best when their URLs change whenever their contents change. A file such as <code>app.8d3f.js</code> can safely be cached for a long time because a new build gets a new filename.</p>
+<h2>Use cache-control deliberately</h2>
+<p>For immutable hashed assets, a long <code>max-age</code> with <code>immutable</code> is ideal. HTML usually needs a shorter lifetime so visitors can discover new content. Do not give every resource the same caching policy.</p>
+<h2>What the CDN actually buys you</h2>
+<p>A CDN puts cached content closer to users and absorbs repeated requests at the edge. For a globally distributed audience, that reduces round-trip time even when the origin stays in one region. Static sites benefit especially because most page assets can be served without touching the origin.</p>
+<h2>Beware of stale content</h2>
+<p>Long TTLs create one trade-off: updates can take time to appear. Fingerprinted assets solve most of this. Change the filename when the content changes, keep the HTML more replaceable, and you can have both aggressive caching and reliable deploys.</p>
+<h2>A practical static-site policy</h2>
+<pre><code>HTML:        short cache / revalidate
+JS &amp; CSS:    long cache if fingerprinted
+Images:      long cache if versioned
+Fonts:       long cache if immutable
+Sitemap:     revalidate after deploy</code></pre>
+<p>The goal is simple: cache aggressively where content can never be stale, and keep the documents that point to those assets easy to refresh.</p>

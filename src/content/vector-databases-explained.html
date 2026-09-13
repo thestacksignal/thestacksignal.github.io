@@ -1,0 +1,11 @@
+<h2>What a vector database stores</h2>
+<p>A typical record contains a vector, the original text or a pointer to it, and metadata such as tenant, document type, timestamp or permissions. The vector supports similarity search; metadata makes the results useful and safe.</p>
+<h2>Why approximate search exists</h2>
+<p>Comparing a query with every vector in a large collection becomes expensive. Approximate nearest-neighbour indexes reduce the search space so the system can return strong candidates quickly. The trade-off is small differences in recall for large gains in latency and scale.</p>
+<h2>Metadata is not optional</h2>
+<p>If two customers share an index, tenant filtering should happen during retrieval. The same applies to language, document status and access permissions. A semantically similar document that the user is not allowed to see is still a wrong result.</p>
+<h2>Top-k is only the beginning</h2>
+<p>Fetching the top 20 candidates does not mean you should put all 20 into the model context. Rerank them, remove duplicates, apply diversity rules, then build the final context around the best evidence.</p>
+<h2>Measure retrieval separately from generation</h2>
+<p>Track retrieval recall, precision, latency and the percentage of answers with sufficient supporting evidence. If retrieval is weak, changing the LLM can hide the symptom without fixing the system.</p>
+<p>The best vector database is the one whose indexing, filtering and latency characteristics match your workload. Start from the retrieval contract, then pick the technology.</p>

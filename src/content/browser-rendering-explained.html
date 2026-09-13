@@ -1,0 +1,13 @@
+<h2>The browser has a pipeline, not a single render step</h2>
+<p>A browser does not receive HTML and immediately paint it. It parses the document into a DOM, parses CSS into a CSSOM, combines those trees into a render tree, calculates layout, paints pixels and then composites layers. JavaScript can interrupt that pipeline at almost any stage.</p>
+<h2>1. HTML becomes the DOM</h2>
+<p>The HTML parser builds a tree as bytes arrive. A normal <code>&lt;script&gt;</code> without <code>defer</code> can pause parsing while the browser downloads and executes JavaScript. For a content site, that is an easy way to make first render depend on code the visitor did not need yet.</p>
+<h2>2. CSS builds the CSSOM</h2>
+<p>CSS is render-blocking because the browser needs style information before it can safely paint the page. Keep the critical stylesheet small, avoid unnecessary @imports, and load non-critical CSS later. The goal is not “zero CSS”; it is “only the CSS needed for the first viewport blocks first paint.”</p>
+<h2>3. Layout, paint and composite are different costs</h2>
+<p><strong>Layout</strong> calculates geometry. <strong>Paint</strong> turns boxes, text and images into drawing commands. <strong>Composite</strong> assembles layers on the GPU. A property such as <code>transform</code> can often be composited cheaply, while repeatedly changing width or top can trigger layout and paint work.</p>
+<h2>4. JavaScript is the wildcard</h2>
+<p>Even a small script can become expensive if it reads layout immediately after changing styles, creating a forced synchronous layout. Batch DOM writes, then reads, and prefer event-driven work over constant polling. Long tasks over 50ms are especially damaging to interaction responsiveness.</p>
+<h2>A practical debugging order</h2>
+<ol><li>Measure LCP, INP and CLS.</li><li>Identify the largest render-blocking resources.</li><li>Find long JavaScript tasks in the Performance panel.</li><li>Check for layout thrashing and oversized images.</li><li>Move non-critical work after first interaction.</li></ol>
+<p>The fastest page is usually not the page with the most clever CSS. It is the page that asks the browser to do less work before the user can read and interact with it.</p>

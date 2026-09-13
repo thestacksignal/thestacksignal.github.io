@@ -1,0 +1,12 @@
+<h2>They solve different problems</h2>
+<p>RAG is primarily a knowledge-access pattern: retrieve relevant evidence and place it in the model context. An agent is a workflow pattern in which a model can decide to call tools, inspect results, take another action and stop when the task is complete.</p>
+<h2>RAG answers a knowledge problem</h2>
+<p>Use RAG when the model needs your current documents, policies, product data or private notes. The system retrieves facts at request time rather than hoping the model weights contain the latest information.</p>
+<h2>Agents solve action problems</h2>
+<p>Use an agent when the system needs to do something such as query a database, call an API, create a ticket, inspect a file or run a sequence of tools. The model is coordinating actions rather than only generating text.</p>
+<h2>The practical combination</h2>
+<p>Many useful systems are both: an agent decides which tool or information source to use, and RAG supplies grounded context to the reasoning step. The important design choice is to keep tool permissions narrow and observable.</p>
+<h2>Where agents fail</h2>
+<ul><li>They can loop when the stopping condition is weak.</li><li>They can call expensive tools unnecessarily.</li><li>They can amplify a bad observation into a bad action.</li><li>They can create security problems if tools have broad write access.</li></ul>
+<h2>Choose the smallest system that works</h2>
+<p>If a simple retrieval call answers the question, do not build an agent. If a fixed workflow solves the task, use a deterministic pipeline before adding free-form planning. Agents are valuable when variability and action are real requirements, not because the label sounds advanced.</p>

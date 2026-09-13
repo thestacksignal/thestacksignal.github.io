@@ -1,0 +1,13 @@
+<h2>Start by shipping fewer pixels</h2>
+<p>The biggest image optimization mistake is exporting a giant source image and letting CSS shrink it to a tiny card. A 2000px image displayed at 400px still has to travel over the network and be decoded. Resize the asset to the largest display size you actually need.</p>
+<h2>Choose a modern format</h2>
+<p>WebP is a strong default for broad compatibility. AVIF can compress further, especially for photographic images. The right choice depends on your audience and your tooling, but both are preferable to sending oversized JPEG or PNG assets by default.</p>
+<h2>Use responsive images</h2>
+<p>Use <code>srcset</code> and <code>sizes</code> so the browser can choose an appropriate file for the viewport. A phone should not download the desktop hero just because the CSS later scales it down.</p>
+<h2>Do not lazy-load the LCP image</h2>
+<p>Your main above-the-fold image should be discoverable early and, when appropriate, use <code>fetchpriority="high"</code>. Images below the fold are different: lazy loading them can save bandwidth and decoding work without delaying the first screen.</p>
+<h2>Reserve space to prevent layout shift</h2>
+<p>Set explicit <code>width</code> and <code>height</code>, or use <code>aspect-ratio</code>. The browser can then allocate space before the image arrives. That simple step is one of the easiest ways to keep CLS near zero.</p>
+<h2>An image checklist</h2>
+<ul><li>Resize to the largest actual display size.</li><li>Use WebP or AVIF where practical.</li><li>Provide <code>srcset</code> for responsive layouts.</li><li>Prioritize only the true LCP image.</li><li>Lazy-load below-the-fold media.</li><li>Always reserve intrinsic dimensions.</li></ul>
+<p>Image optimization is not about chasing the smallest possible file. It is about delivering the right pixels at the right time and nothing more.</p>

@@ -266,6 +266,146 @@ const POSTS = [
       ['Do I need ChatGPT Plus for these prompts?', 'No. Every prompt here works on the free tier. Longer documents and transcripts are where a paid plan helps, because of context limits rather than prompt quality.'],
       ['Why avoid "act as a world-class expert"?', 'It changes tone and little else. Describing who the answer is for gets you a measurably better result than describing who the model is pretending to be.']
     ]
+  },
+  {
+    slug: 'browser-rendering-explained',
+    category: 'tech',
+    title: 'Browser Rendering Explained: From HTML to Pixels',
+    seoTitle: 'Browser Rendering Explained: How HTML, CSS & JavaScript Become Pixels',
+    description: 'Understand the browser rendering pipeline, critical rendering path, layout, paint and compositing — and where performance really gets lost.',
+    date: '2026-09-13',
+    updated: '2026-09-13',
+    read: 7,
+    tags: ['Web Performance','Browser','Rendering'],
+    keywords: 'browser rendering pipeline, critical rendering path, layout paint composite, web performance',
+    hero: 'Know the path from bytes to pixels, and you know where to look when a page feels slow.',
+    body: ''
+  },
+  {
+    slug: 'image-optimization-for-web',
+    category: 'tech',
+    title: 'Image Optimization for the Modern Web',
+    seoTitle: 'Image Optimization for Web Performance: WebP, AVIF, Sizes & Lazy Loading',
+    description: 'A practical image optimization guide covering dimensions, modern formats, responsive images, loading priority and the mistakes that hurt LCP.',
+    date: '2026-09-13',
+    updated: '2026-09-13',
+    read: 7,
+    tags: ['Performance','Images','Core Web Vitals'],
+    keywords: 'image optimization webp avif responsive images lcp, image performance',
+    hero: 'Your image strategy should start with dimensions, not formats.',
+    body: ''
+  },
+  {
+    slug: 'caching-and-cdn-strategies',
+    category: 'tech',
+    title: 'Caching and CDN Strategies for Fast Static Sites',
+    seoTitle: 'Caching and CDN Strategies for Fast Static Websites',
+    description: 'Learn how browser caching, immutable assets, cache-control headers and CDNs work together to make static websites faster and cheaper.',
+    date: '2026-09-13',
+    updated: '2026-09-13',
+    read: 7,
+    tags: ['Performance','Caching','CDN'],
+    keywords: 'browser caching, cache-control, cdn static site, immutable assets',
+    hero: 'The best request is the request the browser does not need to make again.',
+    body: ''
+  },
+  {
+    slug: 'embeddings-explained',
+    category: 'ai',
+    title: 'Embeddings Explained: How AI Turns Text into Vectors',
+    seoTitle: 'Embeddings Explained: How AI Turns Text into Vectors',
+    description: 'A practical explanation of embeddings, similarity, vector dimensions, chunking and how embeddings power search, RAG and recommendations.',
+    date: '2026-09-13',
+    updated: '2026-09-13',
+    read: 7,
+    tags: ['LLM','Embeddings','RAG'],
+    keywords: 'embeddings explained, text embeddings, vector similarity, rag embeddings',
+    hero: 'Embeddings turn meaning into numbers that a system can compare.',
+    body: ''
+  },
+  {
+    slug: 'vector-databases-explained',
+    category: 'ai',
+    title: 'Vector Databases Explained: Indexes, Metadata and Retrieval',
+    seoTitle: 'Vector Databases Explained: How Indexes, Metadata and Retrieval Work',
+    description: 'Understand vector databases, approximate nearest-neighbour indexes, metadata filtering and the design decisions behind production retrieval systems.',
+    date: '2026-09-13',
+    updated: '2026-09-13',
+    read: 7,
+    tags: ['RAG','Vector Database','Architecture'],
+    keywords: 'vector database explained, ann index, metadata filtering, rag retrieval',
+    hero: 'A vector database is a retrieval engine, not a magical memory for an LLM.',
+    body: ''
+  },
+  {
+    slug: 'ai-agents-vs-rag',
+    category: 'ai',
+    title: 'AI Agents vs RAG: What Is the Real Difference?',
+    seoTitle: 'AI Agents vs RAG: What Each System Actually Does',
+    description: 'A practical comparison of AI agents and RAG: retrieval, tools, planning, memory, failure modes, costs and when to combine both.',
+    date: '2026-09-13',
+    updated: '2026-09-13',
+    read: 7,
+    tags: ['AI Agents','RAG','Architecture'],
+    keywords: 'ai agents vs rag, agentic ai, rag vs agents, ai architecture',
+    hero: 'RAG gives a model evidence. Agents give a model a way to act.',
+    body: ''
+  },
+  {
+    slug: 'llm-inference-optimization',
+    category: 'ai',
+    title: 'LLM Inference Optimization: Latency, Throughput and Memory',
+    seoTitle: 'LLM Inference Optimization: Reduce Latency and Memory',
+    description: 'Learn the core levers for faster LLM inference: quantization, batching, KV cache, context length, speculative decoding and model choice.',
+    date: '2026-09-13',
+    updated: '2026-09-13',
+    read: 7,
+    tags: ['LLM','Inference','Performance'],
+    keywords: 'llm inference optimization, kv cache, quantization, llm latency',
+    hero: 'Inference performance is mostly memory movement, context management and careful batching.',
+    body: ''
+  },
+  {
+    slug: 'prompt-engineering-for-production',
+    category: 'ai',
+    title: 'Prompt Engineering for Production AI Systems',
+    seoTitle: 'Prompt Engineering for Production AI: Patterns That Hold Up',
+    description: 'Move beyond clever prompts with production patterns for instructions, structured outputs, examples, failure handling, evaluation and prompt versioning.',
+    date: '2026-09-13',
+    updated: '2026-09-13',
+    read: 7,
+    tags: ['Prompt Engineering','LLM','Evaluation'],
+    keywords: 'prompt engineering production, structured output, llm prompts, prompt evaluation',
+    hero: 'A production prompt is an interface contract, not a magic sentence.',
+    body: ''
+  },
+  {
+    slug: 'technical-seo-for-ai-websites',
+    category: 'ai',
+    title: 'Technical SEO for AI Websites: Crawlability, Canonicals and Sitemaps',
+    seoTitle: 'Technical SEO for AI Websites: Crawlability, Canonicals, Robots and Sitemaps',
+    description: 'A developer-focused technical SEO checklist for AI and tech sites covering crawlability, canonical URLs, robots.txt, sitemaps, internal links and indexing diagnostics.',
+    date: '2026-09-13',
+    updated: '2026-09-13',
+    read: 7,
+    tags: ['SEO','Technical SEO','AI'],
+    keywords: 'technical seo ai website, robots txt sitemap canonical, crawlability',
+    hero: 'Good technical SEO makes it easy for search engines to understand what exists, what matters and which URL is canonical.',
+    body: ''
+  },
+  {
+    slug: 'internal-linking-for-topical-authority',
+    category: 'ai',
+    title: 'Internal Linking for Topical Authority',
+    seoTitle: 'Internal Linking for Topical Authority: Build Better Content Clusters',
+    description: 'A practical internal-linking framework for building topical authority: pillar pages, supporting articles, anchor text, click depth and link maintenance.',
+    date: '2026-09-13',
+    updated: '2026-09-13',
+    read: 7,
+    tags: ['SEO','Internal Linking','Content Strategy'],
+    keywords: 'internal linking topical authority, content clusters, internal links seo',
+    hero: 'Internal links turn individual articles into a topic system that crawlers and readers can navigate.',
+    body: ''
   }
 ];
 
@@ -586,13 +726,14 @@ ${footer('./')}`;
 
 /* ===== 8.5. LEARNING PLATFORM PAGES ===================================== */
 const PATHS = [
-  { slug:'performance', level:'Intermediate', duration:'3 articles · ~2h', title:'Performance Engineering', description:'Diagnose slow pages, reduce main-thread work and make static sites fast on real devices.', steps:['core-web-vitals-checklist-2026','cut-javascript-bundle-size','self-hosting-vs-serverless'], skills:['Core Web Vitals','bundle budgets','hosting trade-offs','measurement'] },
-  { slug:'ai-systems', level:'Intermediate', duration:'3 articles · ~2h', title:'AI Systems Engineering', description:'Move from model choice to retrieval architecture and local inference without skipping production constraints.', steps:['rag-vs-fine-tuning','local-llm-8gb-vram-setup','chatgpt-prompts-productivity'], skills:['RAG','local LLMs','prompt design','model trade-offs'] },
-  { slug:'search', level:'Foundations', duration:'2 articles · ~70m', title:'Search & AI Visibility', description:'Build topic authority, structure content for modern search and connect SEO work to technical execution.', steps:['ai-seo-topical-authority','chatgpt-prompts-productivity'], skills:['topical authority','internal linking','AI search','content systems'] }
+  { slug:'performance', level:'Intermediate', title:'Performance Engineering', description:'Diagnose slow pages, reduce main-thread work and make static sites fast on real devices.', steps:['core-web-vitals-checklist-2026','browser-rendering-explained','image-optimization-for-web','cut-javascript-bundle-size','caching-and-cdn-strategies'], skills:['Core Web Vitals','rendering','images','bundle budgets','caching','measurement'] },
+  { slug:'ai-systems', level:'Intermediate', title:'AI Systems Engineering', description:'Move from model choice to retrieval architecture and local inference without skipping production constraints.', steps:['rag-vs-fine-tuning','embeddings-explained','vector-databases-explained','ai-agents-vs-rag','local-llm-8gb-vram-setup','llm-inference-optimization','prompt-engineering-for-production'], skills:['RAG','embeddings','agents','local LLMs','inference','prompt design'] },
+  { slug:'search', level:'Foundations', title:'Search & AI Visibility', description:'Build topic authority, structure content for modern search and connect SEO work to technical execution.', steps:['ai-seo-topical-authority','technical-seo-for-ai-websites','internal-linking-for-topical-authority','core-web-vitals-checklist-2026'], skills:['topical authority','internal linking','technical SEO','AI search','performance'] }
 ];
 const getPostsBySlugs = (slugs) => slugs.map((slug)=>sorted.find((p)=>p.slug===slug)).filter(Boolean);
-function pathsPage(){ const jsonld=[{'@context':'https://schema.org','@type':'CollectionPage',name:'StackSignal Learning Paths',url:`${SITE.url}/paths.html`}]; return `${head({title:`Learning Paths — Tech, AI & Performance | ${SITE.name}`,description:'Structured learning paths across performance engineering, AI systems and search.',canonical:'paths.html',base:'./',theme:'default',jsonld})}${header('./','paths')}<main id="main"><section class="hero hero--platform"><canvas class="hero__canvas" data-shape="network" aria-hidden="true"></canvas><div class="wrap hero__in"><span class="kicker">LEARNING SYSTEM · 03 PATHS</span><h1>Pick a path. <span class="grad">Build real skill.</span></h1><p class="lede">StackSignal is evolving from a blog into a connected engineering library: focused guides and production-minded learning paths.</p><div class="cta-row"><a class="btn btn--primary" href="#paths">Explore paths</a></div></div></section><section id="paths"><div class="wrap"><div class="sec-head"><div><span class="eyebrow">01 — Choose your route</span><h2>Three tracks, one engineering mindset</h2><p>Read the existing guides in a useful sequence instead of browsing randomly.</p></div></div><div class="path-grid">${PATHS.map((x,i)=>`<article class="path-card reveal path-card--${i+1}"><div class="path-card__top"><span class="path-num">0${i+1}</span><span class="badge">${x.level}</span><span class="path-time">${x.duration}</span></div><h3>${x.title}</h3><p>${esc(x.description)}</p><div class="chip-row">${x.skills.map(t=>`<span>${esc(t)}</span>`).join('')}</div><ol class="path-steps">${getPostsBySlugs(x.steps).map((p,j)=>`<li><span>${j+1}</span><a href="./${postUrl(p)}">${esc(p.title)}</a></li>`).join('')}</ol><a class="btn btn--primary" href="./${postUrl(getPostsBySlugs(x.steps)[0])}">Start path →</a></article>`).join('')}</div></div></section><section class="platform-band"><div class="wrap platform-band__grid"><div><span class="eyebrow">02 — Learn → Build → Measure → Ship</span><h2>Every page should leave you with something you can test.</h2></div><div class="steps-row"><div><b>Learn</b><span>Understand the constraint</span></div><div><b>Build</b><span>Copy the pattern</span></div><div><b>Measure</b><span>Use real signals</span></div><div><b>Ship</b><span>Keep the trade-off</span></div></div></div></section></main>${footer('./')}`; }
-function topicsPage(){ const groups=[['AI Systems',['RAG','LLM','Fine-Tuning','Local LLM']],['Web Engineering',['Performance','Core Web Vitals','JavaScript','Architecture']],['Search & Visibility',['SEO','AI','Content Strategy']]]; const cards=groups.map(([name,tags])=>`<section class="topic-group"><div class="topic-group__head"><span class="eyebrow">Topic hub</span><h2>${name}</h2><p>Follow the thread across related guides.</p></div><div class="topic-grid">${tags.map(tag=>{const matches=sorted.filter(p=>p.tags.some(t=>t.toLowerCase()===tag.toLowerCase()||t.toLowerCase().includes(tag.toLowerCase()))).slice(0,3);return `<article class="topic-card reveal"><div class="topic-card__icon">${tag.slice(0,1)}</div><h3>${esc(tag)}</h3><span>${matches.length} ${matches.length===1?'guide':'guides'}</span><div>${matches.map(p=>`<a href="./${postUrl(p)}">${esc(p.title)}</a>`).join('')}</div></article>`;}).join('')}</div></section>`).join(''); return `${head({title:`Topics — AI, Performance & Search | ${SITE.name}`,description:'Browse StackSignal topics by engineering theme.',canonical:'topics.html',base:'./',theme:'default',jsonld:[{'@context':'https://schema.org','@type':'CollectionPage',name:'StackSignal Topics',url:`${SITE.url}/topics.html`}]})}${header('./','topics')}<main id="main"><section class="hero hero--compact"><canvas class="hero__canvas" data-shape="grid" aria-hidden="true"></canvas><div class="wrap hero__in"><span class="kicker">TOPIC MAP</span><h1>Browse by <span class="grad">engineering problem.</span></h1><p class="lede">No giant taxonomy. Just the concepts that connect your current StackSignal guides.</p>${searchBox('','Search the topic library…')}</div></section><div class="wrap topics-wrap">${cards}</div></main>${footer('./')}`; }
+const pathDuration = (slugs) => { const posts = getPostsBySlugs(slugs); const minutes = posts.reduce((sum,p)=>sum+p.read,0); const rounded = Math.max(10, Math.round((minutes*1.25)/5)*5); return `${posts.length} articles · ~${rounded}m`; };
+function pathsPage(){ const jsonld=[{'@context':'https://schema.org','@type':'CollectionPage',name:'StackSignal Learning Paths',url:`${SITE.url}/paths.html`}]; return `${head({title:`Learning Paths — Tech, AI & Performance | ${SITE.name}`,description:'Structured learning paths across performance engineering, AI systems and search.',canonical:'paths.html',base:'./',theme:'default',jsonld})}${header('./','paths')}<main id="main"><section class="hero hero--platform"><canvas class="hero__canvas" data-shape="network" aria-hidden="true"></canvas><div class="wrap hero__in"><span class="kicker">LEARNING SYSTEM · 03 PATHS</span><h1>Pick a path. <span class="grad">Build real skill.</span></h1><p class="lede">StackSignal is evolving from a blog into a connected engineering library: focused guides and production-minded learning paths.</p><div class="cta-row"><a class="btn btn--primary" href="#paths">Explore paths</a></div></div></section><section id="paths"><div class="wrap"><div class="sec-head"><div><span class="eyebrow">01 — Choose your route</span><h2>Three tracks, one engineering mindset</h2><p>Read the existing guides in a useful sequence instead of browsing randomly.</p></div></div><div class="path-grid">${PATHS.map((x,i)=>`<article class="path-card reveal path-card--${i+1}"><div class="path-card__top"><span class="path-num">0${i+1}</span><span class="badge">${x.level}</span><span class="path-time">${pathDuration(x.steps)}</span></div><h3>${x.title}</h3><p>${esc(x.description)}</p><div class="chip-row">${x.skills.map(t=>`<span>${esc(t)}</span>`).join('')}</div><ol class="path-steps">${getPostsBySlugs(x.steps).map((p,j)=>`<li><span>${j+1}</span><a href="./${postUrl(p)}">${esc(p.title)}</a></li>`).join('')}</ol><a class="btn btn--primary" href="./${postUrl(getPostsBySlugs(x.steps)[0])}">Start path →</a></article>`).join('')}</div></div></section><section class="platform-band"><div class="wrap platform-band__grid"><div><span class="eyebrow">02 — Learn → Build → Measure → Ship</span><h2>Every page should leave you with something you can test.</h2></div><div class="steps-row"><div><b>Learn</b><span>Understand the constraint</span></div><div><b>Build</b><span>Copy the pattern</span></div><div><b>Measure</b><span>Use real signals</span></div><div><b>Ship</b><span>Keep the trade-off</span></div></div></div></section></main>${footer('./')}`; }
+function topicsPage(){ const groups=[['AI Systems',['RAG','LLM','Embeddings','Vector Database','AI Agents','Local LLM','Prompt Engineering']],['Web Engineering',['Performance','Core Web Vitals','JavaScript','Browser','Images','Caching']],['Search & Visibility',['SEO','Technical SEO','Internal Linking','AI','Content Strategy']]]; const cards=groups.map(([name,tags])=>`<section class="topic-group"><div class="topic-group__head"><span class="eyebrow">Topic hub</span><h2>${name}</h2><p>Follow the thread across related guides.</p></div><div class="topic-grid">${tags.map(tag=>{const matches=sorted.filter(p=>p.tags.some(t=>t.toLowerCase()===tag.toLowerCase()||t.toLowerCase().includes(tag.toLowerCase()))).slice(0,3);return `<article class="topic-card reveal"><div class="topic-card__icon">${tag.slice(0,1)}</div><h3>${esc(tag)}</h3><span>${matches.length} ${matches.length===1?'guide':'guides'}</span><div>${matches.map(p=>`<a href="./${postUrl(p)}">${esc(p.title)}</a>`).join('')}</div></article>`;}).join('')}</div></section>`).join(''); return `${head({title:`Topics — AI, Performance & Search | ${SITE.name}`,description:'Browse StackSignal topics by engineering theme.',canonical:'topics.html',base:'./',theme:'default',jsonld:[{'@context':'https://schema.org','@type':'CollectionPage',name:'StackSignal Topics',url:`${SITE.url}/topics.html`}]})}${header('./','topics')}<main id="main"><section class="hero hero--compact"><canvas class="hero__canvas" data-shape="grid" aria-hidden="true"></canvas><div class="wrap hero__in"><span class="kicker">TOPIC MAP</span><h1>Browse by <span class="grad">engineering problem.</span></h1><p class="lede">No giant taxonomy. Just the concepts that connect your current StackSignal guides.</p>${searchBox('','Search the topic library…')}</div></section><div class="wrap topics-wrap">${cards}</div></main>${footer('./')}`; }
 function blogIndexPage() {
   return `${head({ title: `All Articles — Tech & AI Guides | ${SITE.name}`, description: `Browse all ${POSTS.length} ${SITE.name} articles on web performance, architecture, LLMs and AI-era SEO.`, canonical: 'blog/index.html', base: '../', theme: 'default', keywords: 'tech and ai articles, engineering blog archive', jsonld: [{ '@context': 'https://schema.org', '@type': 'Blog', name: SITE.name, url: `${SITE.url}/blog/index.html`, blogPost: sorted.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: `${SITE.url}/${postUrl(p)}`, datePublished: p.date })) }] })}
 ${header('../', 'blog')}

@@ -1,0 +1,12 @@
+<h2>What an embedding actually is</h2>
+<p>An embedding is a vector of numbers that represents the meaning or properties of an input in a space where similar inputs tend to be close together. The model is not storing a sentence as a sentence; it is mapping the input into a numerical representation that downstream systems can compare.</p>
+<h2>Similarity is the key operation</h2>
+<p>Once two texts are embedded, you can compare their vectors with a distance or similarity function such as cosine similarity. The exact score is less important than the ranking: which stored chunks are most similar to the new query?</p>
+<h2>Why chunking matters</h2>
+<p>Embedding a 20-page document as one vector usually creates a weak retrieval unit. Smaller chunks preserve more precise topical signals, but chunks that are too small lose context. A practical starting point is to split by semantic boundaries and overlap only when necessary.</p>
+<h2>Dimensions are not quality</h2>
+<p>A larger vector does not automatically mean better retrieval. Quality depends on the embedding model, language coverage, data distribution and retrieval task. Benchmark your own question set instead of choosing a model because its dimension count looks impressive.</p>
+<h2>Embeddings inside RAG</h2>
+<p>A common RAG pipeline looks like: query → query embedding → vector search → top-k chunks → prompt → model response. The embedding stage is only one component. Poor chunking, bad metadata filters or weak reranking can ruin a good embedding model.</p>
+<h2>How to evaluate an embedding choice</h2>
+<p>Create a set of real user questions with known relevant documents. Measure recall@k before changing the model. If the correct chunk is never retrieved, prompt tuning cannot save the pipeline; the retrieval layer has to improve first.</p>

@@ -1,0 +1,12 @@
+<h2>Write prompts like interfaces</h2>
+<p>A reliable prompt tells the model the task, constraints, input shape and output contract. It should make success testable. Avoid vague instructions such as “be an expert” when you can define the actual behaviour you need.</p>
+<h2>Separate stable rules from dynamic data</h2>
+<p>System-level instructions should contain durable behaviour. User content and retrieved evidence should be inserted into clearly delimited sections. This separation makes debugging easier and reduces accidental prompt injection through data.</p>
+<h2>Prefer schemas when software consumes the answer</h2>
+<p>If downstream code expects JSON, define the fields, types and edge cases. A natural-language answer that happens to look structured is not a reliable API contract. Use the model's structured-output support when available.</p>
+<h2>Examples beat adjectives</h2>
+<p>Few-shot examples show exactly what “good” looks like. Keep examples representative and diverse enough to demonstrate the boundary cases you care about. One excellent example can be more useful than a paragraph of subjective adjectives.</p>
+<h2>Evaluate prompts like code</h2>
+<p>Create a small golden dataset and compare prompt versions against the same inputs. Measure correctness, schema compliance, refusal quality, latency and token cost. A prompt change that improves one example but breaks 10 percent of production cases is not an improvement.</p>
+<h2>Version prompts and observe failures</h2>
+<p>Keep prompts in source control, assign versions, log which version served a request and capture anonymized failure cases. The best prompt is the one you can improve systematically, not the one you wrote at 2 a.m. and never measured.</p>
