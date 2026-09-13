@@ -360,7 +360,6 @@
     {label:'Home',meta:'Page',icon:'⌂',url:BASE+'index.html'},
     {label:'Learning Paths',meta:'Learn',icon:'↗',url:BASE+'paths.html'},
     {label:'Topics',meta:'Explore',icon:'#',url:BASE+'topics.html'},
-    {label:'Practice & Labs',meta:'Build',icon:'⚙',url:BASE+'practice.html'},
     {label:'All Posts',meta:'Library',icon:'▤',url:BASE+'blog/index.html'},
     {label:'Tech',meta:'Category',icon:'T',url:BASE+'tech.html'},
     {label:'AI',meta:'Category',icon:'A',url:BASE+'ai.html'},
