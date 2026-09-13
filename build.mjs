@@ -312,7 +312,6 @@ ${keywords ? `<meta name="keywords" content="${esc(keywords)}">` : ''}
 <meta name="twitter:site" content="${SITE.twitter}">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(description)}">
-<meta name="twitter:image" content="${SITE.url}/assets/img/og-${theme}.svg">
 <link rel="icon" href="${base}favicon.ico" sizes="any">
 <link rel="icon" href="${base}assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="${base}assets/img/icon-32.png">
@@ -344,10 +343,12 @@ function header(base, current) {
     <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
     <nav class="nav" id="nav" aria-label="Primary">
       ${link('index.html', 'Home', 'home')}
-      ${link('tech.html', 'Tech', 'tech')}
-      ${link('ai.html', 'AI', 'ai')}
-      ${link('blog/index.html', 'All posts', 'blog')}
+      ${link('paths.html', 'Paths', 'paths')}
+      ${link('topics.html', 'Topics', 'topics')}
+      ${link('practice.html', 'Practice', 'practice')}
+      ${link('blog/index.html', 'Blog', 'blog')}
       ${link('about.html', 'About', 'about')}
+      <button class="cmd-btn" type="button" data-command aria-label="Open command palette"><span>⌘</span>K</button>
     </nav>
   </div>
 </header>`;
@@ -371,19 +372,31 @@ const footer = (base) => `<footer class="foot">
       ${logo(base)}
       <p style="margin-top:.8rem">${SITE.description}</p>
     </div>
-    <div><h4>Categories</h4><ul>
+    <div><h4>Explore</h4><ul>
+      <li><a href="${base}paths.html">Learning paths</a></li>
+      <li><a href="${base}topics.html">Topics</a></li>
+      <li><a href="${base}practice.html">Practice &amp; labs</a></li>
+    </ul></div>
+    <div><h4>Library</h4><ul>
       <li><a href="${base}tech.html">Tech</a></li>
       <li><a href="${base}ai.html">AI</a></li>
       <li><a href="${base}blog/index.html">All posts</a></li>
+      <li><a href="${base}about.html">About</a></li>
     </ul></div>
-    <div><h4>Site</h4><ul>
-      <li><a href="${base}about.html">About</a></li>    </ul></div>
     <div><h4>Popular topics</h4><ul>
       ${[...new Set(POSTS.flatMap((p) => p.tags))].slice(0, 5).map((t) => `<li>${esc(t)}</li>`).join('')}
     </ul></div>
   </div>
   <div class="wrap" style="margin-top:2rem;font-size:.82rem">© ${new Date().getFullYear()} ${SITE.name}. Built as a static site — ${SITE.tagline}</div>
 </footer>
+<div class="cmd-palette" data-palette hidden>
+  <div class="cmd-palette__backdrop" data-command-close></div>
+  <div class="cmd-palette__dialog" role="dialog" aria-modal="true" aria-labelledby="cmd-title">
+    <div class="cmd-palette__head"><div><b id="cmd-title">StackSignal command palette</b><span>Search pages, paths and actions</span></div><button type="button" data-command-close aria-label="Close">Esc</button></div>
+    <div class="cmd-palette__search"><span>⌘K</span><input type="search" data-command-input placeholder="Try “RAG”, “paths” or “saved”" autocomplete="off"></div>
+    <div class="cmd-palette__list" data-command-list></div>
+  </div>
+</div>
 <button class="to-top" type="button" aria-label="Scroll back to top" title="Back to top">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
 </button>
@@ -444,7 +457,9 @@ ${header('../', p.category)}
         <time datetime="${p.date}">${fmt(p.date)}</time><span aria-hidden="true">•</span>
         <span>${p.read} min read</span><span aria-hidden="true">•</span>
         <span>Updated ${fmt(p.updated || p.date)}</span>
+        <button class="save-btn" type="button" data-save="${postUrl(p)}" aria-pressed="false">☆ Save</button>
       </div>
+      <div class="article-path"><strong>Suggested path:</strong> ${c.name === 'AI' ? 'AI Systems' : 'Performance Engineering'} · <a href="../paths.html">View path →</a></div>
       <p class="article__lede">${esc(p.hero)}</p>
       <div class="prose">${p.body}
       ${p.faq?.length ? `<h2 id="faq">Frequently asked questions</h2><div class="faq">${p.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div>` : ''}
@@ -560,13 +575,26 @@ ${header('./', 'home')}
 
   <section id="latest">
     <div class="wrap">
-      <div class="sec-head"><div><h2>Latest updates</h2><p>The newest four posts, always — rendered from <code>search-index.json</code> at load.</p></div><a class="btn" href="./blog/index.html">All posts</a></div>
+      <div class="sec-head"><div><span class="eyebrow">05 — Fresh signals</span><h2>Latest updates</h2><p>The newest four posts, always — rendered from <code>search-index.json</code> at load.</p></div><a class="btn" href="./blog/index.html">All posts</a></div>
       <div class="grid" data-feed="" data-limit="4">${sorted.slice(0, 4).map((p) => cardOf(p, './')).join('')}</div>
     </div>
   </section>
+  <section class="platform-band"><div class="wrap platform-band__grid"><div><span class="eyebrow">06 — Learn by doing</span><h2>Turn reading into a repeatable workflow.</h2><p>Follow a learning path, open a practice lab, then save the guides you want to revisit.</p></div><div class="feature-links"><a href="./paths.html"><b>Learning paths</b><span>Read in a useful order →</span></a><a href="./practice.html"><b>Practice labs</b><span>Test the idea yourself →</span></a><a href="./topics.html"><b>Topic map</b><span>Find connected guides →</span></a></div></div></section>
+  <section><div class="wrap"><div class="sec-head"><div><span class="eyebrow">07 — The StackSignal loop</span><h2>Learn → Build → Measure → Ship</h2><p>A compact workflow for turning one article into a working engineering habit.</p></div></div><div class="loop-grid"><div class="loop-card"><b>01</b><h3>Learn</h3><p>Understand the constraint and the failure mode.</p></div><div class="loop-card"><b>02</b><h3>Build</h3><p>Copy the pattern into a small test project.</p></div><div class="loop-card"><b>03</b><h3>Measure</h3><p>Use real numbers, not intuition, to validate it.</p></div><div class="loop-card"><b>04</b><h3>Ship</h3><p>Keep the trade-off that survives production.</p></div></div></div></section>
 </main>
 ${footer('./')}`;
 }
+
+/* ===== 8.5. LEARNING PLATFORM PAGES ===================================== */
+const PATHS = [
+  { slug:'performance', level:'Intermediate', duration:'3 articles · ~2h', title:'Performance Engineering', description:'Diagnose slow pages, reduce main-thread work and make static sites fast on real devices.', steps:['core-web-vitals-checklist-2026','cut-javascript-bundle-size','self-hosting-vs-serverless'], skills:['Core Web Vitals','bundle budgets','hosting trade-offs','measurement'] },
+  { slug:'ai-systems', level:'Intermediate', duration:'3 articles · ~2h', title:'AI Systems Engineering', description:'Move from model choice to retrieval architecture and local inference without skipping production constraints.', steps:['rag-vs-fine-tuning','local-llm-8gb-vram-setup','chatgpt-prompts-productivity'], skills:['RAG','local LLMs','prompt design','model trade-offs'] },
+  { slug:'search', level:'Foundations', duration:'2 articles · ~70m', title:'Search & AI Visibility', description:'Build topic authority, structure content for modern search and connect SEO work to technical execution.', steps:['ai-seo-topical-authority','chatgpt-prompts-productivity'], skills:['topical authority','internal linking','AI search','content systems'] }
+];
+const getPostsBySlugs = (slugs) => slugs.map((slug)=>sorted.find((p)=>p.slug===slug)).filter(Boolean);
+function pathsPage(){ const jsonld=[{'@context':'https://schema.org','@type':'CollectionPage',name:'StackSignal Learning Paths',url:`${SITE.url}/paths.html`}]; return `${head({title:`Learning Paths — Tech, AI & Performance | ${SITE.name}`,description:'Structured learning paths across performance engineering, AI systems and search.',canonical:'paths.html',base:'./',theme:'default',jsonld})}${header('./','paths')}<main id="main"><section class="hero hero--platform"><canvas class="hero__canvas" data-shape="network" aria-hidden="true"></canvas><div class="wrap hero__in"><span class="kicker">LEARNING SYSTEM · 03 PATHS</span><h1>Pick a path. <span class="grad">Build real skill.</span></h1><p class="lede">StackSignal is evolving from a blog into a connected engineering library: short guides, deliberate practice and production-minded paths.</p><div class="cta-row"><a class="btn btn--primary" href="#paths">Explore paths</a><a class="btn" href="./practice.html">Open practice</a></div></div></section><section id="paths"><div class="wrap"><div class="sec-head"><div><span class="eyebrow">01 — Choose your route</span><h2>Three tracks, one engineering mindset</h2><p>Read the existing guides in a useful sequence instead of browsing randomly.</p></div></div><div class="path-grid">${PATHS.map((x,i)=>`<article class="path-card reveal path-card--${i+1}"><div class="path-card__top"><span class="path-num">0${i+1}</span><span class="badge">${x.level}</span><span class="path-time">${x.duration}</span></div><h3>${x.title}</h3><p>${esc(x.description)}</p><div class="chip-row">${x.skills.map(t=>`<span>${esc(t)}</span>`).join('')}</div><ol class="path-steps">${getPostsBySlugs(x.steps).map((p,j)=>`<li><span>${j+1}</span><a href="./${postUrl(p)}">${esc(p.title)}</a></li>`).join('')}</ol><a class="btn btn--primary" href="./${postUrl(getPostsBySlugs(x.steps)[0])}">Start path →</a></article>`).join('')}</div></div></section><section class="platform-band"><div class="wrap platform-band__grid"><div><span class="eyebrow">02 — Learn → Build → Measure → Ship</span><h2>Every page should leave you with something you can test.</h2></div><div class="steps-row"><div><b>Learn</b><span>Understand the constraint</span></div><div><b>Build</b><span>Copy the pattern</span></div><div><b>Measure</b><span>Use real signals</span></div><div><b>Ship</b><span>Keep the trade-off</span></div></div></div></section></main>${footer('./')}`; }
+function topicsPage(){ const groups=[['AI Systems',['RAG','LLM','Fine-Tuning','Local LLM']],['Web Engineering',['Performance','Core Web Vitals','JavaScript','Architecture']],['Search & Visibility',['SEO','AI','Content Strategy']]]; const cards=groups.map(([name,tags])=>`<section class="topic-group"><div class="topic-group__head"><span class="eyebrow">Topic hub</span><h2>${name}</h2><p>Follow the thread across related guides.</p></div><div class="topic-grid">${tags.map(tag=>{const matches=sorted.filter(p=>p.tags.some(t=>t.toLowerCase()===tag.toLowerCase()||t.toLowerCase().includes(tag.toLowerCase()))).slice(0,3);return `<article class="topic-card reveal"><div class="topic-card__icon">${tag.slice(0,1)}</div><h3>${esc(tag)}</h3><span>${matches.length} ${matches.length===1?'guide':'guides'}</span><div>${matches.map(p=>`<a href="./${postUrl(p)}">${esc(p.title)}</a>`).join('')}</div></article>`;}).join('')}</div></section>`).join(''); return `${head({title:`Topics — AI, Performance & Search | ${SITE.name}`,description:'Browse StackSignal topics by engineering theme.',canonical:'topics.html',base:'./',theme:'default',jsonld:[{'@context':'https://schema.org','@type':'CollectionPage',name:'StackSignal Topics',url:`${SITE.url}/topics.html`}]})}${header('./','topics')}<main id="main"><section class="hero hero--compact"><canvas class="hero__canvas" data-shape="grid" aria-hidden="true"></canvas><div class="wrap hero__in"><span class="kicker">TOPIC MAP</span><h1>Browse by <span class="grad">engineering problem.</span></h1><p class="lede">No giant taxonomy. Just the concepts that connect your current StackSignal guides.</p>${searchBox('','Search the topic library…')}</div></section><div class="wrap topics-wrap">${cards}</div></main>${footer('./')}`; }
+function practicePage(){ const labs=[{title:'Fix a slow page',level:'Intermediate',time:'45 min',slug:'core-web-vitals-checklist-2026',desc:'Audit LCP, INP and CLS on a real page and produce a three-step remediation plan.',checks:['Find the LCP element','Trace long tasks','Lock layout dimensions']},{title:'Perform a bundle surgery',level:'Intermediate',time:'40 min',slug:'cut-javascript-bundle-size',desc:'Take an oversized bundle and identify the highest-impact cuts before writing any code.',checks:['Sort by parsed cost','Split by interaction','Set a CI size budget']},{title:'Choose an AI architecture',level:'Advanced',time:'50 min',slug:'rag-vs-fine-tuning',desc:'Choose RAG, fine-tuning or the hybrid pattern and defend the trade-off.',checks:['Freshness','Evaluation','Latency & cost']},{title:'Fit an LLM into 8GB VRAM',level:'Advanced',time:'35 min',slug:'local-llm-8gb-vram-setup',desc:'Select a quantization level, estimate memory use and design a safe context budget.',checks:['Weight memory','KV cache','Fallback plan']}]; return `${head({title:`Practice & Labs — Engineering Challenges | ${SITE.name}`,description:'Hands-on practice labs based on StackSignal engineering guides.',canonical:'practice.html',base:'./',theme:'default',jsonld:[{'@context':'https://schema.org','@type':'CollectionPage',name:'StackSignal Practice',url:`${SITE.url}/practice.html`}]})}${header('./','practice')}<main id="main"><section class="hero hero--compact"><canvas class="hero__canvas" data-shape="globe" aria-hidden="true"></canvas><div class="wrap hero__in"><span class="kicker">PRACTICE LABS</span><h1>Learn it. <span class="grad">Prove it.</span></h1><p class="lede">Short engineering challenges built from the problems behind the articles. Pick one, make a decision, then compare it to the guide.</p></div></section><section><div class="wrap"><div class="lab-grid">${labs.map((lab,i)=>`<article class="lab-card reveal"><div class="lab-card__head"><span>0${i+1}</span><span>${lab.level}</span><span>${lab.time}</span></div><h2>${lab.title}</h2><p>${esc(lab.desc)}</p><ul>${lab.checks.map(c=>`<li>${esc(c)}</li>`).join('')}</ul><a class="btn btn--primary" href="./${postUrl(sorted.find(p=>p.slug===lab.slug))}">Open guide →</a></article>`).join('')}</div></div></section><section class="platform-band"><div class="wrap two-up"><div><span class="eyebrow">Architecture drill</span><h2>Think in systems, not isolated prompts.</h2><p>Use the examples to sketch the flow, identify failure modes and explain trade-offs before reaching for a tool.</p></div><div class="system-flow"><span>User</span><i>→</i><span>Context</span><i>→</i><span>Decision</span><i>→</i><span>System</span></div></div></section></main>${footer('./')}`; }
 
 /* ===== 8. PAGE: all posts + about + 404 =================================== */
 function blogIndexPage() {
@@ -651,6 +679,7 @@ const searchIndex = sorted.map((p) => ({
 const sitemap = () => {
   const urls = [
         ['', '1.0', 'daily'], ['tech.html', '0.9', 'daily'], ['ai.html', '0.9', 'daily'],
+    ['paths.html', '0.8', 'weekly'], ['topics.html', '0.8', 'weekly'], ['practice.html', '0.8', 'weekly'],
     ['blog/index.html', '0.8', 'daily'], ['about.html', '0.4', 'monthly'],
     ...sorted.map((p) => [postUrl(p), '0.8', 'weekly'])
   ];
@@ -717,6 +746,9 @@ await cp('src/assets', path.join(OUT, 'assets'), { recursive: true });
 const written = [];
 written.push(await w('index.html', homePage()));
 for (const c of Object.values(CATEGORIES)) written.push(await w(`${c.slug}.html`, categoryPage(c)));
+written.push(await w('paths.html', pathsPage()));
+written.push(await w('topics.html', topicsPage()));
+written.push(await w('practice.html', practicePage()));
 written.push(await w('blog/index.html', blogIndexPage()));
 for (const p of sorted) written.push(await w(postUrl(p), postPage(p)));
 written.push(await w('about.html', aboutPage()));

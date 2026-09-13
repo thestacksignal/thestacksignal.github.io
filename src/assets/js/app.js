@@ -347,3 +347,45 @@
 
   if (window.SS) window.SS.article = init;
 })();
+
+/* =========================================================================
+   PLATFORM ENHANCEMENTS — command palette + saved articles
+   ========================================================================= */
+(function(){
+  'use strict';
+  var root=document.querySelector('[data-palette]');
+  if(!root) return;
+  var input=root.querySelector('[data-command-input]'), list=root.querySelector('[data-command-list]');
+  var BASE=window.SITE_BASE||'./', items=[
+    {label:'Home',meta:'Page',icon:'⌂',url:BASE+'index.html'},
+    {label:'Learning Paths',meta:'Learn',icon:'↗',url:BASE+'paths.html'},
+    {label:'Topics',meta:'Explore',icon:'#',url:BASE+'topics.html'},
+    {label:'Practice & Labs',meta:'Build',icon:'⚙',url:BASE+'practice.html'},
+    {label:'All Posts',meta:'Library',icon:'▤',url:BASE+'blog/index.html'},
+    {label:'Tech',meta:'Category',icon:'T',url:BASE+'tech.html'},
+    {label:'AI',meta:'Category',icon:'A',url:BASE+'ai.html'},
+    {label:'Saved articles',meta:'Local',icon:'☆',action:'saved'}
+  ], active=0;
+  function saved(){try{return JSON.parse(localStorage.getItem('ss-saved')||'[]')}catch(e){return[]}}
+  function render(q){
+    var term=(q||'').trim().toLowerCase(), all=items.slice();
+    if(term==='saved' || term==='bookmarks') all=all.filter(function(x){return x.action==='saved'});
+    else if(term) all=all.filter(function(x){return (x.label+' '+x.meta).toLowerCase().indexOf(term)>-1});
+    if(!all.length){list.innerHTML='<div class="cmd-item"><span></span><span class="cmd-item__label">No command matches</span><span></span></div>';return;}
+    active=0; list.innerHTML=all.map(function(x,i){return '<a class="cmd-item'+(i===0?' is-active':'')+'" href="'+(x.url||'#')+'" data-cmd-action="'+(x.action||'')+'"><span class="cmd-item__icon">'+x.icon+'</span><span class="cmd-item__label">'+x.label+'</span><span class="cmd-item__meta">'+x.meta+'</span></a>'}).join('');
+  }
+  function open(){root.hidden=false;document.body.classList.add('cmd-open');render(input.value);setTimeout(function(){input.focus();input.select()},0)}
+  function close(){root.hidden=true;document.body.classList.remove('cmd-open')}
+  document.querySelectorAll('[data-command]').forEach(function(b){b.addEventListener('click',open)});
+  root.querySelectorAll('[data-command-close]').forEach(function(b){b.addEventListener('click',close)});
+  input.addEventListener('input',function(){render(input.value)});
+  document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();root.hidden?open():close();return}if(!root.hidden&&e.key==='Escape'){e.preventDefault();close();return}if(!root.hidden&&e.key==='ArrowDown'){e.preventDefault();var a=list.querySelectorAll('.cmd-item');active=Math.min(active+1,a.length-1);a.forEach(function(x,i){x.classList.toggle('is-active',i===active)})}if(!root.hidden&&e.key==='ArrowUp'){e.preventDefault();var b=list.querySelectorAll('.cmd-item');active=Math.max(active-1,0);b.forEach(function(x,i){x.classList.toggle('is-active',i===active)})}if(!root.hidden&&e.key==='Enter'){var c=list.querySelectorAll('.cmd-item')[active];if(c){e.preventDefault();var act=c.getAttribute('data-cmd-action');if(act==='saved'){var sv=saved();location.href=BASE+'blog/index.html#saved';close();}else if(c.getAttribute('href')) location.href=c.getAttribute('href')}}});
+
+  var saveButtons=document.querySelectorAll('[data-save]');
+  saveButtons.forEach(function(btn){
+    var key=btn.getAttribute('data-save'), sv=saved(), on=sv.indexOf(key)>-1;
+    function paint(){btn.classList.toggle('is-saved',on);btn.setAttribute('aria-pressed',String(on));btn.textContent=on?'★ Saved':'☆ Save'}
+    paint();
+    btn.addEventListener('click',function(){var arr=saved();if(arr.indexOf(key)>-1){arr=arr.filter(function(x){return x!==key});on=false}else{arr.push(key);on=true}localStorage.setItem('ss-saved',JSON.stringify(arr));paint()});
+  });
+})();
