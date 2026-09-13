@@ -665,12 +665,6 @@ const robots = () => `User-agent: *
 Allow: /
 Disallow: /404.html
 
-# AI crawlers — allow (remove a line to block that bot)
-User-agent: GPTBot
-Allow: /
-User-agent: PerplexityBot
-Allow: /
-
 Sitemap: ${SITE.url}/sitemap.xml`;
 
 const rss = () => `<?xml version="1.0" encoding="UTF-8"?>
