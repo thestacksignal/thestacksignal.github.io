@@ -438,6 +438,7 @@ function postPage(p) {
     mainEntity: p.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } }))
   });
 
+  // Paragraph cards are applied automatically by .prose > p in style.css, so every new post inherits the same treatment.
   const base = p.seoTitle || p.title;
   const titleTag = (base + ' | ' + SITE.name).length <= 60 ? base + ' | ' + SITE.name : base;
   return `${head({ title: titleTag, description: p.description, canonical: postUrl(p), base: '../', theme: c.theme, keywords: p.keywords, jsonld })}

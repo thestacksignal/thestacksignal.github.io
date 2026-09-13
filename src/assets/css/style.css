@@ -170,6 +170,7 @@ section{ padding:clamp(2.4rem,5vw,4.2rem) 0; }
 .article{ max-width:44rem; padding-top:1rem; }
 .article__meta{ display:flex; flex-wrap:wrap; gap:.5rem .9rem; align-items:center; font-size:.83rem; color:var(--muted-2); margin-bottom:1.4rem; }
 .article__lede{ font-size:1.14rem; color:var(--muted); border-left:2px solid var(--accent); padding-left:1rem; margin:0 0 1.8rem; }
+.prose > p{position:relative;margin:1.15rem 0;padding:1rem 1.1rem 1.05rem;border:1px solid color-mix(in srgb,var(--line) 72%,transparent);border-radius:14px;background:linear-gradient(180deg,color-mix(in srgb,var(--surface) 94%,white 6%),var(--surface));box-shadow:0 8px 24px rgba(0,0,0,.06);line-height:1.82;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}.prose > p::before{content:"";position:absolute;left:-1px;top:1rem;width:3px;height:1.35rem;border-radius:99px;background:var(--accent);opacity:.9}.prose > p:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--accent) 28%,var(--line));box-shadow:0 12px 28px rgba(0,0,0,.09)}
 .prose h2{ margin-top:2.2rem; scroll-margin-top:5rem; }
 .prose h3{ margin-top:1.6rem; }
 .prose ul,.prose ol{ padding-left:1.25rem; color:#dbe1ee; }
