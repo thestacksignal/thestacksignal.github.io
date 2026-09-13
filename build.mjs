@@ -312,6 +312,7 @@ ${keywords ? `<meta name="keywords" content="${esc(keywords)}">` : ''}
 <meta name="twitter:site" content="${SITE.twitter}">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(description)}">
+<meta name="twitter:image" content="${SITE.url}/assets/img/og-${theme}.svg">
 <link rel="icon" href="${base}favicon.ico" sizes="any">
 <link rel="icon" href="${base}assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="${base}assets/img/icon-32.png">
@@ -660,83 +661,6 @@ ${urls.map(([u, pr, cf]) => `  <url><loc>${SITE.url}/${u}</loc><lastmod>${lastmo
 </urlset>`;
 };
 
-const minifyJS = (s) => {
-  const out = [];
-  let i = 0, state = 'code', quote = '', esc = false;
-  let prevWord = '';
-  const canStartRegex = () => {
-    const last = out.length ? out[out.length - 1] : '';
-    const ch = last ? last.slice(-1) : '';
-    return !ch || '([{=,:;!&|?+\-*%^~<>'.includes(ch) || /^(return|throw|case|delete|void|typeof|instanceof|in|of|else|do)$/.test(prevWord);
-  };
-  while (i < s.length) {
-    const c = s[i];
-    if (state === 'code') {
-      if (c === '"' || c === "'" || c === '`') { quote = c; state = 'string'; out.push(c); esc = false; prevWord = ''; i++; continue; }
-      if (c === '/' && s[i + 1] === '/') { i += 2; while (i < s.length && s[i] !== '\n' && s[i] !== '\r') i++; continue; }
-      if (c === '/' && s[i + 1] === '*') { const j = s.indexOf('*/', i + 2); i = j < 0 ? s.length : j + 2; continue; }
-      if (c === '/' && s[i + 1] !== '/' && s[i + 1] !== '*' && canStartRegex()) {
-        let j = i + 1, inClass = false, regexEsc = false;
-        while (j < s.length) {
-          const ch = s[j];
-          if (regexEsc) regexEsc = false;
-          else if (ch === '\\') regexEsc = true;
-          else if (ch === '[') inClass = true;
-          else if (ch === ']') inClass = false;
-          else if (ch === '/' && !inClass) { j++; while (j < s.length && /[A-Za-z]/.test(s[j])) j++; break; }
-          j++;
-        }
-        out.push(s.slice(i, j)); i = j; prevWord = ''; continue;
-      }
-      if (/\s/.test(c)) {
-        let j = i + 1; while (j < s.length && /\s/.test(s[j])) j++;
-        const prev = out.length ? out[out.length - 1].slice(-1) : '';
-        const next = s[j] || '';
-        if (/[A-Za-z0-9_$]/.test(prev) && /[A-Za-z0-9_$]/.test(next)) out.push(' ');
-        i = j; continue;
-      }
-      if (/[A-Za-z0-9_$]/.test(c)) {
-        let j = i + 1; while (j < s.length && /[A-Za-z0-9_$]/.test(s[j])) j++;
-        const word = s.slice(i, j); out.push(word); prevWord = word; i = j; continue;
-      }
-      out.push(c); prevWord = ''; i++;
-    } else if (state === 'string') {
-      out.push(c);
-      if (esc) esc = false;
-      else if (c === '\\') esc = true;
-      else if (c === quote) state = 'code';
-      i++;
-    }
-  }
-  return out.join('').trim();
-};
-
-const minifyCSS = (s) => {
-  let out = [], i = 0, state = 'code', quote = '', esc = false;
-  while (i < s.length) {
-    const c = s[i];
-    if (state === 'code') {
-      if (c === '"' || c === "'") { quote = c; state = 'string'; out.push(c); esc = false; i++; continue; }
-      if (c === '/' && s[i + 1] === '*') { const j = s.indexOf('*/', i + 2); i = j < 0 ? s.length : j + 2; continue; }
-      if (/\s/.test(c)) {
-        let j = i + 1; while (j < s.length && /\s/.test(s[j])) j++;
-        const prev = out.length ? out[out.length - 1].slice(-1) : '';
-        const next = s[j] || '';
-        if (/[A-Za-z0-9_-]/.test(prev) && /[A-Za-z0-9_(-]/.test(next)) out.push(' ');
-        i = j; continue;
-      }
-      out.push(c); i++;
-    } else {
-      out.push(c);
-      if (esc) esc = false;
-      else if (c === '\\') esc = true;
-      else if (c === quote) state = 'code';
-      i++;
-    }
-  }
-  return out.join('').trim().replace(/\s*([{}:;,>+~])\s*/g, '$1').replace(/;}/g, '}');
-};
-
 const robots = () => `User-agent: *
 Allow: /
 Disallow: /404.html
@@ -789,9 +713,6 @@ const w = async (rel, data) => {
 
 await rm(OUT, { recursive: true, force: true });
 await cp('src/assets', path.join(OUT, 'assets'), { recursive: true });
-await writeFile(path.join(OUT, 'assets/js/app.js'), minifyJS(await readFile('src/assets/js/app.js', 'utf8')) + '\n');
-await writeFile(path.join(OUT, 'assets/js/hero3d.js'), minifyJS(await readFile('src/assets/js/hero3d.js', 'utf8')) + '\n');
-await writeFile(path.join(OUT, 'assets/css/style.css'), minifyCSS(await readFile('src/assets/css/style.css', 'utf8')) + '\n');
 
 const written = [];
 written.push(await w('index.html', homePage()));
