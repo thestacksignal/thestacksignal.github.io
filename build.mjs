@@ -55,7 +55,7 @@ const POSTS = [
     seoTitle: 'Core Web Vitals Checklist 2026: Pass INP, LCP & CLS',
     description: 'A field-tested Core Web Vitals checklist for 2026: how to pass INP, LCP and CLS on real devices, with the exact fixes that move the numbers.',
     date: '2026-09-08',
-    updated: '2026-09-08',
+    updated: '2026-09-18',
     read: 8,
     tags: ['Core Web Vitals', 'Performance', 'SEO'],
     keywords: 'core web vitals checklist, INP optimization, LCP fix, CLS fix, page speed 2026',
@@ -455,6 +455,44 @@ const POSTS = [
       ['What is a pillar page?', 'A broad overview page for a topic that links out to every supporting article in that cluster, aggregating and distributing topical authority across the group.'],
       ['Why does anchor text matter for SEO?', 'Descriptive anchor text tells both readers and crawlers what the linked page is about, reinforcing the same topical signal as the destination page\'s own title and headings — generic anchors like "click here" carry none of that.'],
       ['What is click depth and why does it matter?', 'It is the number of clicks needed to reach a page from the homepage via internal links. Pages several clicks deep tend to be crawled less often and inherit less authority through the link graph.']
+    ]
+  },
+  {
+    slug: 'rag-chunking-strategies',
+    category: 'ai',
+    title: 'RAG Chunking Strategies Compared: Fixed vs Recursive vs Semantic',
+    seoTitle: 'RAG Chunking Strategies 2026: Fixed vs Recursive vs Semantic Chunking',
+    description: 'A practical comparison of RAG chunking strategies — fixed-size, recursive, semantic and structure-aware — with chunk-size guidance and a simple decision framework.',
+    date: '2026-09-17',
+    updated: '2026-09-17',
+    read: 7,
+    tags: ['RAG', 'Chunking', 'Embeddings'],
+    keywords: 'rag chunking strategies, chunk size for rag, semantic chunking vs fixed size, recursive character splitting',
+    hero: 'Your retrieval ceiling is set the moment you decide where to cut the document — before a single embedding is generated.',
+    body: '',
+    faq: [
+      ['What chunk size should I start with for RAG?', 'A common starting point is 300–500 tokens with 10–20% overlap for prose-heavy documentation, adjusted down for short self-contained content and up for reference material that needs surrounding context — validate the choice against a real question set rather than treating any number as fixed.'],
+      ['Is semantic chunking always better than fixed-size chunking?', 'No. It can improve recall on long, topic-diverse prose, but it roughly doubles embedding calls and can produce fragments too short to be useful — recursive character splitting remains a strong, much cheaper default for most documents.'],
+      ['Does chunk overlap actually improve retrieval?', 'A moderate overlap of 10–20% helps by preventing a fact from being split exactly at a chunk boundary. Pushing overlap much higher mostly adds storage and embedding cost for duplicated text without a proportional recall gain.']
+    ]
+  },
+  {
+    slug: 'core-web-vitals-for-ai-chat-interfaces',
+    category: 'tech',
+    title: 'Core Web Vitals for AI Chat Interfaces: LCP, INP and CLS in Streaming UIs',
+    seoTitle: 'Core Web Vitals for AI Chatbots: Fix LCP, INP & CLS in Streaming UIs',
+    description: 'Why AI chat interfaces fail Core Web Vitals even when the model responds fast, and how to fix LCP, INP and CLS specifically for token-by-token streaming interfaces.',
+    date: '2026-09-18',
+    updated: '2026-09-18',
+    read: 7,
+    tags: ['Core Web Vitals', 'AI', 'Performance'],
+    keywords: 'core web vitals ai chatbot, streaming ui performance, cls chat widget, inp llm interface',
+    hero: 'A model that answers in 200ms can still feel slow if the interface around it fights the browser.',
+    body: '',
+    faq: [
+      ['Why does LCP look bad on a chat interface that has no real content at first paint?', 'Because LCP measures the largest element that actually paints, which on a fresh chat session is the app shell — input box, header, welcome state — not the eventual AI response. Optimise that shell for fast first paint the same way you would any other page.'],
+      ['Does streaming text token-by-token hurt Core Web Vitals?', 'Not inherently — it hurts INP and CLS specifically when each token triggers its own layout and paint pass. Batching updates inside requestAnimationFrame and reserving space for the response container removes most of the problem without changing the streaming itself.'],
+      ['How do I stop a chat widget from causing layout shift?', 'Reserve a sensible minimum height for the response container before the first token arrives, and avoid inserting or removing elements like a "thinking" indicator above content that has already rendered — both are common, avoidable sources of CLS in streaming interfaces.']
     ]
   }
 ];

@@ -1,0 +1,71 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>Chat interfaces break the usual Core Web Vitals playbook because the page has no real content until the model starts responding &mdash; LCP has to be optimised around the interface shell, not the eventual answer.</li><li>Token-by-token streaming is a main-thread problem before it's a network problem: appending to the DOM on every token is what actually causes poor INP and layout shift, not model latency.</li><li>Reserving space for the response container before the first token arrives removes most chat-related CLS in a single change.</li><li>A fast model with a low time-to-first-token can still feel slow if the surrounding interface fights the browser's rendering pipeline &mdash; the two are measured differently and fixed differently.</li></ul></div>
+
+<h2>Why chat interfaces break the usual playbook</h2>
+<p>Core Web Vitals were designed around a page that loads once and mostly sits still: LCP marks when the main content painted, CLS tracks unexpected movement after that, and INP measures how fast the page responds to input. A chat interface violates the assumption underneath all three &mdash; the "main content" doesn't exist yet when the page loads, and it keeps growing, token by token, for the entire interaction. See the general <a href="./core-web-vitals-checklist-2026.html">Core Web Vitals checklist</a> for the baseline these interfaces still have to clear before the AI-specific problems even start.</p>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>Time to first token is a model-latency metric. LCP, INP and CLS are browser-rendering metrics. A 200ms time-to-first-token and a broken INP score can coexist in the same interface &mdash; they measure completely different things.</p></div></div>
+
+<h2>LCP: painting a page that has no content yet</h2>
+<p>On first load, the largest visible element in a chat UI is usually the empty message container, an input box, or a welcome state &mdash; not the answer, which doesn't exist until the user asks something. LCP for a chat app should be optimised like any other app shell: fast first paint of the input and layout chrome, not the eventual AI response. Where teams go wrong is rendering that shell client-side behind a JavaScript bundle, which delays the one paint that LCP actually measures on a fresh visit.</p>
+<ul>
+<li>Server-render or statically render the empty shell &mdash; input box, header, suggested-prompt chips &mdash; so it paints before any client JavaScript has to run.</li>
+<li>Don't block that first paint on auth checks or model-availability pings; show the shell, then progressively enable it.</li>
+<li>If the interface reopens an existing conversation, treat the last message's render as the LCP-critical path, not the empty state.</li>
+</ul>
+
+<h2>INP: the input lags while tokens are still arriving</h2>
+<p>This is where most AI chat interfaces actually fail Core Web Vitals, and it has almost nothing to do with the model itself. A naive implementation appends each incoming token straight to the DOM as it arrives over the stream, often re-running markdown parsing or syntax highlighting on every single token. At even a moderate token rate, that's dozens of forced layout and paint cycles per second competing with the user's own clicks and keystrokes for the main thread &mdash; exactly what INP measures.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Rendering approach</th><th>Main-thread cost</th><th>INP risk</th></tr></thead>
+<tbody>
+<tr><td>Append and re-render on every token</td><td>One layout/paint pass per token</td><td>High &mdash; input lags during streaming</td></tr>
+<tr><td>Batch tokens with requestAnimationFrame</td><td>One pass per frame, ~60/sec max</td><td>Low &mdash; bounded by the frame budget</td></tr>
+<tr><td>Buffer and flush every N tokens or M ms</td><td>Configurable, lowest cost</td><td>Lowest &mdash; trades a little visual smoothness for headroom</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> re-parsing the entire growing message as markdown on every token is a common hidden cost. Parse incrementally, or only re-parse the last block that actually changed, instead of the whole message from scratch each time.</p></div></div>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>Batch DOM updates inside <code>requestAnimationFrame</code> and let a small buffer coalesce multiple tokens into a single paint. Users can't perceive the difference between per-token and per-frame updates, but the browser's main thread can.</p></div></div>
+
+<h2>CLS: the layout-shift trap of growing messages</h2>
+<p>A response container with no reserved height grows as tokens stream in, pushing the input box, suggested prompts, or previous messages down the page. Each push is a layout shift, and if the user's cursor or a click lands during one of those shifts, it counts against CLS at the worst possible moment &mdash; mid-interaction.</p>
+<ul>
+<li>Reserve a sensible minimum height for the response container before the first token arrives, based on typical response length.</li>
+<li>Anchor scroll position to the bottom explicitly during streaming rather than relying on natural document flow to keep the latest content in view.</li>
+<li>Animate new content in with <code>transform</code> and <code>opacity</code>, never by changing height or inserting above messages that already rendered.</li>
+</ul>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">&#215;</span><div><p>Inserting a "thinking&hellip;" indicator above the growing response, then removing it once the first token arrives, is a guaranteed layout shift. Reserve its space as part of the response container instead of treating it as a separate element.</p></div></div>
+
+<div class="stat-strip"><div><b>16ms</b><span>frame budget at 60fps</span></div><div><b>200ms</b><span>INP threshold for a "good" score</span></div><div><b>0.1</b><span>CLS threshold for a "good" score</span></div></div>
+
+<h2>Measuring a page whose "load" isn't the point</h2>
+<p>Standard field tools still work here, but the interaction that matters most is the send-message-to-first-render cycle, not the initial page load. Treat each message turn as its own soft navigation for measurement purposes where your tooling supports it, and specifically watch INP during the streaming window, not just on the initial click that sent the message &mdash; a keystroke in the input box while a previous response is still streaming is exactly the interaction most likely to reveal a real INP problem.</p>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>Lab tools like Lighthouse often under-report this, because a scripted run doesn't type into the input field while a response streams. Field data, or a manual trace while interacting mid-stream, catches what a synthetic run misses.</p></div></div>
+
+<h2>Perceived performance: skeletons and optimistic UI</h2>
+<p>Not every fix here is a Core Web Vitals metric. The user's own sent message should render instantly and optimistically &mdash; before the server has even acknowledged it &mdash; because waiting for a round trip before showing what someone just typed reads as broken, even though it technically doesn't touch LCP, INP or CLS. Pair that with a lightweight, fixed-height typing indicator that occupies the exact space the first response tokens will need, and the interface feels responsive well before the model has produced anything at all.</p>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>A skeleton or typing indicator only helps perceived performance if it reserves the same space the real content will occupy. One that collapses the moment the response arrives just relocates the layout shift instead of preventing it.</p></div></div>
+
+<h2>Concurrent streams compound the same problem</h2>
+<p>Interfaces built on multi-step, tool-calling workflows often render more than one stream at once &mdash; a status line for the current tool call, the model's running commentary, and the eventual answer, all updating independently. Each additional stream is another source of token-driven DOM updates competing for the same main thread, so the batching and reserved-space fixes above matter more, not less, as an interface gets more agentic. Treat every simultaneous stream as its own rendering budget rather than assuming the fix for one chat bubble automatically covers a page updating three things at once.</p>
+
+<h2>You don't have to build the batching yourself</h2>
+<p>Most of this is a known problem with known primitives, not something to solve from scratch. React's <code>useTransition</code> and <code>startTransition</code> let you mark streaming text updates as lower priority than user input, so a keystroke in the input box can still interrupt a render instead of waiting behind it. Several LLM front-end SDKs already batch token updates internally rather than dispatching a state update per token. For long conversation histories, a virtualised list renders only the messages currently on screen, which keeps CLS and paint cost from growing as the conversation gets longer &mdash; the same technique any long-scrolling feed uses, applied to chat.</p>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>Before writing custom token-batching logic, check whether your streaming SDK or UI framework already does it. Reinventing this layer is a common source of the exact bugs it's meant to prevent.</p></div></div>
+
+<h2>A fix checklist</h2>
+<ol>
+<li>Server-render or statically render the empty chat shell so first paint doesn't wait on JavaScript.</li>
+<li>Reserve height for the response container before the first token arrives.</li>
+<li>Batch token rendering inside <code>requestAnimationFrame</code> instead of appending on every token.</li>
+<li>Parse markdown and syntax highlighting incrementally, not on the full message every time.</li>
+<li>Anchor auto-scroll explicitly during streaming instead of relying on layout flow.</li>
+<li>Test INP by typing into the input while a response is actively streaming, not just on the initial send.</li>
+</ol>
+<blockquote><p>A model that answers in 200 milliseconds can still feel slow if the interface fights the browser for the rest of the interaction.</p></blockquote>
+
+<h2>Where this fits with the rest of the pipeline</h2>
+<p>These are rendering problems, not model problems, which is exactly why they stay invisible to teams measuring only <a href="./browser-rendering-explained.html">the rendering pipeline</a> in the abstract, or only time-to-first-token on the model side. Fixing them doesn't require a different model or a faster provider &mdash; it requires treating the streaming response the same way you'd treat any other high-frequency UI update: batched, bounded, and never fighting layout for space it didn't reserve.</p>
+
+<hr>
+<p>Optimise the shell like any other page for LCP, treat token streaming as a rendering-frequency problem for INP, and reserve space up front to kill CLS before it starts. None of these fixes touch the model &mdash; which is exactly why they're so often missed by teams who assume a Core Web Vitals problem must be a model-speed problem.</p>

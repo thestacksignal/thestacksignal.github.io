@@ -34,7 +34,7 @@
 </tbody>
 </table>
 </div>
-<p>A practical starting point: split by semantic boundaries &mdash; headings, paragraphs, list items &mdash; rather than a fixed character count, and only add overlap between chunks when a concept genuinely spans the boundary. Overlap by default just duplicates noise across your index and inflates storage without improving recall.</p>
+<p>A practical starting point: split by semantic boundaries &mdash; headings, paragraphs, list items &mdash; rather than a fixed character count, and only add overlap between chunks when a concept genuinely spans the boundary. Overlap by default just duplicates noise across your index and inflates storage without improving recall. For a fuller comparison of fixed, recursive, semantic and structure-aware splitting &mdash; including when each one is worth its extra cost &mdash; see <a href="./rag-chunking-strategies.html">RAG chunking strategies compared</a>.</p>
 <div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>Keep tables, code blocks and FAQ pairs as atomic chunks. Splitting a table mid-row or a function mid-body destroys the one property &mdash; local coherence &mdash; that made it embeddable in the first place.</p></div></div>
 
 <h2>Dimensions are not quality</h2>

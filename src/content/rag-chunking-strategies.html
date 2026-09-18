@@ -1,0 +1,84 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>Chunking happens before embedding, so it sets a hard ceiling on retrieval quality &mdash; no amount of prompt tuning recovers a fact that was split across two chunks.</li><li>Recursive character splitting is the safest default for most production RAG systems: it respects document structure at close to zero extra cost.</li><li>Semantic chunking can lift recall on long, topic-diverse content, but it roughly doubles embedding calls and can produce fragments too short to be useful on their own.</li><li>The chunk size that matters is the one you validate against your own questions &mdash; there is no single correct number for every corpus.</li></ul></div>
+
+<h2>Why chunking sets your retrieval ceiling</h2>
+<p>Every RAG pipeline embeds chunks, not documents. If a chunk boundary falls in the middle of the one sentence that answers the user's question, no embedding model and no reranker can fully recover it &mdash; the model can only work with what got embedded in the first place. That makes chunking one of the few decisions in a RAG system that acts as a hard ceiling rather than a tunable parameter: you can swap embedding models, add a reranker, or upgrade the generator, and none of it fixes a chunk that cut the answer in half before indexing ever happened.</p>
+<p>Take a support-docs example: "Refunds are processed within 5&ndash;7 business days. This does not apply to enterprise accounts, which follow the terms in their contract." If a fixed cut lands between those two sentences, a question about enterprise refund timing retrieves only the first sentence &mdash; and the model confidently returns the wrong policy. The failure is invisible to any metric that only checks whether an answer was returned; it only shows up when someone checks whether it was the <em>right</em> answer for that user.</p>
+<p>This is also why chunking is easy to get wrong quietly. A pipeline with bad chunking still returns results, still generates fluent answers, and still looks like it's working. See <a href="./embeddings-explained.html">how embeddings represent meaning</a> for the layer that sits directly underneath this decision.</p>
+
+<h2>The four strategies, mechanically</h2>
+
+<h3>Fixed-size chunking</h3>
+<p>Split every N characters or tokens, usually with some overlap to avoid losing context at the boundary. It is the simplest option available: no parsing, no extra model calls, and entirely predictable chunk sizes going into the index.</p>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>Fixed-size chunking works well on homogeneous, low-structure text &mdash; logs, transcripts, plain data exports &mdash; where there is no paragraph or heading structure to preserve in the first place.</p></div></div>
+
+<h3>Recursive character splitting</h3>
+<p>Instead of cutting blindly at a character count, a recursive splitter tries a hierarchy of separators in order &mdash; paragraph breaks first, then line breaks, then sentence endings, then words &mdash; falling back only when a chunk is still too large after trying the more natural boundary. A 2,000-character paragraph gets split at a sentence boundary, not mid-word, and two short paragraphs that both fit inside the target size stay together as one chunk.</p>
+<p>This is the default most production systems and popular retrieval frameworks reach for first, and for good reason: it respects the document's own structure at essentially the same computational cost as fixed-size chunking, with none of the downside.</p>
+
+<h3>Semantic chunking</h3>
+<p>Embed individual sentences, measure the similarity between adjacent ones, and cut where that similarity drops &mdash; the idea being that a genuine topic shift is a better boundary than an arbitrary character count. It can meaningfully improve recall on long, multi-topic prose where paragraph breaks don't line up with where the subject actually changes.</p>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> semantic chunking roughly doubles your embedding calls at index time &mdash; one pass to find the boundaries, another to embed the resulting chunks &mdash; and without a minimum chunk-size floor it can produce fragments too short to answer anything on their own.</p></div></div>
+
+<h3>Structure-aware and hierarchical chunking</h3>
+<p>For documents that already carry real structure &mdash; Markdown headings, HTML sections, PDF headings, source files &mdash; split on that structure directly: one chunk per section, or per function, rather than by character count. A hierarchical variant takes this further with parent-child chunking: index small, precise chunks for matching, but return the larger parent section they belong to for generation, giving the model more surrounding context than the exact chunk that was matched.</p>
+
+<div class="stat-strip"><div><b>512</b><span>tokens: a common default chunk size</span></div><div><b>10&ndash;20%</b><span>typical overlap between chunks</span></div><div><b>~2x</b><span>embedding calls for semantic chunking</span></div></div>
+
+<h2>What published benchmarks actually show</h2>
+<p>Independent comparisons of chunking strategies on real retrieval tasks generally agree on a few points, even though the exact numbers shift by corpus and embedding model. Recursive splitting is consistently a strong, low-cost baseline. Fixed-size chunking stays close behind on homogeneous text but falls off on documents with real structure. Semantic chunking can push recall higher on topic-diverse, unstructured prose, but the gain doesn't always survive contact with a full retrieve-then-generate pipeline once you account for its extra cost and its tendency to over-fragment short passages.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Strategy</th><th>Typical strength</th><th>Typical weakness</th><th>Extra cost</th></tr></thead>
+<tbody>
+<tr><td>Fixed-size</td><td>Fast, predictable, zero setup</td><td>Ignores structure, breaks mid-idea</td><td>None</td></tr>
+<tr><td>Recursive</td><td>Respects structure at low cost</td><td>Still character-count driven at the leaves</td><td>None</td></tr>
+<tr><td>Semantic</td><td>Follows real topic boundaries</td><td>Slower; can over-fragment</td><td>~2x embedding calls</td></tr>
+<tr><td>Structure-aware / hierarchical</td><td>Matches the document's own sections</td><td>Needs structured input to work</td><td>One parsing pass</td></tr>
+</tbody>
+</table>
+</div>
+<blockquote><p>There is no globally optimal chunk size. There is only the chunk size that scored best against your own questions.</p></blockquote>
+
+<h2>Contextual retrieval: fixing chunks after they're cut</h2>
+<p>A newer technique, often called contextual retrieval, attacks the same problem from the other direction: instead of finding a smarter place to cut, it uses an LLM to prepend a short, chunk-specific summary of where that chunk sits in the wider document, before embedding it. A chunk that reads "Revenue grew 12% year over year" becomes something like "This chunk is from Q3's earnings report, in the section on European sales. Revenue grew 12% year over year" &mdash; recovering context that any fixed cutting point would otherwise throw away.</p>
+<p>This costs one extra LLM call per chunk at index time, which is meaningfully more expensive than plain chunking, but it's a genuinely different lever from choosing where to cut: it repairs the information loss that every chunking strategy leaves behind, rather than trying to pick a smarter boundary in the first place.</p>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>Treat contextual retrieval as an addition to a chunking strategy, not a replacement for one &mdash; you still need to decide chunk size and overlap before deciding whether to enrich each chunk with extra context.</p></div></div>
+
+<h2>Picking a chunk size and overlap</h2>
+<p>Start narrower than feels natural. 300&ndash;500 tokens with 10&ndash;20% overlap is a reasonable first pass for prose-heavy documentation; go smaller for FAQ-style content where each answer is genuinely self-contained, and larger for reference material where a fact needs several surrounding sentences to make sense on its own.</p>
+<ul>
+<li><strong>Too small:</strong> retrieval finds the right neighbourhood but each chunk lacks enough context to answer alone, forcing the generator to stitch together several retrieved fragments.</li>
+<li><strong>Too large:</strong> retrieval precision drops because each chunk covers multiple topics, and irrelevant text dilutes the embedding's usefulness.</li>
+<li><strong>Overlap</strong> exists specifically to stop a fact from being split across a boundary. Past roughly 20%, you are mostly paying storage and embedding cost for duplicated text without a proportional recall gain.</li>
+</ul>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>Don't guess. Build a 30&ndash;50 question set from questions people actually asked, and measure <code>recall@5</code> for two or three chunk sizes before picking one &mdash; this evaluation habit matters more than which chunking method you start with.</p></div></div>
+
+<h2>Chunking by document type</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Document type</th><th>Recommended approach</th></tr></thead>
+<tbody>
+<tr><td>Markdown or HTML docs</td><td>Structure-aware &mdash; split on headings first, then recursive within each section</td></tr>
+<tr><td>Long-form prose, reports</td><td>Recursive, or semantic if the topic shifts frequently within sections</td></tr>
+<tr><td>PDFs with tables and figures</td><td>Page- or element-aware chunking; avoid naive text extraction that merges columns</td></tr>
+<tr><td>Source code</td><td>Split by function or class, never by raw character count</td></tr>
+<tr><td>FAQs, tickets, short records</td><td>One chunk per record &mdash; chunking often isn't needed at all</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">&#215;</span><div><p>The most common mistake is using one chunking configuration for an entire mixed corpus. A PDF manual, a support-ticket export and a code repository don't share a chunking strategy just because they end up in the same vector database.</p></div></div>
+
+<h2>A simple decision framework</h2>
+<ol>
+<li>Does the corpus already have real structure &mdash; headings, sections, code? If yes, chunk on that structure first.</li>
+<li>If not, start with recursive character splitting at 300&ndash;500 tokens and 10&ndash;20% overlap.</li>
+<li>Only reach for semantic chunking after measuring recursive splitting underperforming on genuinely topic-diverse, unstructured prose &mdash; and only if you can afford the extra embedding cost.</li>
+<li>For long reference material, consider hierarchical retrieval: small chunks for matching, larger parent sections for generation.</li>
+<li>Re-run your evaluation set every time you change the strategy. A change that looks obviously better can still regress specific question types.</li>
+</ol>
+
+<h2>Where chunking fits in the pipeline</h2>
+<p>Chunking sits upstream of everything else in retrieval: the <a href="./vector-databases-explained.html">index and metadata filtering</a> that stores your chunks, and the decision of whether to reach for <a href="./rag-vs-fine-tuning.html">RAG or fine-tuning</a> in the first place, both assume the chunks going in are coherent. Fix chunking before tuning the prompt, swapping the embedding model, or adding a reranker &mdash; in most RAG debugging sessions, the chunk boundary turns out to be where the failure actually started.</p>
+
+<hr>
+<p>None of the four strategies is universally "best" &mdash; each trades setup cost against how well it respects the document's own structure. Pick the cheapest one that fits your document type, measure it against real questions, and only add complexity where the numbers say it earned its keep.</p>
