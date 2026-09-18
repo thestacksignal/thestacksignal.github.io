@@ -1,13 +1,65 @@
-<h2>Start by shipping fewer pixels</h2>
-<p>The biggest image optimization mistake is exporting a giant source image and letting CSS shrink it to a tiny card. A 2000px image displayed at 400px still has to travel over the network and be decoded. Resize the asset to the largest display size you actually need.</p>
-<h2>Choose a modern format</h2>
-<p>WebP is a strong default for broad compatibility. AVIF can compress further, especially for photographic images. The right choice depends on your audience and your tooling, but both are preferable to sending oversized JPEG or PNG assets by default.</p>
-<h2>Use responsive images</h2>
-<p>Use <code>srcset</code> and <code>sizes</code> so the browser can choose an appropriate file for the viewport. A phone should not download the desktop hero just because the CSS later scales it down.</p>
-<h2>Do not lazy-load the LCP image</h2>
-<p>Your main above-the-fold image should be discoverable early and, when appropriate, use <code>fetchpriority="high"</code>. Images below the fold are different: lazy loading them can save bandwidth and decoding work without delaying the first screen.</p>
-<h2>Reserve space to prevent layout shift</h2>
-<p>Set explicit <code>width</code> and <code>height</code>, or use <code>aspect-ratio</code>. The browser can then allocate space before the image arrives. That simple step is one of the easiest ways to keep CLS near zero.</p>
-<h2>An image checklist</h2>
-<ul><li>Resize to the largest actual display size.</li><li>Use WebP or AVIF where practical.</li><li>Provide <code>srcset</code> for responsive layouts.</li><li>Prioritize only the true LCP image.</li><li>Lazy-load below-the-fold media.</li><li>Always reserve intrinsic dimensions.</li></ul>
-<p>Image optimization is not about chasing the smallest possible file. It is about delivering the right pixels at the right time and nothing more.</p>
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>Start with dimensions, not formats &mdash; a correctly-sized image in an old format beats an oversized image in a new one.</li><li>AVIF wins on file size, WebP wins on compatibility and encode speed; both beat JPEG/PNG for photographic content.</li><li>Your single largest above-the-fold image is very likely your LCP element. Never lazy-load it.</li><li><code>srcset</code> and <code>sizes</code> exist to stop the browser downloading a 2000px image for a 400px slot &mdash; the most common source of wasted image bytes.</li></ul></div>
+
+<h2>Dimensions come before format</h2>
+<div class="stat-strip"><div><b>50%+</b><span>of page weight is often images</span></div><div><b>2000px</b><span>typical unnecessary hero width</span></div><div><b>~30&ndash;50%</b><span>AVIF savings over JPEG</span></div></div>
+
+<p>The single biggest image mistake is choosing a better format for an image that shouldn't have been that large in the first place. Serving a 2400&times;1600 image into a 600px-wide card wastes far more bytes than switching that same oversized image from JPEG to AVIF would ever save. Fix dimensions first; format second.</p>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">&#215;</span><div><p>Uploading the camera-original file and letting CSS shrink it with <code>width: 100%</code> is the single most common image performance mistake. The browser still downloads every byte of the original resolution.</p></div></div>
+
+<h2>Choosing a format</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Format</th><th>Best for</th><th>Trade-off</th></tr></thead>
+<tbody>
+<tr><td>AVIF</td><td>Photographs, complex images &mdash; smallest file size</td><td>Slower to encode; slightly lower browser support than WebP</td></tr>
+<tr><td>WebP</td><td>General-purpose replacement for JPEG/PNG</td><td>Larger than AVIF, but near-universal support and fast encoding</td></tr>
+<tr><td>JPEG</td><td>Fallback for the rare unsupported browser</td><td>Largest file size of the three</td></tr>
+<tr><td>SVG</td><td>Icons, logos, illustrations with flat colors</td><td>Not suitable for photographs</td></tr>
+</tbody>
+</table>
+</div>
+<p>The practical pattern is a <code>&lt;picture&gt;</code> element offering AVIF first, WebP second, and a JPEG fallback last &mdash; the browser picks the first format it supports:</p>
+<pre><code>&lt;picture&gt;
+  &lt;source srcset="hero.avif" type="image/avif"&gt;
+  &lt;source srcset="hero.webp" type="image/webp"&gt;
+  &lt;img src="hero.jpg" alt="Description" width="1200" height="630" fetchpriority="high"&gt;
+&lt;/picture&gt;</code></pre>
+
+<h2>Responsive images: srcset and sizes</h2>
+<p>A single image file cannot be the right size for every viewport. <code>srcset</code> offers the browser several resolutions of the same image; <code>sizes</code> tells it how large the image will actually render at different breakpoints, so it can pick the smallest sufficient file.</p>
+<pre><code>&lt;img
+  srcset="card-400.webp 400w, card-800.webp 800w, card-1200.webp 1200w"
+  sizes="(max-width: 600px) 100vw, 400px"
+  src="card-800.webp"
+  alt="Description" width="400" height="300" loading="lazy"&gt;</code></pre>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>The <code>sizes</code> attribute is not a display size &mdash; it's a hint the browser uses <em>before</em> it knows the final CSS layout, at the point it must decide which file to start downloading. Get it wrong and the browser can pick a file that's too small (blurry) or too large (wasted bytes) despite srcset being correct.</p></div></div>
+
+<h2>Loading priority: the LCP decision that's easy to get backwards</h2>
+<p>Every image on a page competes for priority, and the one decision that most directly affects <strong>LCP</strong> is how you treat your largest above-the-fold image versus everything below the fold.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Image</th><th>Correct treatment</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>Hero / largest above-the-fold image</td><td><code>fetchpriority="high"</code>, no <code>loading="lazy"</code></td><td>This is very likely your LCP element &mdash; delaying it delays your LCP score directly</td></tr>
+<tr><td>Below-the-fold images</td><td><code>loading="lazy"</code></td><td>Downloading them early competes for bandwidth with content the user can actually see</td></tr>
+<tr><td>Background images via CSS</td><td>Avoid for LCP-critical content</td><td>The browser discovers them later than an <code>&lt;img&gt;</code> tag found in the initial HTML parse</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> lazy-loading the hero image is one of the most common LCP regressions. It looks harmless in a code review but tells the browser to wait until the image is nearly in view before even starting the download &mdash; directly on your critical path.</p></div></div>
+
+<h2>Preventing layout shift from images</h2>
+<p>Always set explicit <code>width</code> and <code>height</code> attributes (or an <code>aspect-ratio</code> in CSS) on every image. Without them, the browser doesn't know how much space to reserve before the image downloads, and the layout jumps when it arrives &mdash; the most common cause of poor <strong>CLS</strong>. <a href="./browser-rendering-explained.html">See how layout shift fits into the rendering pipeline</a> for the underlying mechanism.</p>
+
+<h2>A practical checklist</h2>
+<ol>
+<li>Resize the source image to the largest size it will actually render at &mdash; not the camera original.</li>
+<li>Serve AVIF with WebP and JPEG fallbacks via <code>&lt;picture&gt;</code>.</li>
+<li>Use <code>srcset</code> + <code>sizes</code> for anything that renders at different widths across breakpoints.</li>
+<li>Set explicit <code>width</code> and <code>height</code> on every image, every time.</li>
+<li><code>fetchpriority="high"</code> and eager-loading on the hero image only; <code>loading="lazy"</code> everywhere else.</li>
+<li>Compress before shipping &mdash; automated pipelines (Squoosh, sharp, an image CDN) catch what manual export settings miss.</li>
+</ol>
+
+<hr>
+<p>Format choice gets most of the attention, but dimensions, loading priority and explicit sizing are what actually move LCP and CLS. Get those three right first, and format becomes a smaller optimization on top of an already-solid foundation.</p>

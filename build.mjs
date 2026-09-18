@@ -274,12 +274,17 @@ const POSTS = [
     seoTitle: 'Browser Rendering Explained: How HTML, CSS & JavaScript Become Pixels',
     description: 'Understand the browser rendering pipeline, critical rendering path, layout, paint and compositing — and where performance really gets lost.',
     date: '2026-09-13',
-    updated: '2026-09-13',
+    updated: '2026-09-18',
     read: 7,
     tags: ['Web Performance','Browser','Rendering'],
     keywords: 'browser rendering pipeline, critical rendering path, layout paint composite, web performance',
     hero: 'Know the path from bytes to pixels, and you know where to look when a page feels slow.',
-    body: ''
+    body: '',
+    faq: [
+      ['Why is a transform animation cheaper than animating width?', 'Transform and opacity changes skip the layout and paint stages entirely and go straight to compositing, which the GPU handles efficiently. Changing width or top forces layout, paint and composite to all rerun.'],
+      ['What counts as a long task?', 'Any main-thread task longer than 50 milliseconds. Long tasks block the browser from responding to input or updating the frame, which is the primary cause of poor INP scores.'],
+      ['Does the pipeline explain Cumulative Layout Shift?', 'Yes — CLS happens when layout is recalculated unexpectedly after initial render, typically because space wasn\'t reserved for an image, ad or web font before it loaded in.']
+    ]
   },
   {
     slug: 'image-optimization-for-web',
@@ -288,12 +293,17 @@ const POSTS = [
     seoTitle: 'Image Optimization for Web Performance: WebP, AVIF, Sizes & Lazy Loading',
     description: 'A practical image optimization guide covering dimensions, modern formats, responsive images, loading priority and the mistakes that hurt LCP.',
     date: '2026-09-13',
-    updated: '2026-09-13',
+    updated: '2026-09-18',
     read: 7,
     tags: ['Performance','Images','Core Web Vitals'],
     keywords: 'image optimization webp avif responsive images lcp, image performance',
     hero: 'Your image strategy should start with dimensions, not formats.',
-    body: ''
+    body: '',
+    faq: [
+      ['Should I always use AVIF?', 'AVIF gives the smallest files for photographic content, but serve it alongside a WebP and JPEG fallback via <picture> since encode time and support vary slightly by browser.'],
+      ['Why is my hero image hurting my LCP score?', 'The most common cause is lazy-loading it or leaving out fetchpriority="high" — both delay the download of what is very likely your largest above-the-fold element.'],
+      ['Do I need both srcset and sizes?', 'Yes. srcset lists the available resolutions; sizes tells the browser how large the image will actually render at different viewport widths so it can pick the right one before layout is known.']
+    ]
   },
   {
     slug: 'caching-and-cdn-strategies',
@@ -302,12 +312,17 @@ const POSTS = [
     seoTitle: 'Caching and CDN Strategies for Fast Static Websites',
     description: 'Learn how browser caching, immutable assets, cache-control headers and CDNs work together to make static websites faster and cheaper.',
     date: '2026-09-13',
-    updated: '2026-09-13',
+    updated: '2026-09-18',
     read: 7,
     tags: ['Performance','Caching','CDN'],
     keywords: 'browser caching, cache-control, cdn static site, immutable assets',
     hero: 'The best request is the request the browser does not need to make again.',
-    body: ''
+    body: '',
+    faq: [
+      ['Why can content-hashed assets be cached for a year?', 'Because the filename itself changes whenever the content changes, a cached copy of a hashed filename is never stale — it is simply the version that filename has always referred to.'],
+      ['What does stale-while-revalidate actually do?', 'It serves the cached response instantly even after it is technically stale, while fetching a fresh copy in the background for the next visit — combining speed with eventual freshness.'],
+      ['Will adding a CDN automatically make my site faster?', 'Only as much as your Cache-Control headers allow. A CDN in front of uncacheable or overly conservative headers provides little benefit beyond basic proxying.']
+    ]
   },
   {
     slug: 'embeddings-explained',
@@ -354,12 +369,17 @@ const POSTS = [
     seoTitle: 'AI Agents vs RAG: What Each System Actually Does',
     description: 'A practical comparison of AI agents and RAG: retrieval, tools, planning, memory, failure modes, costs and when to combine both.',
     date: '2026-09-13',
-    updated: '2026-09-13',
+    updated: '2026-09-18',
     read: 7,
     tags: ['AI Agents','RAG','Architecture'],
     keywords: 'ai agents vs rag, agentic ai, rag vs agents, ai architecture',
     hero: 'RAG gives a model evidence. Agents give a model a way to act.',
-    body: ''
+    body: '',
+    faq: [
+      ['Is an AI agent just RAG with extra steps?', 'Often, in practice — many products marketed as agents are RAG with a single decision step added. A true agent re-plans after each action in a loop rather than executing one fixed sequence.'],
+      ['Can RAG and agents be combined?', 'Yes, and it is the most common production pattern — retrieval becomes one tool an agent can call as part of a longer, adaptable plan.'],
+      ['Why do agents fail more often than RAG systems?', 'Every additional tool call and planning step is another point where the system can choose the wrong action, misinterpret a result, or fail to terminate — failures compound across the loop.']
+    ]
   },
   {
     slug: 'llm-inference-optimization',
@@ -368,12 +388,17 @@ const POSTS = [
     seoTitle: 'LLM Inference Optimization: Reduce Latency and Memory',
     description: 'Learn the core levers for faster LLM inference: quantization, batching, KV cache, context length, speculative decoding and model choice.',
     date: '2026-09-13',
-    updated: '2026-09-13',
+    updated: '2026-09-18',
     read: 7,
     tags: ['LLM','Inference','Performance'],
     keywords: 'llm inference optimization, kv cache, quantization, llm latency',
     hero: 'Inference performance is mostly memory movement, context management and careful batching.',
-    body: ''
+    body: '',
+    faq: [
+      ['Why is LLM inference considered a memory problem?', 'Generating each token requires moving model weights and the KV cache through memory bandwidth, which is typically the bottleneck rather than raw compute throughput.'],
+      ['Does quantization hurt output quality?', 'Some, but modern INT4 methods keep the loss small enough that it is now a reasonable production default, not just a hobbyist compromise, for many use cases.'],
+      ['Why does batching increase latency for individual requests?', 'A request inside a larger batch may wait longer for its turn to be processed, even though the batch as a whole completes more total work per unit of time.']
+    ]
   },
   {
     slug: 'prompt-engineering-for-production',
@@ -382,12 +407,17 @@ const POSTS = [
     seoTitle: 'Prompt Engineering for Production AI: Patterns That Hold Up',
     description: 'Move beyond clever prompts with production patterns for instructions, structured outputs, examples, failure handling, evaluation and prompt versioning.',
     date: '2026-09-13',
-    updated: '2026-09-13',
+    updated: '2026-09-18',
     read: 7,
     tags: ['Prompt Engineering','LLM','Evaluation'],
     keywords: 'prompt engineering production, structured output, llm prompts, prompt evaluation',
     hero: 'A production prompt is an interface contract, not a magic sentence.',
-    body: ''
+    body: '',
+    faq: [
+      ['Why use structured output instead of asking for JSON in the prompt text?', 'A native structured-output or function-calling mode is enforced at generation time, while asking for JSON in plain instructions is just a request the model can still deviate from under pressure.'],
+      ['Do examples work better than detailed instructions?', 'For format and edge-case handling, usually yes — a well-chosen example demonstrates the desired pattern more reliably than prose instructions, especially for cases the instructions did not anticipate.'],
+      ['How do I know if a prompt change is actually an improvement?', 'Run it against a fixed evaluation set of 20-50 representative cases and compare results to the previous version — a prompt that "feels better" on a few manual tests is not reliable evidence.']
+    ]
   },
   {
     slug: 'technical-seo-for-ai-websites',
@@ -396,12 +426,17 @@ const POSTS = [
     seoTitle: 'Technical SEO for AI Websites: Crawlability, Canonicals, Robots and Sitemaps',
     description: 'A developer-focused technical SEO checklist for AI and tech sites covering crawlability, canonical URLs, robots.txt, sitemaps, internal links and indexing diagnostics.',
     date: '2026-09-13',
-    updated: '2026-09-13',
+    updated: '2026-09-18',
     read: 7,
     tags: ['SEO','Technical SEO','AI'],
     keywords: 'technical seo ai website, robots txt sitemap canonical, crawlability',
     hero: 'Good technical SEO makes it easy for search engines to understand what exists, what matters and which URL is canonical.',
-    body: ''
+    body: '',
+    faq: [
+      ['Does robots.txt block search engines from indexing a page?', 'Not directly — it discourages crawling, but a disallowed page can still be indexed if other sites link to it. Use a noindex meta tag to prevent indexing specifically.'],
+      ['Should I list AI crawlers like GPTBot separately in robots.txt?', 'Yes — AI-search and answer-engine crawlers read robots.txt independently from traditional search engines, so a wildcard rule intended for Googlebot may not cover them as expected.'],
+      ['Why would indexed pages suddenly drop?', 'The most common causes are an overly broad robots.txt disallow, an accidental sitewide noindex tag, or a canonical tag pointing away from the pages in question.']
+    ]
   },
   {
     slug: 'internal-linking-for-topical-authority',
@@ -410,12 +445,17 @@ const POSTS = [
     seoTitle: 'Internal Linking for Topical Authority: Build Better Content Clusters',
     description: 'A practical internal-linking framework for building topical authority: pillar pages, supporting articles, anchor text, click depth and link maintenance.',
     date: '2026-09-13',
-    updated: '2026-09-13',
+    updated: '2026-09-18',
     read: 7,
     tags: ['SEO','Internal Linking','Content Strategy'],
     keywords: 'internal linking topical authority, content clusters, internal links seo',
     hero: 'Internal links turn individual articles into a topic system that crawlers and readers can navigate.',
-    body: ''
+    body: '',
+    faq: [
+      ['What is a pillar page?', 'A broad overview page for a topic that links out to every supporting article in that cluster, aggregating and distributing topical authority across the group.'],
+      ['Why does anchor text matter for SEO?', 'Descriptive anchor text tells both readers and crawlers what the linked page is about, reinforcing the same topical signal as the destination page\'s own title and headings — generic anchors like "click here" carry none of that.'],
+      ['What is click depth and why does it matter?', 'It is the number of clicks needed to reach a page from the homepage via internal links. Pages several clicks deep tend to be crawled less often and inherit less authority through the link graph.']
+    ]
   }
 ];
 

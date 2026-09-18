@@ -1,12 +1,54 @@
-<h2>They solve different problems</h2>
-<p>RAG is primarily a knowledge-access pattern: retrieve relevant evidence and place it in the model context. An agent is a workflow pattern in which a model can decide to call tools, inspect results, take another action and stop when the task is complete.</p>
-<h2>RAG answers a knowledge problem</h2>
-<p>Use RAG when the model needs your current documents, policies, product data or private notes. The system retrieves facts at request time rather than hoping the model weights contain the latest information.</p>
-<h2>Agents solve action problems</h2>
-<p>Use an agent when the system needs to do something such as query a database, call an API, create a ticket, inspect a file or run a sequence of tools. The model is coordinating actions rather than only generating text.</p>
-<h2>The practical combination</h2>
-<p>Many useful systems are both: an agent decides which tool or information source to use, and RAG supplies grounded context to the reasoning step. The important design choice is to keep tool permissions narrow and observable.</p>
-<h2>Where agents fail</h2>
-<ul><li>They can loop when the stopping condition is weak.</li><li>They can call expensive tools unnecessarily.</li><li>They can amplify a bad observation into a bad action.</li><li>They can create security problems if tools have broad write access.</li></ul>
-<h2>Choose the smallest system that works</h2>
-<p>If a simple retrieval call answers the question, do not build an agent. If a fixed workflow solves the task, use a deterministic pipeline before adding free-form planning. Agents are valuable when variability and action are real requirements, not because the label sounds advanced.</p>
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>RAG gives a model evidence to answer with; agents give a model a way to take multi-step action. They solve different problems and are frequently confused as competitors.</li><li>RAG is a single retrieve-then-generate pass; an agent runs a loop &mdash; plan, act, observe, repeat &mdash; until it decides the task is done.</li><li>Agents fail in more ways than RAG does, because every added tool and every added step is another place things can go wrong.</li><li>Most production systems that look like "agents" are really RAG with a thin decision layer on top &mdash; true multi-step agentic loops are rarer and harder to keep reliable than the term suggests.</li></ul></div>
+
+<h2>What each one actually is</h2>
+<div class="stat-strip"><div><b>1</b><span>pass in basic RAG</span></div><div><b>N</b><span>loop iterations in an agent</span></div><div><b>2</b><span>failure surfaces: retrieval + action</span></div></div>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th></th><th>RAG</th><th>Agent</th></tr></thead>
+<tbody>
+<tr><td>Core idea</td><td>Retrieve relevant documents, then generate an answer grounded in them</td><td>Plan a sequence of steps, use tools, observe results, decide what to do next</td></tr>
+<tr><td>Control flow</td><td>Fixed: retrieve &rarr; generate</td><td>Dynamic: the model decides the next action based on prior results</td></tr>
+<tr><td>Typical use</td><td>Answering questions from a knowledge base</td><td>Completing a task that requires multiple actions or external systems</td></tr>
+<tr><td>Failure mode</td><td>Wrong or missing chunk retrieved</td><td>Wrong tool chosen, bad plan, or the loop never terminates correctly</td></tr>
+</tbody>
+</table>
+</div>
+<p>RAG answers "what does the documentation say about X" by finding the right passage and grounding a response in it. An agent answers "go do X" by deciding which tools to call, in what order, adjusting the plan as results come back. <a href="./embeddings-explained.html">Embeddings and retrieval</a> are the mechanism under RAG; a planning loop and tool-calling are the mechanism under an agent. Neither replaces the other, and most serious systems use both.</p>
+
+<h2>Why the categories get blurred</h2>
+<p>Many products marketed as "AI agents" are really RAG with a decision step bolted on: retrieve some context, let the model decide whether to call one tool, return an answer. That's a reasonable and often sufficient design &mdash; but it isn't the multi-step, self-correcting loop the word "agent" technically implies. Knowing the difference matters when you're evaluating a vendor's claims or scoping your own build: ask specifically whether the system re-plans after each action, or whether it executes one fixed sequence.</p>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>A useful test: if you removed the ability to call more than one tool and re-plan based on the result, would the system still work the same way? If yes, it's RAG with extra steps, not an agent.</p></div></div>
+
+<h2>The agent loop, mechanically</h2>
+<ol>
+<li><strong>Plan</strong> &mdash; the model decides what needs to happen next, given the goal and everything observed so far.</li>
+<li><strong>Act</strong> &mdash; it calls a tool: a search, an API, a code execution, a database query.</li>
+<li><strong>Observe</strong> &mdash; the tool's result is fed back into the model's context.</li>
+<li><strong>Repeat or stop</strong> &mdash; the model decides whether the goal is met or another step is needed.</li>
+</ol>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> without an explicit step limit or a well-specified stopping condition, an agent loop can continue indefinitely, repeating similar actions without converging. Always cap iterations and log every step for debugging.</p></div></div>
+
+<h2>Comparing costs and failure surfaces</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th></th><th>RAG</th><th>Agent</th></tr></thead>
+<tbody>
+<tr><td>Latency</td><td>One retrieval + one generation call</td><td>Multiplies with each loop iteration and tool call</td></tr>
+<tr><td>Cost</td><td>Predictable, roughly fixed per query</td><td>Variable &mdash; a complex task can trigger many model calls</td></tr>
+<tr><td>Debuggability</td><td>Inspect the retrieved chunks and the single generation</td><td>Inspect the full trace of plans, actions and observations</td></tr>
+<tr><td>Reliability risk</td><td>Bad retrieval &rarr; wrong answer, one failure point</td><td>Bad retrieval, bad tool choice, or bad stopping condition &mdash; compounding failure points</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>When to use which</h2>
+<ul>
+<li><strong>Use RAG</strong> when the task is answering questions from a corpus of documents, and a single well-grounded response is the goal.</li>
+<li><strong>Use an agent</strong> when the task requires taking action across systems &mdash; scheduling, executing code, calling multiple APIs, or adapting a plan based on intermediate results.</li>
+<li><strong>Use both</strong> when an agent needs to consult a knowledge base as one of its tools &mdash; retrieval becomes a step inside the agent's loop rather than the entire system. This is the most common production pattern for "agentic RAG."</li>
+</ul>
+<blockquote><p>RAG gives a model evidence. Agents give a model a way to act. The interesting systems usually need both, applied to different parts of the same task.</p></blockquote>
+
+<hr>
+<p>Treat "agent" and "RAG" as different tools for different jobs rather than competing architectures. The question to ask about any system isn't which term applies &mdash; it's whether the task needs a single grounded answer, or a sequence of adaptable actions.</p>

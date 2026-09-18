@@ -1,12 +1,54 @@
-<h2>Think in clusters, not isolated posts</h2>
-<p>A pillar page covers the subject broadly, while supporting articles answer narrower questions. Internal links connect the supporting pages back to the pillar and across closely related subtopics.</p>
-<h2>Use descriptive anchors</h2>
-<p>“Read more” tells neither the reader nor the crawler what comes next. A phrase such as “Core Web Vitals checklist” carries useful context without needing to stuff keywords into every link.</p>
-<h2>Keep important pages close to the homepage</h2>
-<p>Clicks are a simple way to reason about discoverability. Your highest-value content should generally be reachable in a few meaningful steps from the homepage or a strong category hub.</p>
-<h2>Link where the reader needs the next concept</h2>
-<p>The strongest internal links answer the natural next question. An article about RAG should link to embeddings, vector databases and reranking. A performance guide can link to browser rendering, image optimization and caching.</p>
-<h2>Audit orphan and dead-end pages</h2>
-<p>Every important article should have incoming links. When you publish a new post, add it to the relevant category, learning path or older guide rather than expecting the sitemap alone to do the discovery work.</p>
-<h2>Use the site as a graph</h2>
-<p>Once your library grows, review which pages receive the most internal links and whether those pages are actually your most valuable resources. A small number of well-connected hubs can make a growing archive much easier to navigate.</p>
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>Internal links turn a collection of individually-good articles into a topic system search engines can recognize as authoritative on that subject.</li><li>A pillar page plus supporting articles beats the same articles left unlinked &mdash; the pillar aggregates authority and routes it to the specific pages.</li><li>Descriptive anchor text carries topical signal; "click here" carries none.</li><li>Click depth (how many clicks from the homepage) correlates with how often a page gets crawled and how much authority it inherits.</li></ul></div>
+
+<h2>Why isolated good articles underperform</h2>
+<div class="stat-strip"><div><b>3</b><span>clicks from home, ideal max depth</span></div><div><b>1</b><span>pillar per topic cluster</span></div><div><b>2&ndash;5</b><span>contextual links per article, typical</span></div></div>
+
+<p>A single excellent article with no internal links pointing to or from it is competing alone. The same article, linked from a pillar page and linking to two or three related pieces, is now part of a recognizable cluster &mdash; and search engines use that link structure as a signal of which pages are central to a topic and which are supporting detail.</p>
+
+<h2>The pillar-and-cluster model</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Page type</th><th>Role</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>Pillar page</td><td>Broad overview of a topic, linking out to every supporting article</td><td>"Production RAG: the complete guide"</td></tr>
+<tr><td>Supporting article</td><td>Deep dive on one narrow subtopic, linking back to the pillar and sideways to siblings</td><td>"Embeddings Explained", "Vector Databases Explained"</td></tr>
+</tbody>
+</table>
+</div>
+<p>The pillar aggregates topical authority and distributes it downward; supporting articles funnel their own authority back up and sideways to each other. This is the structure your existing <a href="./ai-seo-topical-authority.html">learning paths already imply</a> &mdash; the paths group related articles in sequence, but the articles themselves also need to physically link to each other for a crawler to read the same relationship.</p>
+
+<h2>Anchor text: the most underused signal</h2>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">&#215;</span><div><p>"Click here," "read more," and "this article" carry zero topical information to a crawler. They tell a search engine nothing about what the destination page is about.</p></div></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Weak anchor</th><th>Descriptive anchor</th></tr></thead>
+<tbody>
+<tr><td>"click here for more"</td><td>"how vector databases handle metadata filtering"</td></tr>
+<tr><td>"this guide"</td><td>"the Core Web Vitals checklist"</td></tr>
+<tr><td>"read this"</td><td>"chunking strategy for RAG retrieval"</td></tr>
+</tbody>
+</table>
+</div>
+<p>Descriptive anchor text does double duty: it tells the reader exactly what they'll find if they click, and it tells a crawler what the linked page is about &mdash; reinforcing the same keyword and topic signal the destination page's own title and headings are sending.</p>
+
+<h2>Click depth: how far a page sits from the homepage</h2>
+<p>Click depth is the number of clicks required to reach a page starting from the homepage, following only internal links. Pages several clicks deep tend to get crawled less frequently and inherit less authority through the link graph, independent of their content quality.</p>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> a common failure is publishing a strong article, listing it only on a paginated "page 4" of the blog archive, and linking to it from nowhere else. Technically crawlable, practically buried &mdash; three or more clicks deep with no other page pointing at it.</p></div></div>
+<p>A practical target: every important page should be reachable within three clicks from the homepage, through at least one deliberate path &mdash; a nav link, a pillar page, a topic hub, or a "related articles" section, not just the paginated archive.</p>
+
+<h2>A repeatable internal-linking workflow</h2>
+<ol>
+<li><strong>Group existing articles into 2&ndash;4 topic clusters</strong> based on what they actually cover, not just their category tag.</li>
+<li><strong>Designate or write one pillar page per cluster</strong> that links to every article in it.</li>
+<li><strong>Add 2&ndash;5 contextual links per article</strong> to sibling articles in the same cluster, using descriptive anchor text tied to the destination's actual subject.</li>
+<li><strong>Link back to the pillar</strong> from every supporting article, not just from the pillar downward.</li>
+<li><strong>Audit for orphans quarterly</strong> &mdash; any published page with zero incoming internal links is a page fighting for ranking alone.</li>
+</ol>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>When publishing a new article, immediately add at least one link to it from an existing, already-indexed page. This gets the new page discovered faster than waiting for a sitemap crawl alone, and it's the single easiest habit to build into a publishing checklist.</p></div></div>
+
+<h2>Where this fits with technical SEO</h2>
+<p><a href="./technical-seo-for-ai-websites.html">Technical SEO</a> makes sure a page can be crawled and indexed unambiguously. Internal linking is what tells a crawler why that page matters and what it's related to &mdash; the two work at different layers of the same problem, and neither compensates for the other being missing.</p>
+<blockquote><p>Internal links turn individual articles into a topic system that crawlers and readers can navigate &mdash; without them, even excellent content stays a collection of disconnected pages.</p></blockquote>
+
+<hr>
+<p>Content quality earns the right to rank; internal linking is what makes that quality legible to a crawler as part of a coherent topic, rather than one isolated page competing on its own.</p>

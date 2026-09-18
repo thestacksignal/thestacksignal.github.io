@@ -1,13 +1,66 @@
-<h2>The browser has a pipeline, not a single render step</h2>
-<p>A browser does not receive HTML and immediately paint it. It parses the document into a DOM, parses CSS into a CSSOM, combines those trees into a render tree, calculates layout, paints pixels and then composites layers. JavaScript can interrupt that pipeline at almost any stage.</p>
-<h2>1. HTML becomes the DOM</h2>
-<p>The HTML parser builds a tree as bytes arrive. A normal <code>&lt;script&gt;</code> without <code>defer</code> can pause parsing while the browser downloads and executes JavaScript. For a content site, that is an easy way to make first render depend on code the visitor did not need yet.</p>
-<h2>2. CSS builds the CSSOM</h2>
-<p>CSS is render-blocking because the browser needs style information before it can safely paint the page. Keep the critical stylesheet small, avoid unnecessary @imports, and load non-critical CSS later. The goal is not “zero CSS”; it is “only the CSS needed for the first viewport blocks first paint.”</p>
-<h2>3. Layout, paint and composite are different costs</h2>
-<p><strong>Layout</strong> calculates geometry. <strong>Paint</strong> turns boxes, text and images into drawing commands. <strong>Composite</strong> assembles layers on the GPU. A property such as <code>transform</code> can often be composited cheaply, while repeatedly changing width or top can trigger layout and paint work.</p>
-<h2>4. JavaScript is the wildcard</h2>
-<p>Even a small script can become expensive if it reads layout immediately after changing styles, creating a forced synchronous layout. Batch DOM writes, then reads, and prefer event-driven work over constant polling. Long tasks over 50ms are especially damaging to interaction responsiveness.</p>
-<h2>A practical debugging order</h2>
-<ol><li>Measure LCP, INP and CLS.</li><li>Identify the largest render-blocking resources.</li><li>Find long JavaScript tasks in the Performance panel.</li><li>Check for layout thrashing and oversized images.</li><li>Move non-critical work after first interaction.</li></ol>
-<p>The fastest page is usually not the page with the most clever CSS. It is the page that asks the browser to do less work before the user can read and interact with it.</p>
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>The critical rendering path runs HTML and CSS into a render tree, then layout, then paint, then compositing &mdash; and a blocking resource anywhere in that chain delays everything after it.</li><li>Layout (reflow) is expensive; compositing (transform/opacity) is cheap. Animate the cheap properties.</li><li>JavaScript that runs on the main thread competes directly with rendering work &mdash; long tasks are the most common cause of a page that "loads fast but feels slow."</li><li>Every major performance metric (LCP, INP, CLS) maps to a specific stage of this pipeline, which is why understanding the pipeline makes those metrics stop feeling arbitrary.</li></ul></div>
+
+<h2>The pipeline, stage by stage</h2>
+<div class="stat-strip"><div><b>5</b><span>pipeline stages</span></div><div><b>16.6ms</b><span>budget per frame at 60fps</span></div><div><b>50ms</b><span>long-task threshold</span></div></div>
+
+<p>A browser turns bytes into pixels through a fixed sequence of stages. Understanding this sequence is the fastest way to stop guessing about performance problems and start diagnosing them.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Stage</th><th>What happens</th><th>Triggered by</th></tr></thead>
+<tbody>
+<tr><td>Parse</td><td>HTML becomes the DOM; CSS becomes the CSSOM</td><td>Receiving bytes</td></tr>
+<tr><td>Style</td><td>DOM + CSSOM combine into a render tree of visible nodes with computed styles</td><td>DOM or CSSOM changes</td></tr>
+<tr><td>Layout</td><td>The browser calculates the exact position and size of every element</td><td>Anything that changes geometry (width, position, content)</td></tr>
+<tr><td>Paint</td><td>Pixels are drawn for each visible element into layers</td><td>Anything that changes appearance (color, shadow, background)</td></tr>
+<tr><td>Composite</td><td>Layers are combined on the GPU into the final frame</td><td>Transform, opacity changes</td></tr>
+</tbody>
+</table>
+</div>
+<p>The critical insight is that these stages are not equally expensive, and a change doesn't always start from the top. A <code>transform</code> or <code>opacity</code> change skips layout and paint entirely and goes straight to composite &mdash; which is exactly why they're the properties recommended for smooth animation. A change to <code>width</code> or <code>top</code> forces layout to rerun, which forces paint to rerun, which forces composite to rerun. Same visual result, wildly different cost.</p>
+
+<h2>Layout thrashing: the classic self-inflicted wound</h2>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> reading a layout property (like <code>offsetHeight</code>) right after writing one (like changing <code>style.width</code>) forces the browser to run layout synchronously, on the spot, instead of batching it. Do this in a loop and you get "layout thrashing" &mdash; dozens of forced synchronous layouts in a single frame.</p></div></div>
+<pre><code>// Thrashing: read forces a flush of the previous write, every iteration
+els.forEach(el => {
+  el.style.width = '100px';   // write
+  const h = el.offsetHeight;  // read — forces layout NOW
+});
+
+// Fixed: batch all reads, then all writes
+const heights = els.map(el => el.offsetHeight); // all reads first
+els.forEach((el, i) => { el.style.width = '100px'; });        // all writes after</code></pre>
+<p>Browsers batch layout and style recalculation automatically when they can &mdash; but only when your code doesn't force them apart by interleaving reads and writes. This single pattern explains a large share of "why is scrolling janky" bug reports.</p>
+
+<h2>Where the main thread becomes the bottleneck</h2>
+<p>Rendering and JavaScript execution largely share one thread. While a script runs, the browser cannot update layout, respond to input, or paint a new frame. A task longer than 50 milliseconds is classified as a "long task," and long tasks are the primary cause of poor <strong>INP</strong> (Interaction to Next Paint) &mdash; the page looks finished, but a click or tap sits queued behind whatever the main thread is busy doing.</p>
+<ul>
+<li><strong>Break up long tasks</strong> &mdash; yield back to the browser between chunks of work using <code>scheduler.yield()</code> or splitting work across microtasks.</li>
+<li><strong>Move work off-thread</strong> &mdash; Web Workers can run heavy computation without blocking rendering, at the cost of not having direct DOM access.</li>
+<li><strong>Defer non-critical scripts</strong> &mdash; analytics, chat widgets and third-party embeds are common long-task sources; load them after first interaction, not on page load.</li>
+</ul>
+
+<h2>How this maps to the metrics you actually measure</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Metric</th><th>Pipeline stage it reflects</th></tr></thead>
+<tbody>
+<tr><td>LCP (Largest Contentful Paint)</td><td>Time until the largest visible element completes parse &rarr; style &rarr; layout &rarr; paint</td></tr>
+<tr><td>CLS (Cumulative Layout Shift)</td><td>Unexpected layout recalculations after initial render, usually from late-loading images or fonts without reserved space</td></tr>
+<tr><td>INP (Interaction to Next Paint)</td><td>Main-thread availability between an input event and the next painted frame</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>Read <a href="./core-web-vitals-checklist-2026.html">the full Core Web Vitals checklist</a> for the concrete fixes mapped to each metric above &mdash; this article explains the mechanism, that one gives you the action items.</p></div></div>
+
+<h2>Practical rules that follow directly from the pipeline</h2>
+<ol>
+<li>Reserve space for images and ads before they load, so their arrival doesn't force a late layout recalculation (CLS).</li>
+<li>Animate <code>transform</code> and <code>opacity</code>, not <code>width</code>, <code>top</code>, or <code>margin</code>.</li>
+<li>Keep the main thread free near user input &mdash; defer third-party scripts until after first interaction where possible.</li>
+<li>Batch DOM reads and writes separately to avoid layout thrashing in loops.</li>
+<li>Prefer <code>fetchpriority="high"</code> and no lazy-loading on your largest above-the-fold image, since it usually is the LCP element; see <a href="./image-optimization-for-web.html">the full image optimization guide</a> for the rest of the format and sizing decisions.</li>
+</ol>
+<blockquote><p>Most "slow page" complaints are actually "blocked main thread" complaints. The pipeline itself is fast; what's usually slow is everything competing with it for the same thread.</p></blockquote>
+
+<hr>
+<p>Once you can name the stage a symptom belongs to &mdash; a jump on load is layout, a jank during scroll is paint or a blocked thread, a laggy click is INP &mdash; performance debugging stops being guesswork and becomes a lookup.</p>

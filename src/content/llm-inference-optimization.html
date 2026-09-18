@@ -1,12 +1,57 @@
-<h2>Start with the real bottleneck</h2>
-<p>LLM latency is not one number. Time to first token, time per output token, total request time and throughput answer different questions. Measure each before choosing an optimization.</p>
-<h2>Quantization trades precision for memory</h2>
-<p>Lower-bit weights reduce memory footprint and often improve bandwidth efficiency. The exact quality loss depends on the model and quantization scheme, so evaluate a representative task set rather than assuming every four-bit model behaves the same.</p>
-<h2>Context length has a cost</h2>
-<p>The KV cache grows with sequence length. Long prompts can consume large amounts of memory even when the model weights fit comfortably. Trimming irrelevant history, retrieving only useful evidence and limiting output length can make a larger difference than changing the GPU.</p>
-<h2>Batching improves throughput — until memory says no</h2>
-<p>Batching lets the accelerator process multiple sequences together, which can raise tokens per second for server workloads. But larger batches also increase memory use and can make single-request latency worse. Tune for your workload, not for one benchmark screenshot.</p>
-<h2>Speculative decoding and smaller models</h2>
-<p>A fast draft model can propose tokens that a larger model verifies, reducing the work needed per accepted token. In many products, though, the biggest win is simply choosing a smaller model that meets the quality requirement.</p>
-<h2>The optimization order</h2>
-<ol><li>Choose the smallest acceptable model.</li><li>Limit unnecessary context.</li><li>Use sensible quantization.</li><li>Measure KV-cache pressure.</li><li>Tune batching for your actual traffic.</li><li>Only then explore advanced decoding tricks.</li></ol>
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>LLM inference is dominated by memory movement, not raw compute &mdash; the model weights and the KV cache have to move through memory bandwidth for every token generated.</li><li>Quantization, batching and KV cache management are the three levers with the biggest real-world impact, in that rough order of effort-to-payoff.</li><li>Throughput and latency trade against each other &mdash; batching improves one at the cost of the other, and the right setting depends on whether you're serving one user or many.</li><li>Speculative decoding can meaningfully cut latency, but only when the draft model is well-matched to the target model.</li></ul></div>
+
+<h2>Why inference is a memory problem, not just a compute problem</h2>
+<div class="stat-strip"><div><b>1 token</b><span>= full pass through model weights</span></div><div><b>O(n)</b><span>KV cache growth with context length</span></div><div><b>2&ndash;4x</b><span>typical batching throughput gain</span></div></div>
+
+<p>Generating each token requires moving the model's weights (and the growing key-value cache) through memory to the compute units, once per token. For most consumer and even many production setups, the bottleneck is how fast that data can move through memory bandwidth, not how fast the arithmetic itself can be computed. This is why inference optimization looks so different from training optimization: the problem to solve is mostly "move less data, less often."</p>
+
+<h2>Quantization: the highest-leverage single change</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Precision</th><th>Relative size</th><th>Effect</th></tr></thead>
+<tbody>
+<tr><td>FP16 / BF16</td><td>Baseline</td><td>Full precision, largest memory footprint</td></tr>
+<tr><td>INT8</td><td>~50% of FP16</td><td>Small, usually negligible quality loss</td></tr>
+<tr><td>INT4 (e.g. GPTQ, AWQ)</td><td>~25% of FP16</td><td>Noticeable but often acceptable quality trade for the memory savings</td></tr>
+</tbody>
+</table>
+</div>
+<p>Lower precision means less data to move per token, which directly reduces both memory footprint and, usually, latency. The quality cost has shrunk substantially with modern quantization methods &mdash; INT4 is now a reasonable production default for many use cases, not just a hobbyist compromise. See <a href="./local-llm-8gb-vram-setup.html">the local LLM VRAM guide</a> for a concrete breakdown of quantization formats and what fits in a given memory budget.</p>
+
+<h2>The KV cache: the part everyone underestimates</h2>
+<p>The key-value cache stores intermediate attention state so the model doesn't recompute it for every previous token on every new token generated. It's essential for reasonable latency, but it grows linearly with context length and batch size, and it is frequently the actual reason a model that "fits" runs out of memory mid-generation.</p>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> a model's weights fitting in memory says nothing about whether a long conversation will fit. The KV cache for a long context can exceed the size of the model weights themselves, especially at larger batch sizes.</p></div></div>
+<ul>
+<li><strong>Cap context length</strong> to what the use case genuinely needs &mdash; every unused token of context is wasted KV cache memory.</li>
+<li><strong>Use paged attention</strong> (as in vLLM) where available &mdash; it manages KV cache memory in fixed-size blocks instead of one large contiguous allocation, dramatically reducing fragmentation.</li>
+<li><strong>Evict or summarize</strong> old conversation turns for long-running sessions instead of keeping the entire history in the active cache.</li>
+</ul>
+
+<h2>Batching: throughput versus latency</h2>
+<p>Processing multiple requests together lets the GPU amortize the cost of loading weights across more tokens of output, which raises overall throughput. The trade-off is per-request latency: a request in a large batch may wait longer for its turn than it would running alone.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Scenario</th><th>Batching approach</th></tr></thead>
+<tbody>
+<tr><td>Interactive single-user chat</td><td>Small batch size, prioritize low latency</td></tr>
+<tr><td>Bulk offline processing (summarizing many documents)</td><td>Large batch size, prioritize throughput</td></tr>
+<tr><td>Multi-user production API</td><td>Continuous/dynamic batching &mdash; new requests join in-flight batches instead of waiting for a batch boundary</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>Continuous batching (used by serving frameworks like vLLM and TGI) gets most of the throughput benefit of large static batches without forcing every request to wait for a batch to fill &mdash; it's the right default for a multi-user serving setup.</p></div></div>
+
+<h2>Speculative decoding, briefly</h2>
+<p>A small, fast "draft" model proposes several tokens ahead; the larger target model verifies them in a single pass instead of generating each one sequentially. When the draft model's guesses are frequently correct, this can meaningfully reduce latency, because verification is cheaper than sequential generation. The gain shrinks or disappears if the draft model's output diverges too often from what the target model would have generated.</p>
+
+<h2>A practical order of operations</h2>
+<ol>
+<li>Quantize to INT8 or INT4 before anything else &mdash; it's the single highest-leverage, lowest-effort change.</li>
+<li>Cap context length to what the application actually needs.</li>
+<li>Use a serving framework with continuous batching and paged attention rather than a naive request-per-call loop.</li>
+<li>Only reach for speculative decoding once the above are in place and latency is still the bottleneck.</li>
+</ol>
+<blockquote><p>Inference performance is mostly memory movement, context management and careful batching &mdash; not a search for a faster GPU.</p></blockquote>
+
+<hr>
+<p>Every lever here trades something: quality for memory, latency for throughput, complexity for speed. There's no universal best setting &mdash; only the right trade-off for whether you're serving one interactive user or a queue of offline jobs.</p>

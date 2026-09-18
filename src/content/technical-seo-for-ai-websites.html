@@ -1,12 +1,54 @@
-<h2>Start with one canonical URL</h2>
-<p>Pick the exact site URL you want indexed and use it consistently in canonical tags, Open Graph URLs, structured data and sitemap entries. Mixed hostnames or protocol variants create needless ambiguity.</p>
-<h2>Robots.txt is about crawling, not indexing</h2>
-<p>Use robots.txt to control crawler access to paths you truly do not want crawled. Do not use it as a substitute for <code>noindex</code>. A page blocked from crawling cannot reliably communicate its indexing directive.</p>
-<h2>Your sitemap should contain canonical pages</h2>
-<p>List only the URLs you want search engines to discover. Keep the sitemap at a stable URL, return valid XML with a successful HTTP response and include the exact canonical URLs used by the site.</p>
-<h2>Internal links create discoverability</h2>
-<p>Important pages should be linked from other relevant pages using descriptive anchor text. A page that exists in a sitemap but is disconnected from the rest of the site is harder for both crawlers and users to understand.</p>
-<h2>Use Search Console to separate problems</h2>
-<p>URL inspection answers whether a specific page is indexed. The sitemap report answers whether Google can read your sitemap and what it discovered from it. Page indexing reports can lag, so do not confuse a delayed report with a broken page.</p>
-<h2>AI sites need the same fundamentals</h2>
-<p>Whether your content is about LLMs, agents or AI SEO, the technical rules are unchanged: fast HTML, stable URLs, useful internal linking, correct canonical tags, valid structured data and a sitemap that reflects the pages you actually want indexed.</p>
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>Technical SEO's job is to make it unambiguous what exists, what the canonical version of it is, and which pages deserve to be indexed.</li><li>A single wrong canonical tag or an overly broad robots.txt disallow can silently remove an entire section from search &mdash; and it fails silently, with no error message.</li><li>AI-search crawlers (GPTBot, PerplexityBot, ClaudeBot and similar) are a distinct audience from traditional search crawlers and need their own explicit robots.txt consideration.</li><li>Sitemaps and internal links are discovery aids, not ranking factors on their own &mdash; but a page a crawler can't find can't rank regardless of its content quality.</li></ul></div>
+
+<h2>Crawlability: can anything reach this page at all?</h2>
+<div class="stat-strip"><div><b>1</b><span>canonical URL per page, always</span></div><div><b>3</b><span>clicks &mdash; a reasonable max depth</span></div><div><b>0</b><span>orphan pages, ideally</span></div></div>
+
+<p>Before a page can rank, it has to be crawled, and before it's crawled, something has to link to it or list it in a sitemap. A page reachable only through a search box or a form submission is invisible to a crawler no matter how good its content is &mdash; this is what "orphan page" means, and it's a more common problem on JavaScript-heavy sites than developers expect.</p>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> a robots.txt <code>Disallow</code> rule that's broader than intended &mdash; like disallowing <code>/blog</code> instead of <code>/blog-drafts</code> &mdash; silently removes an entire section from crawling. There's no warning; pages simply stop appearing in search results over the following weeks.</p></div></div>
+
+<h2>Canonical URLs: telling search engines which version counts</h2>
+<p>Most sites accidentally serve the same content at multiple URLs &mdash; with and without a trailing slash, with tracking parameters, over http and https, on www and non-www. Without a canonical tag, search engines have to guess which one to index, and sometimes split ranking signal across all of them instead of consolidating it onto one.</p>
+<pre><code>&lt;link rel="canonical" href="https://example.com/blog/my-post"&gt;</code></pre>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Situation</th><th>Canonical points to</th></tr></thead>
+<tbody>
+<tr><td>Same content, with/without trailing slash</td><td>Pick one form and canonicalize the other to it &mdash; consistently, everywhere</td></tr>
+<tr><td>Content syndicated to another site</td><td>The original source, not the syndicated copy</td></tr>
+<tr><td>Paginated series (page 2, page 3...)</td><td>Each page canonicalizes to itself, not to page 1 &mdash; they're distinct content</td></tr>
+<tr><td>URL with tracking parameters (<code>?utm_source=...</code>)</td><td>The clean URL without the parameters</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Robots.txt: the front door, not a security measure</h2>
+<p>Robots.txt tells well-behaved crawlers what they may access; it does not enforce anything, and it's publicly readable by anyone. Its correct use is steering crawl budget away from low-value pages (admin routes, search result pages, duplicate filtered views) and toward content worth indexing.</p>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>A growing and distinct consideration: AI-search and answer-engine crawlers (GPTBot, OAI-SearchBot, PerplexityBot, ClaudeBot, Google-Extended) read robots.txt separately from traditional search crawlers. A site can allow Googlebot while accidentally blocking every AI crawler, or vice versa &mdash; check each user-agent explicitly rather than assuming a wildcard rule covers all of them equivalently.</p></div></div>
+
+<h2>Sitemaps: discovery, not a ranking factor</h2>
+<p>An XML sitemap lists the URLs you want crawled and, optionally, when they last changed. It doesn't directly improve ranking, but it materially speeds up discovery of new or updated pages, especially on a site without a rich internal-linking structure yet.</p>
+<ul>
+<li>Keep <code>lastmod</code> accurate &mdash; a sitemap where every URL always shows today's date trains crawlers to distrust the field entirely.</li>
+<li>Exclude noindexed, redirected and duplicate URLs &mdash; a sitemap full of pages that shouldn't be indexed wastes crawl budget and signals poor site hygiene.</li>
+<li>Submit it in Search Console and Bing Webmaster Tools rather than relying on passive discovery alone.</li>
+</ul>
+
+<h2>Common indexing failures and how to diagnose them</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Symptom</th><th>Likely cause</th><th>Where to check</th></tr></thead>
+<tbody>
+<tr><td>Page not indexed weeks after publishing</td><td>Orphaned (no internal links), or disallowed in robots.txt</td><td>Search Console URL Inspection tool</td></tr>
+<tr><td>Wrong URL ranking instead of the intended one</td><td>Missing or incorrect canonical tag</td><td>View source, check <code>rel="canonical"</code></td></tr>
+<tr><td>Duplicate content warnings</td><td>Same content reachable via multiple URL variants</td><td>Search Console Coverage report</td></tr>
+<tr><td>Sudden drop in indexed pages</td><td>An overly broad robots.txt change, or accidental <code>noindex</code> deployed sitewide</td><td>Diff the last robots.txt / meta robots deploy</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Where this connects to content strategy</h2>
+<p>Technical SEO makes pages discoverable and unambiguous; it doesn't make them relevant. <a href="./internal-linking-for-topical-authority.html">Internal linking and topical clustering</a> is the layer that turns a pile of individually-crawlable pages into a coherent topic a search engine can recognize as authoritative.</p>
+<blockquote><p>Good technical SEO makes it easy for search engines to understand what exists, what matters and which URL is canonical &mdash; it removes friction, it doesn't create relevance.</p></blockquote>
+
+<hr>
+<p>Most technical SEO problems are invisible until you go looking for them specifically &mdash; a wrong canonical or an overzealous disallow rule produces no error, just a slow, quiet disappearance from search results. Audit these deliberately rather than assuming they're fine because nothing is obviously broken.</p>

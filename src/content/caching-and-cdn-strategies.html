@@ -1,17 +1,61 @@
-<h2>Caching is a delivery strategy</h2>
-<p>A cache is useful because the browser or edge can reuse a response instead of fetching it from the origin again. For a static site, that can remove an enormous amount of repeat network work.</p>
-<h2>Separate HTML from fingerprinted assets</h2>
-<p>HTML changes more often than versioned CSS, JavaScript and images. Long-lived assets work best when their URLs change whenever their contents change. A file such as <code>app.8d3f.js</code> can safely be cached for a long time because a new build gets a new filename.</p>
-<h2>Use cache-control deliberately</h2>
-<p>For immutable hashed assets, a long <code>max-age</code> with <code>immutable</code> is ideal. HTML usually needs a shorter lifetime so visitors can discover new content. Do not give every resource the same caching policy.</p>
-<h2>What the CDN actually buys you</h2>
-<p>A CDN puts cached content closer to users and absorbs repeated requests at the edge. For a globally distributed audience, that reduces round-trip time even when the origin stays in one region. Static sites benefit especially because most page assets can be served without touching the origin.</p>
-<h2>Beware of stale content</h2>
-<p>Long TTLs create one trade-off: updates can take time to appear. Fingerprinted assets solve most of this. Change the filename when the content changes, keep the HTML more replaceable, and you can have both aggressive caching and reliable deploys.</p>
-<h2>A practical static-site policy</h2>
-<pre><code>HTML:        short cache / revalidate
-JS &amp; CSS:    long cache if fingerprinted
-Images:      long cache if versioned
-Fonts:       long cache if immutable
-Sitemap:     revalidate after deploy</code></pre>
-<p>The goal is simple: cache aggressively where content can never be stale, and keep the documents that point to those assets easy to refresh.</p>
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>The fastest request is the one the browser never makes &mdash; caching strategy should be the first performance lever you pull, not the last.</li><li>Immutable, content-hashed assets can be cached forever; HTML almost never should be.</li><li>A CDN's value is proximity and offload, not magic &mdash; it only helps as much as your cache headers let it.</li><li>Stale-while-revalidate gives you near-instant repeat loads without the staleness risk of caching HTML forever.</li></ul></div>
+
+<h2>Two kinds of assets, two completely different rules</h2>
+<div class="stat-strip"><div><b>31536000s</b><span>= 1 year (immutable max-age)</span></div><div><b>0</b><span>correct max-age for HTML</span></div><div><b>~50%+</b><span>cost cut from CDN offload, typical</span></div></div>
+
+<p>Nearly every caching mistake comes from treating all assets the same way. In reality there are two categories, and they want opposite treatment.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Asset type</th><th>Example</th><th>Cache-Control</th></tr></thead>
+<tbody>
+<tr><td>Content-hashed, immutable</td><td><code>app.a1b2c3.js</code>, <code>style.9f8e7d.css</code></td><td><code>public, max-age=31536000, immutable</code></td></tr>
+<tr><td>Mutable, must revalidate</td><td><code>index.html</code>, API responses</td><td><code>public, max-age=0, must-revalidate</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>The trick that makes the first row safe is the hash in the filename. Because the filename changes whenever the content changes, caching it for a year is completely safe &mdash; a stale cached copy of <code>app.a1b2c3.js</code> is simply the old version, never wrong content served under a new name. HTML, by contrast, is the file that tells the browser which hashed filenames to request next, so it needs to be checked on every visit &mdash; caching it for even a few minutes risks serving a page that points at asset versions which no longer exist.</p>
+
+<h2>Reading a Cache-Control header correctly</h2>
+<pre><code>Cache-Control: public, max-age=86400, stale-while-revalidate=604800</code></pre>
+<ul>
+<li><strong><code>public</code></strong> &mdash; any cache (browser, CDN, proxy) may store this response.</li>
+<li><strong><code>max-age=86400</code></strong> &mdash; treat the response as fresh for 24 hours without checking the origin.</li>
+<li><strong><code>stale-while-revalidate=604800</code></strong> &mdash; after freshness expires, keep serving the stale copy instantly while fetching a new one in the background, for up to 7 more days.</li>
+</ul>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p><code>stale-while-revalidate</code> is the most underused header in static-site performance. It gives you the speed of aggressive caching with almost none of the staleness risk, because every visit after the first triggers a background refresh.</p></div></div>
+
+<h2>What a CDN is actually doing for you</h2>
+<p>A CDN is a network of edge servers that cache your responses geographically close to visitors and absorb traffic before it reaches your origin. Its benefit is entirely proportional to how cacheable your responses are &mdash; a CDN sitting in front of uncacheable, always-dynamic responses provides almost no benefit beyond basic proxying.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>What the CDN gives you</th><th>Depends on</th></tr></thead>
+<tbody>
+<tr><td>Lower latency (geographic proximity)</td><td>Edge network size &mdash; mostly out of your control</td></tr>
+<tr><td>Origin offload (fewer requests hit your server)</td><td>Your Cache-Control headers being correct</td></tr>
+<tr><td>Resilience during traffic spikes</td><td>Cache hit rate at the edge</td></tr>
+<tr><td>Free TLS, HTTP/2 or HTTP/3, compression</td><td>Usually enabled by default on any modern CDN</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> putting a CDN in front of a site and leaving <code>Cache-Control</code> unset or overly conservative is one of the most common "we added a CDN and nothing got faster" stories. The CDN can only cache what your headers permit it to.</p></div></div>
+
+<h2>Cache invalidation for static sites</h2>
+<p>Content-hashed filenames make most manual invalidation unnecessary &mdash; a new deploy simply ships new filenames, and old cached files are never requested again. What still needs explicit handling is HTML and any unhashed asset: either keep its cache lifetime short (seconds to minutes) or purge the CDN cache on deploy. Most static-site CDNs (Cloudflare Pages, Netlify, Vercel) purge automatically on deploy &mdash; verify this rather than assuming it.</p>
+<p>See <a href="./self-hosting-vs-serverless.html">self-hosting vs serverless</a> for how this interacts with the platform choice itself &mdash; some hosts handle cache invalidation transparently, others require you to configure it.</p>
+
+<h2>A sane default configuration</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Path</th><th>Cache-Control</th></tr></thead>
+<tbody>
+<tr><td><code>/assets/*</code> (hashed filenames)</td><td><code>public, max-age=31536000, immutable</code></td></tr>
+<tr><td><code>*.html</code></td><td><code>public, max-age=0, must-revalidate</code></td></tr>
+<tr><td><code>/api/*</code> (dynamic, cacheable briefly)</td><td><code>public, max-age=60, stale-while-revalidate=300</code></td></tr>
+<tr><td><code>sitemap.xml</code>, <code>robots.txt</code></td><td><code>public, max-age=3600</code></td></tr>
+</tbody>
+</table>
+</div>
+<blockquote><p>The best request is the request the browser doesn't need to make again. Everything else &mdash; the CDN, the edge network, the compression &mdash; is optimizing the requests you couldn't avoid.</p></blockquote>
+
+<hr>
+<p>Caching strategy and CDN choice work together, but in that order: fix your Cache-Control headers first, and the CDN you already have will start earning its keep. Adding a CDN in front of bad headers just moves the same problem geographically closer to the user.</p>

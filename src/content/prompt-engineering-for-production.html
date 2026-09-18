@@ -1,12 +1,48 @@
-<h2>Write prompts like interfaces</h2>
-<p>A reliable prompt tells the model the task, constraints, input shape and output contract. It should make success testable. Avoid vague instructions such as “be an expert” when you can define the actual behaviour you need.</p>
-<h2>Separate stable rules from dynamic data</h2>
-<p>System-level instructions should contain durable behaviour. User content and retrieved evidence should be inserted into clearly delimited sections. This separation makes debugging easier and reduces accidental prompt injection through data.</p>
-<h2>Prefer schemas when software consumes the answer</h2>
-<p>If downstream code expects JSON, define the fields, types and edge cases. A natural-language answer that happens to look structured is not a reliable API contract. Use the model's structured-output support when available.</p>
-<h2>Examples beat adjectives</h2>
-<p>Few-shot examples show exactly what “good” looks like. Keep examples representative and diverse enough to demonstrate the boundary cases you care about. One excellent example can be more useful than a paragraph of subjective adjectives.</p>
-<h2>Evaluate prompts like code</h2>
-<p>Create a small golden dataset and compare prompt versions against the same inputs. Measure correctness, schema compliance, refusal quality, latency and token cost. A prompt change that improves one example but breaks 10 percent of production cases is not an improvement.</p>
-<h2>Version prompts and observe failures</h2>
-<p>Keep prompts in source control, assign versions, log which version served a request and capture anonymized failure cases. The best prompt is the one you can improve systematically, not the one you wrote at 2 a.m. and never measured.</p>
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>A production prompt is an interface contract between your application and the model &mdash; it needs versioning, testing and failure handling like any other interface.</li><li>Structured output (JSON schemas, function calling) removes an entire class of parsing failures that free-text prompting invites.</li><li>Few-shot examples usually beat longer instructions for teaching format and edge-case handling.</li><li>Without an evaluation set, you cannot tell whether a prompt change is actually an improvement &mdash; you can only tell that it changed.</li></ul></div>
+
+<h2>Why "clever prompting" doesn't survive production</h2>
+<div class="stat-strip"><div><b>1</b><span>prompt, many model versions</span></div><div><b>0</b><span>tolerance for silent format drift</span></div><div><b>N</b><span>test cases per prompt version</span></div></div>
+
+<p>A prompt that works well in a chat window is a different artifact from a prompt embedded in a production system. In a chat window, a slightly malformed response is something a human reads past. In production, that same malformed response is a parsing exception, a broken downstream field, or a silently wrong record in a database. The gap between those two contexts is exactly what production prompt engineering has to close.</p>
+
+<h2>Structured output: remove the parsing problem entirely</h2>
+<p>Asking a model to "return the result as JSON" in free text invites markdown fences, explanatory preambles, and inconsistent field names. Modern APIs offer two better options:</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Approach</th><th>What it guarantees</th></tr></thead>
+<tbody>
+<tr><td>JSON schema / structured output mode</td><td>The response conforms to a defined schema &mdash; no fences, no missing fields, no type mismatches</td></tr>
+<tr><td>Function/tool calling</td><td>The model emits a structured call with typed arguments instead of narrative text</td></tr>
+<tr><td>Free-text parsing with regex</td><td>Nothing &mdash; this is the fallback when neither option above is available, and it should be treated as fragile</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>If your API supports a native structured-output or function-calling mode, use it instead of instructing the model to "output valid JSON only" in the prompt text. The native mode is enforced at generation time; the instruction is just a request the model can still ignore under pressure.</p></div></div>
+
+<h2>Examples beat instructions for format and edge cases</h2>
+<p>Explaining a desired output format in prose is less reliable than showing two or three examples of input-output pairs, especially for edge cases: how to handle a missing field, an ambiguous category, or an empty result. A well-chosen example does the work of several paragraphs of instruction, and it generalizes better to inputs the instruction didn't anticipate.</p>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> examples teach pattern-matching, including patterns you didn't intend. If every example in your few-shot set happens to have a non-empty result field, don't be surprised when the model struggles to produce an empty one for a genuinely empty case.</p></div></div>
+
+<h2>Designing for failure, not just success</h2>
+<ul>
+<li><strong>Give the model a way to say "I don't know" or "not enough information"</strong> &mdash; explicitly, as a valid output. Without this option, an uncertain model tends to guess rather than flag the uncertainty.</li>
+<li><strong>Validate output against the schema before it reaches downstream code</strong>, and define what happens on a validation failure &mdash; retry, fall back to a default, or surface an error, but decide this deliberately rather than letting a malformed response propagate.</li>
+<li><strong>Set explicit boundaries on scope</strong> &mdash; a support-ticket classifier should have a defined behavior for a ticket that doesn't fit any category, not silently force-fit it into the closest one.</li>
+</ul>
+
+<h2>Prompts need version control and evaluation, not just iteration</h2>
+<p>A prompt change that "feels better" on the five examples you happened to test is not evidence of improvement. Treat prompts the way you'd treat any other piece of logic that affects production behavior.</p>
+<ol>
+<li><strong>Version every prompt</strong> &mdash; a prompt change is a code change, and should be tracked, reviewed and attributable in the same way.</li>
+<li><strong>Build a small evaluation set</strong> &mdash; 20 to 50 representative inputs with known-good outputs, covering both common cases and known edge cases.</li>
+<li><strong>Run the evaluation set on every prompt change</strong> before shipping, and compare against the previous version, not just against intuition.</li>
+<li><strong>Watch for regressions on old cases</strong> when fixing a new one &mdash; prompt changes frequently trade one failure for another rather than net-improving.</li>
+</ol>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>This evaluation discipline is the same one that applies to <a href="./embeddings-explained.html">evaluating an embedding model choice</a> or a retrieval pipeline &mdash; measure against your own representative cases, not vibes or a public leaderboard.</p></div></div>
+
+<h2>Where prompts fit next to agents and RAG</h2>
+<p>In a RAG system, the prompt is the contract for how retrieved context gets used and cited. In an <a href="./ai-agents-vs-rag.html">agentic system</a>, the prompt additionally has to specify when to call a tool, how to interpret its result, and when to stop. The more the prompt is asked to do, the more essential structured output and explicit failure paths become &mdash; free-text instructions scale poorly as responsibility grows.</p>
+<blockquote><p>A production prompt is an interface contract, not a magic sentence. Treat it with the same rigor you'd apply to any other interface your system depends on.</p></blockquote>
+
+<hr>
+<p>The prompts that survive contact with production are the ones designed around failure from the start &mdash; structured output, explicit uncertainty handling, and a real evaluation set &mdash; not the ones that happened to produce a good-looking answer once.</p>
