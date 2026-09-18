@@ -1,11 +1,60 @@
-<h2>What a vector database stores</h2>
-<p>A typical record contains a vector, the original text or a pointer to it, and metadata such as tenant, document type, timestamp or permissions. The vector supports similarity search; metadata makes the results useful and safe.</p>
-<h2>Why approximate search exists</h2>
-<p>Comparing a query with every vector in a large collection becomes expensive. Approximate nearest-neighbour indexes reduce the search space so the system can return strong candidates quickly. The trade-off is small differences in recall for large gains in latency and scale.</p>
-<h2>Metadata is not optional</h2>
-<p>If two customers share an index, tenant filtering should happen during retrieval. The same applies to language, document status and access permissions. A semantically similar document that the user is not allowed to see is still a wrong result.</p>
-<h2>Top-k is only the beginning</h2>
-<p>Fetching the top 20 candidates does not mean you should put all 20 into the model context. Rerank them, remove duplicates, apply diversity rules, then build the final context around the best evidence.</p>
-<h2>Measure retrieval separately from generation</h2>
-<p>Track retrieval recall, precision, latency and the percentage of answers with sufficient supporting evidence. If retrieval is weak, changing the LLM can hide the symptom without fixing the system.</p>
-<p>The best vector database is the one whose indexing, filtering and latency characteristics match your workload. Start from the retrieval contract, then pick the technology.</p>
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>A vector database is a retrieval engine built around approximate nearest-neighbour search &mdash; not a magical memory layer for an LLM.</li><li>Approximate indexes trade a small amount of recall for a massive gain in query speed; the trade-off is tunable, not fixed.</li><li>Metadata filtering usually matters more than index choice for real-world relevance.</li><li>Picking a vector database is an infrastructure decision first and a feature-list decision second: think about scale, ops burden and existing stack before comparing benchmarks.</li></ul></div>
+
+<h2>What a vector database actually does</h2>
+<div class="stat-strip"><div><b>ms</b><span>query latency at scale</span></div><div><b>Millions</b><span>vectors per node, typical</span></div><div><b>~95&ndash;99%</b><span>typical ANN recall</span></div></div>
+
+<p>A vector database stores embeddings alongside their source content and metadata, and answers one question extremely fast at scale: given a query vector, which stored vectors are closest to it? At small scale this is a brute-force problem &mdash; compare the query against every stored vector and sort. At the scale most production systems actually reach, brute force becomes too slow, and that is the entire reason vector databases exist.</p>
+<p>The mechanism that makes this fast is an <strong>approximate nearest-neighbour (ANN) index</strong>. Instead of guaranteeing the true top-k closest vectors, it returns a result that is very likely to be the true top-k, computed far faster than an exhaustive scan. That "approximate" is a deliberate, tunable trade-off &mdash; not a limitation to work around.</p>
+
+<h2>How ANN indexes actually work</h2>
+<p>Three index families cover almost every production vector database. Each makes a different trade between build time, query speed, memory and recall.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Index type</th><th>How it works</th><th>Trade-off</th></tr></thead>
+<tbody>
+<tr><td>HNSW</td><td>Navigable small-world graph; search hops along edges toward the nearest neighbours</td><td>Fast queries, high recall, but memory-hungry and slower to build/update</td></tr>
+<tr><td>IVF (inverted file)</td><td>Vectors are clustered; a query only searches the nearest clusters</td><td>Lower memory than HNSW, needs a training step, recall depends on cluster count</td></tr>
+<tr><td>PQ / scalar quantization</td><td>Vectors compressed into smaller codes before comparison</td><td>Big memory savings, some recall loss; often combined with IVF or HNSW</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>Most production vector databases combine these &mdash; for example IVF for coarse filtering plus PQ for compression, or HNSW with quantized vectors to cut memory. The names on a feature list matter less than the recall and latency numbers you measure on your own data.</p></div></div>
+
+<h2>Metadata filtering matters more than people expect</h2>
+<p>A pure similarity search will happily return a semantically relevant chunk that is outdated, from a document the current user has no permission to see, or written in the wrong language. Metadata filtering &mdash; by date, source, tenant, permission level, or category &mdash; is what turns a similarity search into a usable retrieval system.</p>
+<ul>
+<li><strong>Pre-filtering</strong> &mdash; narrow the candidate set before running the vector search. More accurate, but can be slower on databases where filtering isn't index-aware.</li>
+<li><strong>Post-filtering</strong> &mdash; run the vector search first, then discard results that fail the filter. Faster in some engines, but risks returning fewer than k results if too many top matches get filtered out.</li>
+</ul>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> post-filtering with a strict permission filter can silently starve your results &mdash; if 8 of your top 10 matches belong to a document the user can't see, they simply vanish instead of being backfilled. Check whether your database supports filter-aware ANN search before assuming post-filtering is safe.</p></div></div>
+
+<h2>Choosing a vector database</h2>
+<p>The honest answer is that most popular options perform similarly on raw ANN benchmarks. The decision is usually made by everything around the index, not the index itself.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Question</th><th>Why it matters</th></tr></thead>
+<tbody>
+<tr><td>Do you already run Postgres?</td><td><code>pgvector</code> avoids a new system to operate, at the cost of raw ANN performance versus a purpose-built engine</td></tr>
+<tr><td>How many vectors, realistically?</td><td>Under a few million, almost any option works; past that, index choice and sharding strategy start to matter</td></tr>
+<tr><td>Managed or self-hosted?</td><td>Managed services remove ops burden but add cost and a network hop; self-hosted needs someone to own upgrades and scaling</td></tr>
+<tr><td>Do you need hybrid search?</td><td>Combining keyword (BM25) and vector search often beats either alone for technical or exact-match-heavy content</td></tr>
+<tr><td>Filter-aware ANN?</td><td>Determines whether metadata filtering happens safely alongside the vector search, not as a lossy afterthought</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>If you're under a few million vectors and already run Postgres, start with <code>pgvector</code>. Migrate to a dedicated vector database only once you've measured a real latency or recall ceiling &mdash; not before.</p></div></div>
+
+<h2>Where this fits in retrieval-augmented generation</h2>
+<p>The vector database is the search engine inside a RAG pipeline: it takes a query embedding and returns the top-k candidate chunks, ideally already filtered by metadata. <a href="./embeddings-explained.html">How those embeddings are produced and chunked</a> determines what the database has to search through in the first place &mdash; a strong index cannot compensate for weak chunking upstream.</p>
+<blockquote><p>A vector database is a retrieval engine, not a magical memory for an LLM. It returns candidates; your pipeline still decides what to trust.</p></blockquote>
+
+<h2>Common mistakes</h2>
+<ul>
+<li><strong>Treating recall as fixed</strong> &mdash; most ANN indexes expose tunable parameters (like HNSW's <code>ef_search</code>) that trade latency for recall at query time. Default settings are rarely optimal for a specific workload.</li>
+<li><strong>No reindexing plan</strong> &mdash; changing the embedding model without rebuilding the index leaves old and new vectors in incomparable spaces.</li>
+<li><strong>Ignoring cold-start latency</strong> &mdash; some indexes need warm caches or a build/training step; first-query latency after a deploy can look far worse than steady-state.</li>
+<li><strong>Choosing by benchmark alone</strong> &mdash; a database that wins a public ANN benchmark may still be the wrong choice if it doesn't support the metadata filtering or hybrid search your product actually needs.</li>
+</ul>
+
+<hr>
+<p>A vector database's job is narrow and mechanical: index vectors, search them fast, filter them correctly. Getting production-quality retrieval still depends on everything upstream &mdash; chunking, embedding choice and evaluation &mdash; and everything downstream, like reranking and prompt assembly.</p>

@@ -1,12 +1,82 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>An embedding is a fixed-length vector that places similar meaning close together in space &mdash; it is a comparison tool, not a compressed copy of the text.</li><li>Cosine similarity ranks candidates; it does not certify correctness. The ranking is only as good as the chunking and metadata beneath it.</li><li>A bigger vector dimension is not a better vector. Benchmark <code>recall@k</code> on your own questions before picking a model.</li><li>Most retrieval failures are chunking failures, not embedding failures. Fix chunk boundaries before switching models.</li></ul></div>
+
 <h2>What an embedding actually is</h2>
-<p>An embedding is a vector of numbers that represents the meaning or properties of an input in a space where similar inputs tend to be close together. The model is not storing a sentence as a sentence; it is mapping the input into a numerical representation that downstream systems can compare.</p>
-<h2>Similarity is the key operation</h2>
-<p>Once two texts are embedded, you can compare their vectors with a distance or similarity function such as cosine similarity. The exact score is less important than the ranking: which stored chunks are most similar to the new query?</p>
-<h2>Why chunking matters</h2>
-<p>Embedding a 20-page document as one vector usually creates a weak retrieval unit. Smaller chunks preserve more precise topical signals, but chunks that are too small lose context. A practical starting point is to split by semantic boundaries and overlap only when necessary.</p>
+<div class="stat-strip"><div><b>384&ndash;3072</b><span>typical dimensions</span></div><div><b>0&ndash;1</b><span>cosine similarity range</span></div><div><b>&lt;1ms</b><span>per-vector compare</span></div></div>
+
+<p>An embedding is a vector of floating-point numbers &mdash; typically somewhere between 384 and 3072 of them &mdash; produced by a model that has learned to place semantically similar inputs near each other in that space and dissimilar inputs far apart. The model is not storing the sentence. It is projecting the sentence into a coordinate system built specifically so that distance in that system corresponds to something useful: topical closeness, intent similarity, or shared context, depending on how the embedding model was trained.</p>
+<p>This is the part people skip past too quickly. Two embeddings being close does not mean the two texts say the same thing. It means the model's training pushed texts like these close together for whatever objective it optimized. That objective is usually retrieval-shaped (does this passage answer this query?) rather than truth-shaped (are these two facts identical?). Treating embeddings as a similarity oracle instead of a trained approximation is the root of most confused debugging sessions.</p>
+
+<h2>Similarity is the operation, ranking is the point</h2>
+<p>Once two pieces of text are embedded, you compare their vectors with a distance or similarity function. Cosine similarity is the default choice because it measures the angle between vectors rather than their magnitude, which makes it robust to differences in text length.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Metric</th><th>What it measures</th><th>When to prefer it</th></tr></thead>
+<tbody>
+<tr><td>Cosine similarity</td><td>Angle between vectors, ignores magnitude</td><td>Default for text embeddings; most models are trained/normalized for this</td></tr>
+<tr><td>Dot product</td><td>Angle and magnitude combined</td><td>When the embedding model was explicitly trained for dot-product retrieval (check the model card)</td></tr>
+<tr><td>Euclidean (L2)</td><td>Straight-line distance</td><td>Rare for text; more common in image or audio embeddings</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> mixing metrics with a model trained for a different one silently degrades ranking quality. If your vector database defaults to dot product and your embedding model assumes cosine, normalize your vectors before indexing or switch the index metric &mdash; don't leave it to chance.</p></div></div>
+<p>The absolute similarity score rarely matters on its own. A score of 0.71 means nothing in isolation; what matters is whether it is higher than the scores of the other candidates, because <strong>the operation you actually care about is ranking</strong>: given a query, which of your stored chunks are most likely to be relevant, in order?</p>
+
+<h2>Why chunking decides more than the model does</h2>
+<p>Embedding an entire twenty-page document as a single vector creates a weak retrieval unit &mdash; it blends dozens of topics into one point in space, so it will never rank highly for any specific question buried inside it. Splitting too aggressively causes the opposite failure: chunks that are grammatically complete but stripped of the surrounding context that gave them meaning.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Chunk size</th><th>Typical failure mode</th><th>Fix</th></tr></thead>
+<tbody>
+<tr><td>Whole document</td><td>Vector is an average of everything; nothing ranks well</td><td>Split by section or heading first</td></tr>
+<tr><td>1&ndash;2 sentences</td><td>Correct sentence retrieved, but missing context to answer the question</td><td>Add a sliding overlap of 1&ndash;2 sentences, or attach parent-section context</td></tr>
+<tr><td>200&ndash;500 tokens, boundary-aware</td><td>Usually the sweet spot for technical and prose content</td><td>Split on headings/paragraphs, not fixed character counts</td></tr>
+<tr><td>Tables and code blocks</td><td>Split mid-row or mid-function, destroying meaning</td><td>Treat as atomic units; never split inside them</td></tr>
+</tbody>
+</table>
+</div>
+<p>A practical starting point: split by semantic boundaries &mdash; headings, paragraphs, list items &mdash; rather than a fixed character count, and only add overlap between chunks when a concept genuinely spans the boundary. Overlap by default just duplicates noise across your index and inflates storage without improving recall.</p>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>Keep tables, code blocks and FAQ pairs as atomic chunks. Splitting a table mid-row or a function mid-body destroys the one property &mdash; local coherence &mdash; that made it embeddable in the first place.</p></div></div>
+
 <h2>Dimensions are not quality</h2>
-<p>A larger vector does not automatically mean better retrieval. Quality depends on the embedding model, language coverage, data distribution and retrieval task. Benchmark your own question set instead of choosing a model because its dimension count looks impressive.</p>
-<h2>Embeddings inside RAG</h2>
-<p>A common RAG pipeline looks like: query → query embedding → vector search → top-k chunks → prompt → model response. The embedding stage is only one component. Poor chunking, bad metadata filters or weak reranking can ruin a good embedding model.</p>
-<h2>How to evaluate an embedding choice</h2>
-<p>Create a set of real user questions with known relevant documents. Measure recall@k before changing the model. If the correct chunk is never retrieved, prompt tuning cannot save the pipeline; the retrieval layer has to improve first.</p>
+<p>A larger vector does not automatically retrieve better results. Retrieval quality depends on the embedding model's training data and objective, language and domain coverage, and how well the model's notion of "similar" matches your users' notion of "relevant" &mdash; not on how many floats the vector contains.</p>
+<p>Higher dimensions do cost you something concrete: more storage per vector, slower approximate-nearest-neighbour search at scale, and higher indexing memory. If a 768-dimension model retrieves as well as a 3072-dimension one on your own question set, the smaller model is the correct production choice.</p>
+
+<h2>Embeddings inside a RAG pipeline</h2>
+<p>A common retrieval-augmented generation pipeline looks like this: query &rarr; query embedding &rarr; vector search &rarr; top-k chunks &rarr; prompt assembly &rarr; model response. The embedding stage is one component among several, and it is rarely the one that fails first.</p>
+<ol>
+<li><strong>Query embedding</strong> &mdash; the user's question is embedded with the same model used to index the corpus. Using a different model here is a common, silent bug: the two vector spaces are not comparable.</li>
+<li><strong>Vector search</strong> &mdash; an approximate nearest-neighbour index returns the top-k closest chunks by the chosen similarity metric.</li>
+<li><strong>Metadata filtering</strong> &mdash; results are narrowed by date, source, permission or category before or after the vector search, depending on the index.</li>
+<li><strong>Reranking (optional)</strong> &mdash; a cross-encoder re-scores the top candidates with a slower but more accurate model, correcting ordering mistakes the embedding-only pass made.</li>
+<li><strong>Prompt assembly</strong> &mdash; the surviving chunks are inserted into the model's context, ideally with enough surrounding metadata that the model knows what it's reading.</li>
+</ol>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>Poor chunking, missing metadata filters, or a skipped reranking step will ruin a good embedding model's output. Diagnose the whole pipeline before you blame the vectors.</p></div></div>
+<p>See <a href="./vector-databases-explained.html">how vector databases turn this search step into a production system</a> for the index-level trade-offs that sit underneath step two.</p>
+
+<h2>How to evaluate an embedding choice properly</h2>
+<p>Benchmark leaderboards measure average performance across generic tasks. Your corpus is not generic. The only evaluation that predicts production behaviour is one built from your own data.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Step</th><th>What to do</th></tr></thead>
+<tbody>
+<tr><td>1. Build a question set</td><td>Collect 30&ndash;100 real user questions, each with the chunk(s) that should answer it</td></tr>
+<tr><td>2. Pick a metric</td><td><code>recall@k</code> &mdash; is the correct chunk in the top k results?</td></tr>
+<tr><td>3. Run the baseline</td><td>Measure recall@5 and recall@10 with your current model and chunking</td></tr>
+<tr><td>4. Change one variable</td><td>Swap the model, or the chunk size, or the overlap &mdash; never more than one at a time</td></tr>
+<tr><td>5. Compare</td><td>Keep the change only if recall improves on your question set, not on a public leaderboard</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">&#215;</span><div><p>Don't tune the prompt to compensate for weak retrieval. If the correct chunk is never in the top k, prompt engineering cannot recover information that was never handed to the model.</p></div></div>
+<blockquote><p>Measure recall before you change the model. If the correct chunk is never retrieved, the retrieval layer has to improve first &mdash; no amount of prompt tuning fixes a missing document.</p></blockquote>
+
+<h2>Where embeddings go wrong in practice</h2>
+<ul>
+<li><strong>Query/document mismatch</strong> &mdash; embedding a short keyword-style query with a model trained on full sentences produces a poor match to full-sentence documents. Some models expose separate query and document embedding modes; use them.</li>
+<li><strong>Stale indexes</strong> &mdash; content updates without re-embedding leave the vector index pointing at outdated text while the source of truth has moved on.</li>
+<li><strong>No metadata filtering</strong> &mdash; semantically similar but permission-restricted or outdated documents surface anyway because nothing narrowed the candidate set before ranking.</li>
+<li><strong>Ignoring outliers</strong> &mdash; a handful of consistently poor-recall queries usually points at one chunking problem, not seventeen unrelated ones. Group failures before fixing them individually.</li>
+</ul>
+
+<hr>
+<p>Embeddings are the mechanism that makes semantic search and RAG possible, but they are one layer in a pipeline where chunking, metadata and evaluation decide whether that mechanism actually helps a reader find the right answer.</p>

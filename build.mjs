@@ -316,12 +316,17 @@ const POSTS = [
     seoTitle: 'Embeddings Explained: How AI Turns Text into Vectors',
     description: 'A practical explanation of embeddings, similarity, vector dimensions, chunking and how embeddings power search, RAG and recommendations.',
     date: '2026-09-13',
-    updated: '2026-09-13',
+    updated: '2026-09-18',
     read: 7,
     tags: ['LLM','Embeddings','RAG'],
     keywords: 'embeddings explained, text embeddings, vector similarity, rag embeddings',
     hero: 'Embeddings turn meaning into numbers that a system can compare.',
-    body: ''
+    body: '',
+    faq: [
+      ['What is an embedding in simple terms?', 'An embedding is a list of numbers that represents the meaning of a piece of text, positioned so that similar meanings end up close together in that numerical space.'],
+      ['Is cosine similarity always the right metric?', 'It is the right default for most text embedding models, but check the model card — some models are trained specifically for dot-product retrieval instead.'],
+      ['Do more dimensions mean a better embedding model?', 'No. Retrieval quality depends on training data and objective, not vector size. Benchmark recall on your own questions rather than choosing by dimension count.']
+    ]
   },
   {
     slug: 'vector-databases-explained',
@@ -330,12 +335,17 @@ const POSTS = [
     seoTitle: 'Vector Databases Explained: How Indexes, Metadata and Retrieval Work',
     description: 'Understand vector databases, approximate nearest-neighbour indexes, metadata filtering and the design decisions behind production retrieval systems.',
     date: '2026-09-13',
-    updated: '2026-09-13',
+    updated: '2026-09-18',
     read: 7,
     tags: ['RAG','Vector Database','Architecture'],
     keywords: 'vector database explained, ann index, metadata filtering, rag retrieval',
     hero: 'A vector database is a retrieval engine, not a magical memory for an LLM.',
-    body: ''
+    body: '',
+    faq: [
+      ['Do I need a dedicated vector database?', 'Not always. If you already run Postgres and have under a few million vectors, pgvector is often enough. Move to a dedicated engine once you measure a real latency or recall ceiling.'],
+      ['What does approximate nearest-neighbour search mean?', 'It means the index returns results that are very likely, but not mathematically guaranteed, to be the true closest matches — trading a small amount of recall for much faster queries at scale.'],
+      ['Why does metadata filtering matter for RAG?', 'Without it, a similarity search can return outdated or permission-restricted content just because it is semantically close to the query. Filtering by date, source or access level is what makes results trustworthy.']
+    ]
   },
   {
     slug: 'ai-agents-vs-rag',
@@ -424,7 +434,7 @@ const sorted = [...POSTS].sort(byDate);
 const inCat = (c) => sorted.filter((p) => p.category === c);
 
 /* ===== 4. SHARED MARKUP =================================================== */
-function head({ title, description, canonical, base, theme, keywords = '', jsonld = [], noindex = false }) {
+function head({ title, description, canonical, base, theme, keywords = '', jsonld = [], noindex = false, ogType = 'website', published = '', modified = '' }) {
   return `<!DOCTYPE html>
 <html lang="${SITE.lang}" data-theme="${theme}">
 <head>
@@ -437,7 +447,8 @@ ${keywords ? `<meta name="keywords" content="${esc(keywords)}">` : ''}
 <meta name="robots" content="${noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1'}">
 <meta name="author" content="${SITE.author}">
 <meta name="theme-color" content="#07080d">
-<meta property="og:type" content="website">
+<meta property="og:type" content="${ogType}">
+${ogType === 'article' ? `<meta property="article:published_time" content="${published}">\n<meta property="article:modified_time" content="${modified || published}">\n<meta property="article:author" content="${esc(SITE.author)}">` : ''}
 <meta property="og:site_name" content="${SITE.name}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
@@ -448,7 +459,10 @@ ${keywords ? `<meta name="keywords" content="${esc(keywords)}">` : ''}
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="${esc(SITE.name)} — ${esc(SITE.tagline)}">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="${SITE.url}/assets/img/og-${theme}.png">
+<meta name="twitter:image:alt" content="${esc(SITE.name)} — ${esc(SITE.tagline)}">
+<meta name="twitter:creator" content="${SITE.twitter}">
 <meta name="twitter:site" content="${SITE.twitter}">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(description)}">
@@ -458,9 +472,11 @@ ${keywords ? `<meta name="keywords" content="${esc(keywords)}">` : ''}
 <link rel="apple-touch-icon" sizes="180x180" href="${base}assets/img/icon-180.png">
 <link rel="manifest" href="${base}manifest.webmanifest">
 <link rel="alternate" type="application/rss+xml" title="${SITE.name} feed" href="${SITE.url}/rss.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"></noscript>
 <link rel="stylesheet" href="${base}assets/css/style.css">
 <script>window.SITE_BASE=${JSON.stringify(base)};</script>
 ${jsonld.map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join('\n')}
@@ -581,7 +597,7 @@ function postPage(p) {
   // Paragraph cards are applied automatically by .prose > p in style.css, so every new post inherits the same treatment.
   const base = p.seoTitle || p.title;
   const titleTag = (base + ' | ' + SITE.name).length <= 60 ? base + ' | ' + SITE.name : base;
-  return `${head({ title: titleTag, description: p.description, canonical: postUrl(p), base: '../', theme: c.theme, keywords: p.keywords, jsonld })}
+  return `${head({ title: titleTag, description: p.description, canonical: postUrl(p), base: '../', theme: c.theme, keywords: p.keywords, jsonld, ogType: 'article', published: p.date, modified: p.updated || p.date })}
 <div class="progress" aria-hidden="true"></div>
 ${header('../', p.category)}
 <main id="main">
@@ -815,13 +831,15 @@ const searchIndex = sorted.map((p) => ({
 }));
 
 const sitemap = () => {
+  const newest = (list) => list.map((p) => p.updated || p.date).sort().pop() || new Date().toISOString().slice(0, 10);
+  const hubDate = { '': newest(sorted), 'tech.html': newest(inCat('tech')), 'ai.html': newest(inCat('ai')), 'blog/index.html': newest(sorted), 'paths.html': newest(sorted), 'topics.html': newest(sorted) };
   const urls = [
-        ['', '1.0', 'daily'], ['tech.html', '0.9', 'daily'], ['ai.html', '0.9', 'daily'],
-    ['paths.html', '0.8', 'weekly'], ['topics.html', '0.8', 'weekly'],
-    ['blog/index.html', '0.8', 'daily'], ['about.html', '0.4', 'monthly'],
-    ...sorted.map((p) => [postUrl(p), '0.8', 'weekly'])
+    ['', '1.0', 'weekly'], ['tech.html', '0.9', 'weekly'], ['ai.html', '0.9', 'weekly'],
+    ['paths.html', '0.7', 'monthly'], ['topics.html', '0.7', 'monthly'],
+    ['blog/index.html', '0.8', 'weekly'], ['about.html', '0.4', 'yearly'],
+    ...sorted.map((p) => [postUrl(p), '0.8', 'monthly'])
   ];
-  const lastmod = (u) => (sorted.find((p) => postUrl(p) === u)?.updated) || new Date().toISOString().slice(0, 10);
+  const lastmod = (u) => (sorted.find((p) => postUrl(p) === u)?.updated) || hubDate[u] || new Date().toISOString().slice(0, 10);
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(([u, pr, cf]) => `  <url><loc>${SITE.url}/${u}</loc><lastmod>${lastmod(u)}</lastmod><changefreq>${cf}</changefreq><priority>${pr}</priority></url>`).join('\n')}
@@ -831,6 +849,31 @@ ${urls.map(([u, pr, cf]) => `  <url><loc>${SITE.url}/${u}</loc><lastmod>${lastmo
 const robots = () => `User-agent: *
 Allow: /
 Disallow: /404.html
+
+# Generative / AI search crawlers — explicitly welcomed for citation visibility
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
 
 Sitemap: ${SITE.url}/sitemap.xml`;
 
