@@ -237,7 +237,7 @@ section{ padding:clamp(2.4rem,5vw,4.2rem) 0; }
 .toc__progress i{ display:block; height:100%; width:0; background:linear-gradient(90deg,var(--brand),var(--brand-2)); transition:width .12s linear; }
 
 @media (max-width:960px){
-  .article-grid{ grid-template-columns:1fr; }
+  .article-grid{ grid-template-columns:minmax(0,1fr); }
   .toc{ position:static; max-height:none; border-left:0; border:1px solid var(--line); border-radius:var(--radius-sm); padding:1rem 1.1rem; background:var(--surface); order:-1; }
   .toc a{ margin-left:0; padding-left:.6rem; }
   .toc__progress{ display:none; }

@@ -1,0 +1,102 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>ChatGPT does not forget the way a person does. Each reply is built from the text that fits in its <strong>context window</strong>, and in a long chat the oldest text is trimmed or condensed to make room.</li><li>The window is measured in tokens (roughly three-quarters of an English word each) and is shared by your messages, its replies, pasted files and hidden text such as instructions and memory notes.</li><li>Memory and the context window are different things. Memory carries short notes between chats, while the window is what the model can read right now.</li><li>The fixes are simple habits: restate key rules, keep one task per chat, summarise and restart, put standing preferences in custom instructions or memory, and paste less.</li></ul></div>
+
+<h2>The short answer: it is not a bug</h2>
+<p>You tell ChatGPT at the start of a chat to answer in plain English with no bullet points. Forty messages later, the bullet points are back. Or you spend an hour settling on a plan, and then it suggests something you already rejected. It feels like forgetting, and it happens for a simple reason: ChatGPT can only read a limited amount of text each time it replies. That limit is called the context window.</p>
+<p>Once a conversation is longer than the window, something has to go, and it is usually the oldest material, including the instruction you gave first. Nothing is broken. This is how every large language model chatbot works, including Claude and Gemini. Once you understand it, a frustrating behaviour becomes something you can plan around.</p>
+<div class="stat-strip"><div><b>~0.75</b><span>English words per token</span></div><div><b>1,000</b><span>tokens is about 750 words</span></div><div><b>2</b><span>separate systems: window and memory</span></div></div>
+
+<h2>What is a context window?</h2>
+<p>A large language model reads and writes <strong>tokens</strong>, which are small chunks of text. A token can be a short word, part of a longer word, a punctuation mark or a space. In English, one token is roughly four characters, or about three-quarters of a word. The context window is the maximum number of tokens the model can take into account at once, and it counts everything: your prompts, its answers, any files you pasted, and text you cannot see.</p>
+<p>The model has no built-in memory of your chat. In a typical chat app, every time you send a message, the app gathers the conversation so far, adds hidden instructions, and sends that bundle to the model, which then writes the next reply. What feels like memory is just the earlier text being read again each time. When the bundle grows past the window, something has to be cut or condensed.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Tokens</th><th>Approx. English words</th><th>Roughly the size of</th></tr></thead>
+<tbody>
+<tr><td>100</td><td>75</td><td>A short paragraph</td></tr>
+<tr><td>1,000</td><td>750</td><td>A long blog section</td></tr>
+<tr><td>10,000</td><td>7,500</td><td>A 15-page report</td></tr>
+<tr><td>100,000</td><td>75,000</td><td>A short novel</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>These ratios are a rule of thumb, not an exact count. Code, numbers and languages other than English usually take more tokens per word, so the same window holds less text.</p></div></div>
+
+<h2>Why ChatGPT seems to forget in long chats</h2>
+<h3>Old messages fall out of the window</h3>
+<p>When a conversation outgrows the window, older turns are dropped or condensed to make room for newer ones. OpenAI does not publish exactly how ChatGPT does this, but the effect is the same: the model can no longer see what was cut, so it cannot follow it.</p>
+
+<h3>Big pastes and files use the budget fast</h3>
+<p>A long document can use a large share of the window in one go, leaving less room for the conversation around it. Because the oldest text goes first, the instructions you gave at the very start are often the first thing to disappear.</p>
+
+<h3>Some of what it reads is not yours</h3>
+<p>Hidden instructions, saved memory notes and file or tool output all sit in the same window. They take up space you cannot see, and ChatGPT does not show you a live counter of how full the window is. That is why a chat can start misbehaving without any warning.</p>
+
+<h3>Fitting in the window is not the same as being used</h3>
+<p>Even when everything fits, models do not use every part of a long input equally well. A well-known 2023 research paper called "Lost in the Middle" found that models tended to use information at the beginning and end of a long input more reliably than information buried in the middle. The effect varies by model, but the safe assumption is that a rule you set 60 messages ago is less reliable than one you just repeated.</p>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> a bigger context window is not a guarantee of perfect recall. It is a bigger desk, not a better memory.</p></div></div>
+
+<h3>Signs your chat has outgrown its window</h3>
+<ul>
+<li>It ignores a formatting or tone rule you set early on.</li>
+<li>It asks for information you already gave.</li>
+<li>It contradicts a decision you both made earlier.</li>
+<li>Its answers become more generic and less specific to your situation.</li>
+</ul>
+<p>If you notice two or more of these, stop pushing and use one of the fixes below.</p>
+
+<h2>Context window vs memory: two different things</h2>
+<p>People mix these up, and ChatGPT's own memory features add to the confusion. The context window is the text the model can read right now, for this one reply. Memory is a separate feature that saves short notes about you so they can be brought into future chats.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Feature</th><th>What it does</th><th>How long it lasts</th><th>Best for</th></tr></thead>
+<tbody>
+<tr><td>Context window</td><td>The text the model can read for this reply</td><td>This conversation, and only while it fits</td><td>Everything in the current task</td></tr>
+<tr><td>Memory</td><td>Saves short notes and details about you</td><td>Across chats, until you remove them</td><td>Stable facts and preferences</td></tr>
+<tr><td>Custom instructions</td><td>Standing preferences applied to your chats</td><td>Until you change them</td><td>Tone, format and role</td></tr>
+<tr><td>Projects</td><td>A workspace that groups chats, files and instructions</td><td>As long as the project exists</td><td>Long-running work with shared files</td></tr>
+</tbody>
+</table>
+</div>
+<blockquote><p>Memory is what ChatGPT keeps between chats. The context window is what it can read right now. Mixing them up is why long chats go wrong.</p></blockquote>
+<p>Memory does not make the window bigger. Relevant memory is added to the text the model reads along with your prompt, so it uses some of the same space. That is why memory works best for short, lasting facts rather than project details. OpenAI's <a href="https://help.openai.com/en/articles/8590148-memory-faq">Memory FAQ</a> explains where the controls are (usually Settings, then Personalization, then Memory) and notes that features and controls vary by plan, region and platform, so what you see may differ from what is described here.</p>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">&#215;</span><div><p>Do not save passwords, account numbers, health records or confidential work details as memory. Keep sensitive information out of chats that do not need it.</p></div></div>
+
+<h2>How big is the window, really?</h2>
+<p>It depends on your plan, the model and the mode. OpenAI publishes different windows for different plans and for fast versus reasoning models, and those numbers have changed several times, so check OpenAI's current plan comparison rather than trusting an old article (including this one). The raw API for the same model can also offer a larger window than the ChatGPT app.</p>
+<p>What matters more is what those numbers mean in words. Imagine a window of 32,000 tokens. That is an illustration, not a specific plan limit. It equals roughly 24,000 English words, and that total has to cover your messages, ChatGPT's replies, any files and the hidden text. Paste a 20-page document (about 10,000 words, or around 13,000 tokens) and you have already used about 40% of it before typing your first question.</p>
+
+<h2>Seven fixes that work</h2>
+<ol>
+<li><strong>Restate what matters.</strong> Put the rules that must be followed at the top of any long or important request, or paste a two-line reminder every ten messages or so. It is cheap and it works.</li>
+<li><strong>Use one task per chat.</strong> A chat that jumps from a resume to a recipe to a tax question is full of noise. Start a fresh chat for each new task.</li>
+<li><strong>Keep a running summary.</strong> Every so often, ask ChatGPT to summarise the decisions so far, check it, and keep it handy to paste back in.</li>
+<li><strong>Move standing preferences to custom instructions.</strong> Tone, format and role belong there, so they do not depend on a message that scrolled out of view.</li>
+<li><strong>Use a project for long-running work.</strong> Where available, projects keep related chats, files and instructions in one place instead of one endless thread.</li>
+<li><strong>Save durable facts to memory.</strong> Ask ChatGPT to remember stable facts, then check what it saved and edit anything wrong. Keep it short and non-sensitive.</li>
+<li><strong>Paste less.</strong> Trim documents to the relevant sections, split large files into parts, and ask specific questions instead of "read all of this".</li>
+</ol>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>The most effective habit is also the simplest: when a chat gets long, start a new one with a summary. It takes thirty seconds and resets the window. For more prompts worth keeping, see <a href="./chatgpt-prompts-productivity.html">30 ChatGPT prompts that save an hour a day</a>.</p></div></div>
+
+<h2>A copy-paste prompt for moving to a new chat</h2>
+<p>Use this at the end of a long chat, before you start a fresh one:</p>
+<pre><code>Summarise this conversation so I can
+continue it in a new chat. Include:
+1. My goal, in one sentence
+2. Decisions we have already made
+3. Rules and preferences I gave you
+   (tone, format, constraints)
+4. Facts and numbers that must not
+   change
+5. What is still unresolved
+Keep it under 300 words and write it
+so a fresh assistant can continue
+without asking me anything.</code></pre>
+<p>Read the summary before you paste it. It is written by the same model, so it can drop details too. Add anything important that is missing, then paste it as the first message of a new chat.</p>
+
+<h2>What developers should know</h2>
+<p>If you are building with an API instead of using the app, this limit becomes your problem to manage. Most LLM APIs do not remember anything between calls. You send the conversation history with each request and pay for those input tokens every time (some platforms store the history for you, but the tokens still count). Long histories therefore cost more, run slower and eventually hit the window.</p>
+<p>Common strategies are trimming the oldest turns (a sliding window), summarising older turns into a short note, and retrieving only the relevant pieces of a large document instead of pasting all of it. The last one is the idea behind retrieval-augmented generation, and it is covered in <a href="./rag-chunking-strategies.html">RAG chunking strategies</a> and <a href="./embeddings-explained.html">embeddings explained</a>. Production prompts need this thinking from day one, as described in <a href="./prompt-engineering-for-production.html">prompt engineering for production</a>.</p>
+<p>Running a model on your own machine has the same limit with an extra cost: the window uses memory. That is why <a href="./llm-inference-optimization.html">inference optimization</a> guides talk about KV cache growth, and why local runners such as Ollama start with a modest default (its documentation lists 4k tokens for GPUs with under 24 GiB of VRAM). If you are sizing a setup, the <a href="./local-llm-8gb-vram-setup.html">8GB VRAM guide</a> shows how much memory context takes.</p>
+
+<hr>
+<p>ChatGPT does not forget because it is careless. It forgets because its working space is finite, and everything you paste, type and save has to share it. Keep chats focused, restate what matters, and summarise before a chat gets long, and the assistant will seem to have a much better memory.</p>

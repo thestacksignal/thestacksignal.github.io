@@ -1,0 +1,167 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>A slow website usually has <strong>one or two big causes</strong>, not fifty small ones. Measure first and fix second, or you will spend days on changes that do nothing.</li><li>Five minutes with PageSpeed Insights, the Chrome DevTools Network tab and one <code>curl</code> command will point you to the right cause out of the nine below.</li><li>Fix in this order: images, third-party scripts, JavaScript, caching and CDN, then the server. That order gives the biggest gains for the least effort.</li><li>Your own browser is a bad test. It already has your site cached and you are probably on fast wifi. Test like a first-time visitor on a mid-range phone.</li></ul></div>
+
+<h2>What "slow" actually means</h2>
+<p>"My website is slow" can describe four different problems, and each one has a different fix. The server may take a long time to respond. The main content may take a long time to appear. The page may freeze when someone taps a button. Or the layout may jump around while it loads. Google measures these as Time to First Byte (TTFB), Largest Contentful Paint (LCP), Interaction to Next Paint (INP) and Cumulative Layout Shift (CLS). TTFB is not one of the three Core Web Vitals, but it comes first and delays everything after it.</p>
+<p>The <a href="./core-web-vitals-checklist-2026.html">Core Web Vitals checklist</a> covers the three official metrics in depth. This guide is the step before it: working out which problem you actually have, so that you fix the right thing.</p>
+<div class="stat-strip"><div><b>0.8s</b><span>good TTFB (server response)</span></div><div><b>2.5s</b><span>good LCP (main content)</span></div><div><b>200ms</b><span>good INP (response to taps)</span></div><div><b>0.1</b><span>good CLS (layout stability)</span></div></div>
+<p>These thresholds are judged at the 75th percentile of real visits, so a page only passes when at least three out of four visitors get a good experience.</p>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p><strong>Your browser is a bad test.</strong> On your own computer the site is already cached and the connection is fast. A first-time visitor on a mid-range phone sees something very different. Always test in a private window and throttle the network and CPU, as in the steps below.</p></div></div>
+
+<h2>Find your cause in five minutes</h2>
+<p>Do these steps in order and <strong>do not change anything yet</strong>. The goal is to find out which of the nine causes below applies to you.</p>
+<ol>
+<li><strong>Run PageSpeed Insights on the slow page.</strong> Open <a href="https://pagespeed.web.dev/">pagespeed.web.dev</a>, paste the address of the page that feels slow (not just your homepage) and open the <em>Mobile</em> tab. If the report shows real-user data at the top, read that first: it reflects real visitors over the last 28 days. The lab data below it comes from one simulated test.</li>
+<li><strong>Note which metric fails.</strong> A slow LCP, a slow INP, a poor CLS or a high TTFB each point to different causes. The lookup table later in this guide maps one to the other.</li>
+<li><strong>Open the Network tab.</strong> In Chrome, press F12, go to <em>Network</em>, tick <em>Disable cache</em>, set throttling to Slow 4G and reload. Sort by <em>Size</em>, then by <em>Time</em>. The top few rows are usually the answer.</li>
+<li><strong>Measure the server.</strong> Run the <code>curl</code> command below and look at the TTFB line.</li>
+<li><strong>Block the suspects.</strong> Right-click any third-party request in the Network tab, choose <em>Block request URL</em> and reload. If the page gets clearly faster, you have found a culprit.</li>
+</ol>
+<pre><code>curl -o /dev/null -s -w \
+"DNS:     %{time_namelookup}s\n\
+Connect: %{time_connect}s\n\
+TLS:     %{time_appconnect}s\n\
+TTFB:    %{time_starttransfer}s\n\
+Total:   %{time_total}s\n" \
+https://your-site.com/</code></pre>
+<p>Each value is measured from the start of the request, so TTFB already includes the DNS, connection and TLS time before it. Run the command three times and use the middle value, because a single run can be unlucky.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Tool</th><th>What it shows</th><th>Use it to find</th></tr></thead>
+<tbody>
+<tr><td>PageSpeed Insights</td><td>Real-user data and one lab test</td><td>Which metric fails on mobile</td></tr>
+<tr><td>DevTools &rarr; Network</td><td>Every request with its size and timing</td><td>Oversized files, slow requests, missing caching</td></tr>
+<tr><td>DevTools &rarr; Coverage</td><td>How much CSS and JavaScript is never used</td><td>Wasted code (open the Command Menu and type "Coverage")</td></tr>
+<tr><td>curl</td><td>DNS, connection and first-byte time, plus headers</td><td>Slow server, redirects, missing compression</td></tr>
+<tr><td>WebPageTest</td><td>Repeatable tests with a waterfall chart</td><td>The order and timing of everything that loads</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Causes 1&ndash;3: too much to download</h2>
+<h3>1. Images that are far bigger than they need to be</h3>
+<p>Images are usually the heaviest thing on a page. The classic mistake is uploading a 4000-pixel photo straight from a camera or design tool and letting the browser shrink it to 400 pixels. The visitor still downloads every byte.</p>
+<ul>
+<li><strong>Confirm it:</strong> in the Network tab, filter by <em>Img</em> and sort by size. Anything over a few hundred kilobytes deserves a look.</li>
+<li><strong>Fix it:</strong> resize images to the largest size they are actually shown at, serve WebP or AVIF, use <code>srcset</code> so phones get smaller files, and lazy-load images below the fold. Never lazy-load the main image at the top of the page, because that is usually your LCP element.</li>
+</ul>
+<p>The full process is in <a href="./image-optimization-for-web.html">Image Optimization for the Modern Web</a>.</p>
+
+<h3>2. Too much JavaScript</h3>
+<p>JavaScript costs more than an image of the same size. The browser has to download it, parse it, compile it and run it, and all of that happens on the main thread that also handles taps and scrolling. The typical symptom is a page that looks ready but reacts slowly (poor INP), or a site that feels fine on a laptop and sluggish on a phone.</p>
+<ul>
+<li><strong>Confirm it:</strong> the Coverage tool shows how much of each script is never used on the page.</li>
+<li><strong>Fix it:</strong> remove libraries you do not use, split code so each page loads only what it needs, load heavy widgets such as maps, editors and charts only when someone asks for them, and replace large dependencies with smaller ones or with features the browser already has.</li>
+</ul>
+<p>The step-by-step version is in <a href="./cut-javascript-bundle-size.html">How to Cut JavaScript Bundle Size by 60%</a>.</p>
+
+<h3>3. Text files that are not compressed</h3>
+<p>HTML, CSS, JavaScript, JSON and SVG are plain text, and they shrink a lot when compressed with Brotli or gzip. Most modern hosts and CDNs do this automatically, but a self-managed server often does not.</p>
+<ul>
+<li><strong>Confirm it:</strong> run the command below. You should see <code>br</code> or <code>gzip</code> in the answer. If nothing comes back, the file is being sent uncompressed.</li>
+<li><strong>Fix it:</strong> switch on Brotli (or at least gzip) in your server, host or CDN settings. Do not bother compressing images and video, because they are already compressed.</li>
+</ul>
+<pre><code>curl -s -o /dev/null -D - \
+--compressed \
+https://your-site.com/style.css \
+| grep -i content-encoding</code></pre>
+
+<h2>Causes 4&ndash;6: things that block or delay the page</h2>
+<h3>4. Render-blocking CSS and scripts</h3>
+<p>When the browser finds a stylesheet in the <code>&lt;head&gt;</code>, it will not paint anything until that CSS has arrived. A plain <code>&lt;script&gt;</code> in the head is worse: it pauses the HTML parser while it downloads and runs. Stack several of these and visitors stare at a blank screen.</p>
+<ul>
+<li><strong>Confirm it:</strong> PageSpeed Insights lists render-blocking requests in its diagnostics, and the Network waterfall shows a long gap before the first paint.</li>
+<li><strong>Fix it:</strong> keep CSS small and avoid chains of <code>@import</code>, inline the little CSS needed for the top of the page, and add <code>defer</code> to scripts that do not need to run before the page is parsed. <code>defer</code> keeps scripts in order; <code>async</code> runs them the moment they arrive, in any order.</li>
+</ul>
+<p>How the browser turns code into pixels is explained in <a href="./browser-rendering-explained.html">Browser Rendering Explained</a>.</p>
+
+<h3>5. Third-party scripts</h3>
+<p>Analytics, tag managers, chat widgets, ad networks, social embeds, A/B testing tools and cookie banners each add downloads from other servers and run more code on the same busy main thread. One tag manager entry can quietly pull in several more scripts. Third-party code is one of the most common reasons a fast site turns slow after "just adding one thing".</p>
+<ul>
+<li><strong>Confirm it:</strong> in the Network tab, tick the <em>3rd-party requests</em> filter, then use <em>Block request URL</em> from step 5 to see how much each one costs.</li>
+<li><strong>Fix it:</strong> remove anything nobody looks at, load chat and video embeds only when the visitor clicks them, and load non-essential scripts after the page has become interactive.</li>
+</ul>
+
+<h3>6. Web fonts</h3>
+<p>A custom font is a file the browser must download before it can show text in that font. Loading six weights from two families is common and costly. If the text stays invisible while the font loads, visitors think the page is broken. If the font swaps in late, the layout can jump.</p>
+<ul>
+<li><strong>Confirm it:</strong> filter the Network tab by <em>Font</em> and count the files.</li>
+<li><strong>Fix it:</strong> use one or two families and only the weights you need, serve WOFF2 files, add <code>font-display: swap</code> so text appears immediately, and preload the font used above the fold. System fonts are the fastest option of all.</li>
+</ul>
+
+<h2>Causes 7&ndash;9: the server and your setup</h2>
+<h3>7. A slow server response</h3>
+<p>Everything else waits for the first response. Google's web.dev guidance suggests a TTFB of <a href="https://web.dev/articles/ttfb">0.8 seconds or less</a> for most sites, and treats anything above 1.8 seconds as poor. TTFB is not a Core Web Vital itself, but it adds straight onto LCP.</p>
+<p>The usual causes are cheap or overloaded shared hosting, pages that are built from scratch on every visit because there is no page cache, slow database queries, a server far away from your visitors, a serverless function waking up from a cold start, and redirect chains such as http to https to www, where each hop costs a full round trip.</p>
+<ul>
+<li><strong>Confirm it:</strong> use the <code>curl</code> timing command from earlier, then check for redirect hops with the command below. Ideally you see one <code>200</code> and no <code>location</code> lines.</li>
+<li><strong>Fix it:</strong> turn on full-page caching, put a CDN in front, make every internal link point straight at the final address, or generate pages ahead of time as static HTML.</li>
+</ul>
+<pre><code>curl -sIL https://your-site.com/ \
+| grep -iE "^(HTTP|location)"</code></pre>
+
+<h3>8. No caching and no CDN</h3>
+<p>Without caching headers, returning visitors download the same logo, stylesheet and script on every page. Without a CDN, every visitor fetches everything from one location, however far away they are.</p>
+<ul>
+<li><strong>Confirm it:</strong> reload a page in the Network tab with <em>Disable cache</em> turned off. Files that were already downloaded should show <em>disk cache</em> or <em>memory cache</em> in the Size column. If everything downloads again, caching is missing.</li>
+<li><strong>Fix it:</strong> give versioned CSS, JavaScript and images a long cache lifetime, keep HTML on short or revalidated caching, and serve the site through a CDN.</li>
+</ul>
+<p>Header values and CDN trade-offs are covered in <a href="./caching-and-cdn-strategies.html">Caching and CDN Strategies</a>.</p>
+
+<h3>9. Too many plugins or a heavy theme</h3>
+<p>On WordPress and similar platforms, each plugin can add its own CSS and JavaScript to every page, whether that page needs it or not. Multipurpose themes and page builders also ship large amounts of code for features you may never use.</p>
+<ul>
+<li><strong>Confirm it:</strong> look at the file paths of the biggest CSS and JavaScript files in the Network tab. On WordPress the path shows which plugin or theme a file comes from.</li>
+<li><strong>Fix it:</strong> on a staging copy, disable plugins one at a time and re-test, remove duplicates and anything unused, switch to a lightweight theme, and load plugin assets only on the pages that use them.</li>
+</ul>
+
+<h2>Symptom to cause: a quick lookup</h2>
+<p>If you already know what the slowness looks like, this table narrows it down. The numbers refer to the causes above.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>What you notice</th><th>Likely causes</th><th>First thing to try</th></tr></thead>
+<tbody>
+<tr><td>The main image or heading appears late (slow LCP)</td><td>1, 4, 7</td><td>Compress and resize the top image, then check TTFB</td></tr>
+<tr><td>The page looks ready but taps lag (slow INP)</td><td>2, 5</td><td>Block or remove third-party scripts, then cut unused JavaScript</td></tr>
+<tr><td>Content jumps while loading (high CLS)</td><td>1, 6</td><td>Set <code>width</code> and <code>height</code> on images and fix font loading</td></tr>
+<tr><td>A blank screen before anything appears</td><td>4, 7</td><td>Check TTFB and redirect hops, then defer scripts</td></tr>
+<tr><td>Fast on wifi, slow on mobile data</td><td>1, 2, 8</td><td>Shrink images and JavaScript, add a CDN</td></tr>
+<tr><td>The second visit is as slow as the first</td><td>8</td><td>Add <code>Cache-Control</code> headers to static files</td></tr>
+<tr><td>Only some pages are slow</td><td>5, 9</td><td>Look for embeds and plugins that run only on those pages</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Fix them in this order</h2>
+<p>Once you know your causes, work through them from the biggest payoff to the smallest:</p>
+<ol>
+<li><strong>Images.</strong> The biggest saving for the least risk.</li>
+<li><strong>Third-party scripts.</strong> Remove what you do not need before you optimise what you do.</li>
+<li><strong>JavaScript and render-blocking files.</strong> Defer, split and delete.</li>
+<li><strong>Compression, caching and a CDN.</strong> Set once, benefits every visit.</li>
+<li><strong>Server and hosting.</strong> Only if TTFB is still high after the steps above.</li>
+<li><strong>Fonts and finishing touches.</strong> Small gains that add up.</li>
+</ol>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>Change one thing at a time and re-test. If you change five things at once, you will not know which one helped, or which one broke something.</p></div></div>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">&#215;</span><div><p>Do not install a stack of "speed" plugins to fix a slow site. Each one adds its own code, and several optimisers running together can conflict. Fix the cause you measured instead.</p></div></div>
+
+<h2>Check that the fix actually worked</h2>
+<p>Run PageSpeed Insights on the same page, on mobile, after every change. Lab scores can move a few points between runs even when nothing changed, because the test is not perfectly repeatable. Compare the specific numbers that should have improved, such as LCP in seconds or the size of the page, and run the test a few times before trusting a result.</p>
+<p>The real judge is field data. Search Console's Core Web Vitals report and the real-user section of PageSpeed Insights use a rolling 28-day window, so a fix appears gradually over a few weeks. The "Measure like a skeptic" section of the <a href="./core-web-vitals-checklist-2026.html">Core Web Vitals checklist</a> explains the difference between lab and field data in more detail.</p>
+<blockquote><p>Most slow websites do not need a rewrite. They need someone to look at the waterfall chart.</p></blockquote>
+<p>Keep a simple log: the date, the change, and the before and after numbers for LCP, TTFB and total page weight. That log is worth more than any single score, and it shows you which fixes were worth the effort.</p>
+
+<h2>When the honest answer is your hosting</h2>
+<p>Sometimes every fix on the page helps a little and the site still feels slow. Test the server on its own: upload a plain HTML file with a few lines of text to the same host and time it with <code>curl</code>. If even that file has a high TTFB, the bottleneck is the host, the network path or the server configuration, not your page.</p>
+<p>The options are page caching, a CDN in front of the host, a better plan, or moving to static or pre-rendered pages that a CDN can serve directly. The trade-offs between a cheap server and serverless hosting are broken down in <a href="./self-hosting-vs-serverless.html">Self-Hosting vs Serverless</a>.</p>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> do the free fixes before you pay for a bigger hosting plan. A faster server will not rescue a page that ships a 3 MB hero image and forty scripts.</p></div></div>
+
+<h2>What to do this week</h2>
+<ol>
+<li>Run PageSpeed Insights on your three most important pages and write down LCP, INP, CLS and TTFB for each.</li>
+<li>Sort the Network tab by size and fix the three biggest files.</li>
+<li>Block your third-party scripts one at a time and remove the ones you do not need.</li>
+<li>Re-test, write down the new numbers, and only then move on to caching and the server.</li>
+</ol>
+
+<hr>
+<p>A slow website feels like a mystery until you measure it. Once you know whether the problem is the server, the weight of the page or the code running on it, the fix is almost always one of the nine above. When the basics are done, the <a href="./core-web-vitals-checklist-2026.html">Core Web Vitals checklist</a> is the next step for fine-tuning LCP, INP and CLS.</p>

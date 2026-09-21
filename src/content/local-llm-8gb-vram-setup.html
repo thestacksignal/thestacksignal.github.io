@@ -48,7 +48,7 @@
 
 <p>Several adjustments materially improve throughput without new hardware.</p>
 <ul>
-<li><strong>Reduce context length to what you actually use.</strong> This is the single largest lever. Many defaults allocate a very large window; if your prompts are short, reducing it frees substantial memory for the model itself.</li>
+<li><strong>Reduce context length to what you actually use.</strong> This is the single largest lever. Many defaults allocate a very large window; if your prompts are short, reducing it frees substantial memory for the model itself. New to the term? <a href="./why-does-chatgpt-forget.html">Context windows are explained in plain English here</a>.</li>
 <li><strong>Quantise the KV cache.</strong> Storing cache at eight bits rather than sixteen roughly halves its footprint with minimal quality impact, which can be the difference between fitting and not fitting.</li>
 <li><strong>Offload deliberately, not accidentally.</strong> If a model slightly exceeds VRAM, explicitly place a specific number of layers on the GPU and the remainder on the CPU. Controlled offloading is far better than an automatic fallback.</li>
 <li><strong>Enable flash attention</strong> where supported. It reduces memory use during attention computation and typically improves speed.</li>

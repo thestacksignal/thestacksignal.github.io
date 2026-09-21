@@ -494,6 +494,48 @@ const POSTS = [
       ['Does streaming text token-by-token hurt Core Web Vitals?', 'Not inherently — it hurts INP and CLS specifically when each token triggers its own layout and paint pass. Batching updates inside requestAnimationFrame and reserving space for the response container removes most of the problem without changing the streaming itself.'],
       ['How do I stop a chat widget from causing layout shift?', 'Reserve a sensible minimum height for the response container before the first token arrives, and avoid inserting or removing elements like a "thinking" indicator above content that has already rendered — both are common, avoidable sources of CLS in streaming interfaces.']
     ]
+  },
+  {
+    slug: 'why-is-my-website-slow',
+    category: 'tech',
+    title: 'Why Is My Website So Slow? 9 Causes and How to Find Yours',
+    seoTitle: 'Why Is My Website So Slow? 9 Causes and How to Fix Them',
+    description: 'Why is my website so slow? Find the real cause in 5 minutes with free tools, then fix the 9 most common culprits: images, JavaScript, server, fonts and more.',
+    date: '2026-09-21',
+    updated: '2026-09-21',
+    read: 9,
+    tags: ['Performance', 'Core Web Vitals', 'Troubleshooting'],
+    keywords: 'why is my website so slow, website loading slow, slow website causes, how to find what is slowing down my website, website speed problems',
+    hero: 'Most slow websites have one or two big problems, not fifty small ones. Here is how to find yours before you change anything.',
+    body: '',
+    faq: [
+      ["Why is my website slow on mobile but fast on my computer?", "Phones have slower processors and often slower connections, so large images and heavy JavaScript cost much more there. Your computer also usually has the site cached. Test in a private window with the network and CPU throttled in DevTools to see what a real mobile visitor sees."],
+      ["How do I find out what is slowing down my website?", "Run PageSpeed Insights on the slow page, then open the Chrome DevTools Network tab and sort requests by size and time. Add a curl request to check server response time. Together these show whether the problem is heavy files, blocking scripts or a slow server."],
+      ["Does a slow website hurt SEO?", "Speed is a lightweight ranking signal, and Core Web Vitals are part of it. The bigger effect is on visitors, because slow pages lose people before they read anything. Great content matters more than speed alone, but speed can decide close races and keeps readers on the page."],
+      ["What is a good load time for a website?", "There is no single number. A good target is a Largest Contentful Paint of 2.5 seconds or less and a server response (TTFB) of 0.8 seconds or less for most real visitors on mobile."],
+      ["Could my hosting be the reason my site is slow?", "Yes, if even a plain HTML page on the same host has a slow time to first byte. Test it with curl. If a simple file is fast but your pages are slow, the problem is more likely the page itself: images, scripts or plugins."]
+    ]
+  },
+  {
+    slug: 'why-does-chatgpt-forget',
+    category: 'ai',
+    title: 'Why Does ChatGPT Forget Things? The Context Window Explained',
+    seoTitle: 'Why Does ChatGPT Forget Things? Causes and 7 Fixes',
+    description: 'Why does ChatGPT forget what you said earlier? It is not a bug: the context window has a limit. Learn how it works and 7 fixes that keep long chats on track.',
+    date: '2026-09-21',
+    updated: '2026-09-21',
+    read: 8,
+    tags: ['ChatGPT', 'LLM', 'Context Window', 'Prompt Engineering'],
+    keywords: 'why does chatgpt forget, chatgpt forgets previous messages, chatgpt context window, chatgpt memory limit, chatgpt forgetting instructions',
+    hero: 'ChatGPT does not have a bad memory. It has a small desk, and everything you type has to fit on it.',
+    body: '',
+    faq: [
+      ["Why does ChatGPT forget what I told it earlier in the same chat?", "Because each reply is generated from the text that fits in its context window. In a long chat, older messages are trimmed or condensed to make room, so an early instruction may no longer be visible to the model. Restating the rule, or starting a new chat with a summary, fixes it."],
+      ["Does ChatGPT have a memory limit?", "There are two things people call memory. The context window limits how much text ChatGPT can read for a single reply. Its Memory feature saves short notes across chats and has its own controls, which vary by plan, region and platform."],
+      ["How do I make ChatGPT remember things?", "Put standing preferences in custom instructions, save stable facts to Memory where it is available, group long-running work in a project, and restate anything critical in the chat itself. For a long chat, summarise it and continue in a new one."],
+      ["Is ChatGPT memory the same as its context window?", "No. The context window is what the model can read for the current reply. Memory saves short notes between chats, and relevant notes are added to the same window, so memory does not make the window bigger."],
+      ["Do Claude, Gemini and other AI chatbots forget too?", "Yes. Every large language model has a context window, and the sizes differ by model and product. The same habits help everywhere: keep chats focused, restate key rules, and summarise before a chat gets too long."]
+    ]
   }
 ];
 
@@ -820,8 +862,8 @@ ${footer('./')}`;
 
 /* ===== 8.5. LEARNING PLATFORM PAGES ===================================== */
 const PATHS = [
-  { slug:'performance', level:'Intermediate', title:'Performance Engineering', description:'Diagnose slow pages, reduce main-thread work and make static sites fast on real devices.', steps:['core-web-vitals-checklist-2026','browser-rendering-explained','image-optimization-for-web','cut-javascript-bundle-size','caching-and-cdn-strategies'], skills:['Core Web Vitals','rendering','images','bundle budgets','caching','measurement'] },
-  { slug:'ai-systems', level:'Intermediate', title:'AI Systems Engineering', description:'Move from model choice to retrieval architecture and local inference without skipping production constraints.', steps:['rag-vs-fine-tuning','embeddings-explained','vector-databases-explained','ai-agents-vs-rag','local-llm-8gb-vram-setup','llm-inference-optimization','prompt-engineering-for-production'], skills:['RAG','embeddings','agents','local LLMs','inference','prompt design'] },
+  { slug:'performance', level:'Intermediate', title:'Performance Engineering', description:'Diagnose slow pages, reduce main-thread work and make static sites fast on real devices.', steps:['why-is-my-website-slow','core-web-vitals-checklist-2026','browser-rendering-explained','image-optimization-for-web','cut-javascript-bundle-size','caching-and-cdn-strategies'], skills:['Core Web Vitals','rendering','images','bundle budgets','caching','measurement'] },
+  { slug:'ai-systems', level:'Intermediate', title:'AI Systems Engineering', description:'Move from model choice to retrieval architecture and local inference without skipping production constraints.', steps:['why-does-chatgpt-forget','rag-vs-fine-tuning','embeddings-explained','vector-databases-explained','ai-agents-vs-rag','local-llm-8gb-vram-setup','llm-inference-optimization','prompt-engineering-for-production'], skills:['RAG','embeddings','agents','local LLMs','inference','prompt design'] },
   { slug:'search', level:'Foundations', title:'Search & AI Visibility', description:'Build topic authority, structure content for modern search and connect SEO work to technical execution.', steps:['ai-seo-topical-authority','technical-seo-for-ai-websites','internal-linking-for-topical-authority','core-web-vitals-checklist-2026'], skills:['topical authority','internal linking','technical SEO','AI search','performance'] }
 ];
 const getPostsBySlugs = (slugs) => slugs.map((slug)=>sorted.find((p)=>p.slug===slug)).filter(Boolean);
