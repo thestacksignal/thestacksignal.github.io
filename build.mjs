@@ -536,6 +536,46 @@ const POSTS = [
       ["Is ChatGPT memory the same as its context window?", "No. The context window is what the model can read for the current reply. Memory saves short notes between chats, and relevant notes are added to the same window, so memory does not make the window bigger."],
       ["Do Claude, Gemini and other AI chatbots forget too?", "Yes. Every large language model has a context window, and the sizes differ by model and product. The same habits help everywhere: keep chats focused, restate key rules, and summarise before a chat gets too long."]
     ]
+  },
+  {
+    slug: 'gpt-6-vs-claude-fable-mythos-comparison',
+    category: 'ai',
+    title: 'GPT-6 Sol, Luna and Astra vs Claude Fable and Mythos: The 2026 Comparison',
+    seoTitle: 'GPT-6 vs Claude Fable & Mythos: 2026 Comparison',
+    description: 'GPT-6 Sol, Luna and Astra vs Claude Fable 5.1, Mythos 5.1 and Opus 5.5 compared: pricing, context windows, benchmarks and which model to actually use.',
+    date: '2026-09-26',
+    updated: '2026-09-26',
+    read: 9,
+    tags: ['GPT-6', 'Claude', 'Model Comparison'],
+    keywords: 'gpt-6 vs claude, gpt-6 sol luna astra, claude fable mythos comparison, claude opus 5.5 vs gpt-6, best llm 2026',
+    hero: 'Five frontier models shipped inside three weeks in September 2026 — here is which one actually fits your workload.',
+    body: '',
+    faq: [
+      ["Is GPT-6 Sol better than Claude Fable 5.1?", "On OpenAI's own DeepSWE benchmark, GPT-6 Sol at max effort (68.8%) comes close to Fable 5.1 at xhigh effort (69.9%), at roughly a fifth of the cost. Independent evaluation from Artificial Analysis puts Fable 5.1 ahead of GPT-6 Astra, OpenAI's flagship, on both its Intelligence Index and Coding Agent Index, so 'better' depends heavily on which specific task and which benchmark source you trust."],
+      ["What is Claude Mythos 5.1 and can I use it?", "Mythos 5.1 runs the same underlying weights as Claude Fable 5.1 but under more permissive cybersecurity and biology safeguards. Anthropic only grants access to vetted cybersecurity and life-sciences organisations, so it is not available through a normal Claude subscription or API signup."],
+      ["Which is the cheapest of the six models?", "GPT-6 Luna, at $0.10 per million input tokens and $0.50 per million output tokens. It shares the same 1.05M-token context window as GPT-6 Sol and Astra, so you are not sacrificing context length to get the lower price."],
+      ["Why were Claude Fable 5 and Mythos 5 suspended in June 2026?", "Anthropic suspended access to both models on 12 June 2026, three days after their launch, to comply with U.S. Department of Commerce export controls. The Department lifted those controls on 30 June 2026, and Anthropic restored access on 1 July 2026. Anthropic's own account is posted at anthropic.com/news/fable-mythos-access."]
+    ]
+  },
+  {
+    slug: 'answer-engine-optimization-ai-overviews',
+    category: 'ai',
+    title: 'Answer Engine Optimization: How to Rank in AI Overviews and ChatGPT Search',
+    seoTitle: 'Answer Engine Optimization (AEO): AI Overviews Guide',
+    description: 'Answer Engine Optimization explained: how to structure content so ChatGPT Search, Perplexity and Google AI Overviews extract and cite it as the answer.',
+    date: '2026-09-26',
+    updated: '2026-09-26',
+    read: 8,
+    tags: ['AEO', 'AI', 'SEO'],
+    keywords: 'answer engine optimization, aeo, ai overviews seo, chatgpt search optimization, generative engine optimization, geo seo',
+    hero: 'You are no longer optimizing for a click. You are optimizing for the sentence a model is willing to lift and attribute to you.',
+    body: '',
+    faq: [
+      ["What is Answer Engine Optimization (AEO)?", "AEO is the practice of structuring content so AI-powered answer engines — ChatGPT Search, Perplexity, Google AI Overviews and similar tools — can extract a direct answer from it and cite it as the source, rather than only ranking it in a list of links."],
+      ["Is AEO different from SEO?", "AEO extends SEO rather than replacing it. Around 38% of Google AI Overview citations come from pages already ranking in the top 10 organic results, so strong technical SEO and topical authority remain the foundation AEO is built on."],
+      ["How do I know if my content is being cited by AI Overviews or ChatGPT?", "Google Search Console added generative-AI search performance reporting in June 2026, which is the most direct first-party signal. Beyond that, manually asking your core queries in ChatGPT, Perplexity and Google AI Overviews on a regular schedule and logging which sources get cited is still the most reliable check."],
+      ["Does AEO reduce website traffic?", "It can reduce clicks on informational queries a model can fully answer on its own, since the reader may never visit the source page. Most guidance treats this as a trade-off to measure through citations, brand mentions and assisted conversions rather than a reason to avoid AEO, since the visibility happens whether or not a specific site optimizes for it."]
+    ]
   }
 ];
 
@@ -864,7 +904,7 @@ ${footer('./')}`;
 const PATHS = [
   { slug:'performance', level:'Intermediate', title:'Performance Engineering', description:'Diagnose slow pages, reduce main-thread work and make static sites fast on real devices.', steps:['why-is-my-website-slow','core-web-vitals-checklist-2026','browser-rendering-explained','image-optimization-for-web','cut-javascript-bundle-size','caching-and-cdn-strategies'], skills:['Core Web Vitals','rendering','images','bundle budgets','caching','measurement'] },
   { slug:'ai-systems', level:'Intermediate', title:'AI Systems Engineering', description:'Move from model choice to retrieval architecture and local inference without skipping production constraints.', steps:['why-does-chatgpt-forget','rag-vs-fine-tuning','embeddings-explained','vector-databases-explained','ai-agents-vs-rag','local-llm-8gb-vram-setup','llm-inference-optimization','prompt-engineering-for-production'], skills:['RAG','embeddings','agents','local LLMs','inference','prompt design'] },
-  { slug:'search', level:'Foundations', title:'Search & AI Visibility', description:'Build topic authority, structure content for modern search and connect SEO work to technical execution.', steps:['ai-seo-topical-authority','technical-seo-for-ai-websites','internal-linking-for-topical-authority','core-web-vitals-checklist-2026'], skills:['topical authority','internal linking','technical SEO','AI search','performance'] }
+  { slug:'search', level:'Foundations', title:'Search & AI Visibility', description:'Build topic authority, structure content for modern search and connect SEO work to technical execution.', steps:['ai-seo-topical-authority','technical-seo-for-ai-websites','internal-linking-for-topical-authority','answer-engine-optimization-ai-overviews','core-web-vitals-checklist-2026'], skills:['topical authority','internal linking','technical SEO','answer engine optimization','performance'] }
 ];
 const getPostsBySlugs = (slugs) => slugs.map((slug)=>sorted.find((p)=>p.slug===slug)).filter(Boolean);
 const pathDuration = (slugs) => { const posts = getPostsBySlugs(slugs); const minutes = posts.reduce((sum,p)=>sum+p.read,0); const rounded = Math.max(10, Math.round((minutes*1.25)/5)*5); return `${posts.length} articles · ~${rounded}m`; };

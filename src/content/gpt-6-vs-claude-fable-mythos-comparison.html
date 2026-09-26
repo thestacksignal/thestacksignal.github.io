@@ -1,0 +1,113 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li><strong>GPT-6 vs Claude Fable and Mythos</strong> is really five separate models split across two philosophies: OpenAI's Astra/Sol/Luna tiers by price, Anthropic's Opus 5.5 vs Fable 5.1 by how much reasoning depth you need.</li><li>Claude Mythos 5.1 is not a model you can just sign up for &mdash; it runs the same weights as Fable 5.1 under looser cyber and biology safeguards, and Anthropic only grants it to vetted organisations.</li><li>Every benchmark below is vendor-published unless marked "independent." The two disagree with each other more than either admits.</li><li>For most production workloads, Claude Opus 5.5 or GPT-6 Sol beats the flagship models on cost per correct answer, not raw capability.</li></ul></div>
+
+<h2>GPT-6 vs Claude Fable and Mythos: the short answer</h2>
+<p>Between 1 and 22 September 2026, OpenAI and Anthropic released five new frontier models between them: GPT-6 Astra, Sol and Luna, and Claude Opus 5.5 alongside the already-shipped Fable 5.1 and Mythos 5.1. If you need the fastest possible answer &mdash; GPT-6 Astra is OpenAI's most capable and most expensive model, Claude Fable 5.1 is Anthropic's equivalent flagship, and both companies now sell a cheaper, faster sibling (Sol/Luna, Opus 5.5) that gets most of the way there for a fraction of the price. Mythos 5.1 is the outlier: same weights as Fable, gated to organisations Anthropic has separately approved.</p>
+<p>The rest of this guide breaks down pricing, context windows and benchmark scores model by model, then gives a decision framework for which one actually fits a given job.</p>
+
+<h2>Meet the five (six, counting Mythos) models</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Model</th><th>Maker</th><th>Released</th><th>Context window</th><th>Price (in / out per 1M tokens)</th></tr></thead>
+<tbody>
+<tr><td>GPT-6 Astra</td><td>OpenAI</td><td>3 Sep 2026</td><td>1.05M tokens</td><td>$10 / $50</td></tr>
+<tr><td>GPT-6 Sol</td><td>OpenAI</td><td>22 Sep 2026</td><td>1.05M tokens</td><td>$2 / $10</td></tr>
+<tr><td>GPT-6 Luna</td><td>OpenAI</td><td>22 Sep 2026</td><td>1.05M tokens</td><td>$0.10 / $0.50</td></tr>
+<tr><td>Claude Opus 5.5</td><td>Anthropic</td><td>22 Sep 2026</td><td>1M tokens</td><td>$4 / $20</td></tr>
+<tr><td>Claude Fable 5.1</td><td>Anthropic</td><td>1 Sep 2026</td><td>1M tokens</td><td>$10 / $50</td></tr>
+<tr><td>Claude Mythos 5.1</td><td>Anthropic</td><td>1 Sep 2026</td><td>1M tokens</td><td>$10 / $50 (restricted access)</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>Fable 5.1 and Opus 5.5 launched three weeks apart, and Anthropic's own framing puts them at similar real-world quality &mdash; Opus 5.5 is the model built to get most of the way to Fable's ceiling at 40% less cost. It is not a smaller, worse version so much as a deliberately cheaper one.</p></div></div>
+
+<h2>Pricing compared: cost per million tokens</h2>
+<div class="stat-strip"><div><b>$0.10</b><span>Luna input, cheapest of the six</span></div><div><b>$10</b><span>Astra and Fable input, most expensive</span></div><div><b>60%</b><span>cache-read discount Opus 5.5 added over Opus 5</span></div></div>
+<p>OpenAI's pricing ladder is steeper than Anthropic's. GPT-6 Luna costs a hundredth of GPT-6 Astra on input tokens, aimed squarely at high-volume, low-stakes work like classification and extraction. GPT-6 Sol sits in the middle, priced at a fifth of Astra, and OpenAI says it now reaches "Astra-level reliability" on its internal factuality evaluation despite the price gap.</p>
+<p>Anthropic's ladder is shallower: Opus 5.5 costs 40% less than the outgoing Opus 5 to run on typical workloads, with cache reads down 60% to $0.20 per million tokens, but there is no equivalent of a Luna-tier Claude yet &mdash; Anthropic says Sonnet 5.5 and Haiku 5.5 are coming "in the coming weeks," which will be the actual budget option once they land.</p>
+
+<h2>Benchmark scores, side by side</h2>
+<p>This is where the two companies' own marketing and independent measurement start to disagree, sometimes by a wide margin. Treat every number in the first table as a vendor claim, not a neutral fact.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Vendor-published benchmark</th><th>GPT-6 Astra</th><th>Claude Opus 5.5</th><th>Claude Fable 5.1</th></tr></thead>
+<tbody>
+<tr><td>Terminal-Bench 4.0</td><td>57.9%</td><td>66.4%</td><td>55.8%</td></tr>
+<tr><td>GDPval-AA v2.1 (Elo)</td><td>&mdash;</td><td>1846</td><td>1735</td></tr>
+<tr><td>AutomationBench</td><td>Leads this benchmark</td><td>&mdash;</td><td>31.4%</td></tr>
+<tr><td>FrontierCode</td><td>&mdash;</td><td>&mdash;</td><td>50.3%</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> Anthropic's own Opus 5.5 launch material adds a caveat most vendors leave out &mdash; at this level of capability, benchmark margins have become a less reliable guide to real-world differences than they used to be. Take a few-point gap on any single test as noise, not a verdict.</p></div></div>
+<p>Independent evaluation tells a different story in places. Artificial Analysis, which runs its own third-party test suite rather than reusing vendor numbers, scores GPT-6 Astra at 61 on its Intelligence Index and 67 on its Coding Agent Index &mdash; both below Claude Fable 5.1's 66 and 70 on the same two measures. That is the opposite ranking from what OpenAI's own comparison table implies for coding, and it is worth knowing before you pick a model based on a launch blog post alone.</p>
+
+<h2>Where each model actually wins</h2>
+<h3>GPT-6 Astra: the highest ceiling, at a price</h3>
+<p>Astra is OpenAI's first model rated "Critical" for cybersecurity capability under its own readiness framework, and it leads on computer-use and long-horizon agent benchmarks like ScreenSpot-Pro. If a task genuinely needs the most capable agent OpenAI sells &mdash; not the cheapest adequate one &mdash; Astra is the pick, with the caveat that its knowledge cutoff (30 April 2026) is now several months old.</p>
+<h3>GPT-6 Sol: the default for everyday coding</h3>
+<p>Sol is the model most teams should actually be calling. It halves GPT-5.6 Sol's price, comes close to matching Claude Fable on coding benchmarks like DeepSWE, and OpenAI has tuned its default communication style to be shorter and less jargon-heavy across both Astra and Sol.</p>
+<h3>GPT-6 Luna: high-volume and cost-sensitive</h3>
+<p>At $0.10 input / $0.50 output per million tokens, Luna is built for classification, extraction, and any task run often enough that per-token cost dominates the decision. It shares Sol's 1.05M context window and 128K max output, so you are not trading away context to save money.</p>
+<h3>Claude Opus 5.5: Anthropic's new default</h3>
+<p>Opus 5.5 is the model most Claude users should reach for now. It beats Opus 5 on Terminal-Bench 4.0 by 14 points, costs 40% less to run, and Anthropic reports roughly 85% fewer containment-boundary attempts in internal alignment testing &mdash; a meaningfully different safety profile than the model it replaces, not just a price cut.</p>
+<h3>Claude Fable 5.1: the ceiling model, generally available</h3>
+<p>Fable remains the top of Anthropic's publicly available lineup, and independent benchmarks put it ahead of GPT-6 Astra on both intelligence and coding-agent measures. Anthropic's own comparison table shows Opus 5.5 catching up on several tasks, so Fable's lead over its cheaper sibling is narrower than the price gap suggests.</p>
+<h3>Claude Mythos 5.1: same weights, different gate</h3>
+<p>Mythos 5.1 and Fable 5.1 are, by Anthropic's own account, the same underlying model. What differs is the safeguard configuration: Mythos runs under more permissive cyber and biology safety measures and is only offered to cybersecurity and life-sciences organisations Anthropic has vetted directly. It is not something a typical developer account can request.</p>
+
+<h2>Where you can actually reach each model</h2>
+<p>Availability is not identical across the six, and it matters more than it sounds for anyone planning a migration. GPT-6 Sol and Luna rolled out to ChatGPT Work and Codex for Plus, Pro, Business, Enterprise and Edu accounts on release day, plus the API and GitHub Copilot, with Luna also reaching the free ChatGPT app and Go tier. GPT-6 Astra initially shipped as a limited preview to OpenAI's enterprise Trusted Access Program before reaching paid ChatGPT tiers and the API within days &mdash; its cybersecurity-relevant capabilities are still gated to a smaller group of vetted testers.</p>
+<p>Claude Opus 5.5 shipped the same day across the Claude apps, Claude Code, the Claude API, Amazon Bedrock, Google Cloud Vertex AI and Microsoft Foundry, and it is not available on Anthropic's free plan &mdash; Pro or a Max plan is required. Fable 5.1 is generally available to paid Claude customers through the same channels, while Mythos 5.1, as covered above, is not self-serve at all.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Model</th><th>Where it ships</th><th>Free tier?</th></tr></thead>
+<tbody>
+<tr><td>GPT-6 Astra</td><td>Enterprise Trusted Access, then paid ChatGPT + API</td><td>No</td></tr>
+<tr><td>GPT-6 Sol</td><td>ChatGPT Work, Codex, API, GitHub Copilot</td><td>No</td></tr>
+<tr><td>GPT-6 Luna</td><td>ChatGPT app (incl. Free/Go), Work, API, Copilot</td><td>Yes</td></tr>
+<tr><td>Claude Opus 5.5</td><td>Claude apps, Claude Code, API, Bedrock, Vertex, Foundry</td><td>No &mdash; Pro or Max required</td></tr>
+<tr><td>Claude Fable 5.1</td><td>Same channels as Opus 5.5</td><td>No</td></tr>
+<tr><td>Claude Mythos 5.1</td><td>Vetted cybersecurity/life-sciences orgs only</td><td>No &mdash; not self-serve</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Communication style: the quiet change in both launches</h2>
+<p>Both companies used near-identical language to describe a change that has nothing to do with benchmarks. OpenAI says GPT-6 Sol and Luna adopt the simplified communication style introduced with Astra: less jargon, fewer low-value details, and slightly shorter answers without losing substance. Anthropic made the same pitch for Opus 5.5, describing clearer, less jargon-heavy communication in extended work sessions. Neither company published a benchmark for "clarity," so the only way to judge it is to run your own before-and-after prompts through the older and newer model and compare the answers directly.</p>
+
+<h2>The Fable and Mythos access wrinkle</h2>
+<p>Anthropic's Fable and Mythos line has a history worth knowing before you plan around it. The first generation, Claude Fable 5 and Claude Mythos 5, launched 9 June 2026, and Anthropic suspended access to both models three days later to comply with U.S. Department of Commerce export controls. The Department lifted those controls on 30 June 2026, and Anthropic restored access on 1 July &mdash; the same day, coincidentally, Fable 5.1 and Mythos 5.1 later launched two months on. Anthropic's own account of the suspension and restoration is posted at <a href="https://www.anthropic.com/news/fable-mythos-access">anthropic.com/news/fable-mythos-access</a>.</p>
+<p>The practical takeaway: if a project depends on Fable or Mythos specifically, build in a fallback. Export-control status for a specific model tier can change on short notice, and Mythos access in particular already runs through a manual vetting process rather than self-serve signup.</p>
+
+<h2>Decision framework: which one should you actually use</h2>
+<p><strong>Choose GPT-6 Astra when:</strong></p>
+<ul>
+<li>The task genuinely needs OpenAI's highest computer-use or long-horizon agent capability</li>
+<li>You already run on OpenAI's stack and need the newest knowledge and the widest tool support</li>
+<li>Budget is not the binding constraint</li>
+</ul>
+<p><strong>Choose GPT-6 Sol when:</strong></p>
+<ul>
+<li>You want near-Astra coding and agent quality at a fifth of the price</li>
+<li>You are running interactive or agentic coding work day to day, per GitHub's own Copilot model guidance</li>
+</ul>
+<p><strong>Choose GPT-6 Luna when:</strong></p>
+<ul>
+<li>The workload is high-volume, well-defined, and cost-sensitive &mdash; classification, extraction, short completions</li>
+</ul>
+<p><strong>Choose Claude Opus 5.5 when:</strong></p>
+<ul>
+<li>You want Fable-level quality on most tasks without Fable-level pricing</li>
+<li>Long agentic sessions matter and you can benefit from the cheaper, faster cache reads</li>
+</ul>
+<p><strong>Choose Claude Fable 5.1 when:</strong></p>
+<ul>
+<li>You need Anthropic's ceiling model and the task justifies $10/$50 per million tokens</li>
+<li>Independent benchmarks matter more to you than vendor-published ones, since Fable leads Astra on Artificial Analysis's third-party suite</li>
+</ul>
+<p><strong>Consider Claude Mythos 5.1 only if:</strong> your organisation works in cybersecurity or life sciences and can go through Anthropic's vetting process &mdash; it is not a general-purpose option.</p>
+
+<h2>What's still unverified</h2>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">×</span><div><p><strong>Don't treat this as settled.</strong> As of this writing there is no independently published head-to-head benchmark comparing all five models on the same test suite under the same conditions. Every comparison you read, including this one, is stitched together from separate vendor announcements.</p></div></div>
+<p>Two things are likely to reshuffle this comparison soon. Anthropic has promised Sonnet 5.5 and Haiku 5.5 "in the coming weeks," which would give Claude a genuine Luna-tier competitor for the first time. And neither company has published a same-day, same-harness benchmark run against the other's newest model &mdash; Opus 5.5 shipped 90 minutes after GPT-6 Sol and Luna, and the two teams' comparison tables predictably favour their own model.</p>
+<p>Before committing a production workload to any of these, run your own evaluation set against the two or three candidates that fit your budget. Vendor benchmarks tell you what's plausible; your own <a href="./prompt-engineering-for-production.html">evaluation harness</a> tells you what's true for your task. If the workload is retrieval-heavy rather than raw reasoning, the model choice here matters less than getting the <a href="./rag-vs-fine-tuning.html">RAG architecture</a> right in the first place, and long agent sessions run into the same <a href="./why-does-chatgpt-forget.html">context-window limits</a> regardless of which of these six models you pick.</p>

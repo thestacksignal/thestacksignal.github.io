@@ -1,0 +1,75 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li><strong>Answer Engine Optimization</strong> means structuring content so ChatGPT, Perplexity and Google AI Overviews can extract, trust and cite it &mdash; not just so it ranks in ten blue links.</li><li>38% of AI Overview citations come from pages already in Google's top 10 results, so AEO extends existing SEO work rather than replacing it.</li><li>55% of citations pull from the first 30% of a page &mdash; answer the query before you explain it.</li><li>Google Search Console added generative-AI performance reporting in June 2026, so you can now measure AI Overview appearances directly instead of guessing.</li></ul></div>
+
+<h2>What Answer Engine Optimization actually means</h2>
+<p>Answer Engine Optimization (AEO) is the practice of structuring a page so that AI systems &mdash; ChatGPT Search, Perplexity, Google AI Overviews and AI Mode, Copilot &mdash; can extract a direct answer from it and cite it as the source. Traditional SEO optimizes for a ranking position a human will click. AEO optimizes for an extraction event a model performs on your behalf, often without the reader ever visiting your site.</p>
+<p>That distinction matters because the two goals mostly overlap but sometimes conflict. A page can rank well and still get skipped for citation if the actual answer is buried under three paragraphs of preamble, because an answer engine is scanning for extractable sentences, not rewarding patience. You are not optimizing for a click anymore &mdash; you are optimizing for the sentence a model is willing to lift and attribute to you.</p>
+
+<h2>Why this shift is happening now</h2>
+<p>ChatGPT alone processes billions of prompts a day and has been reported at over 700 million weekly users, and Google has rolled AI Overviews and AI Mode out globally inside standard search results. Forrester has reported that the large majority of B2B buyers now use generative AI as a central source of information somewhere in their buying process. None of that traffic disappears &mdash; it moves from a results page to an answer box, and whoever gets cited inside that answer box captures the attention a ranking used to guarantee.</p>
+<p>The visible effect on click-through is already measurable on reference-heavy sites. Stack Overflow's traffic declined noticeably after ChatGPT and AI coding tools went mainstream, as developers increasingly got a direct code answer instead of a link to a thread. That is the AEO trade-off in miniature: fewer clicks industry-wide, but outsized visibility for whichever source the model decided to trust.</p>
+
+<h2>How the three major answer engines actually differ</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Engine</th><th>What it tends to favour</th></tr></thead>
+<tbody>
+<tr><td>ChatGPT Search</td><td>Authoritative, comprehensive long-form content with clear structure</td></tr>
+<tr><td>Perplexity</td><td>Fresh, well-cited articles with a recent publish or update date</td></tr>
+<tr><td>Google AI Overviews</td><td>Pages already ranking in the top 10 organic results for the query</td></tr>
+</tbody>
+</table>
+</div>
+<p>The practical implication is that a single article can be tuned for all three at once, because none of these preferences contradict each other &mdash; comprehensive, fresh and already well-ranked describes the same well-maintained page. AEO is not a separate content track from SEO; it is what SEO looks like once the reader on the other end might be a model instead of a person.</p>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>AEO increasingly goes by other names &mdash; Generative Engine Optimization (GEO) and LLM Optimization (LLMO) are used more or less interchangeably with it. If a tool or agency uses one of those terms, assume they mean the same discipline.</p></div></div>
+
+<h2>The AEO checklist that actually moves citations</h2>
+<h3>1. Lead with the direct answer</h3>
+<p>An analysis of 100 Google AI Overview citations found that 55% of the cited text came from the first 30% of the source page. Put the actual answer &mdash; the sentence a reader or a model came for &mdash; in the first one or two sentences after the heading, then explain and justify it afterward. Save the throat-clearing for nowhere; delete it.</p>
+<h3>2. Structure for extraction, not for flow</h3>
+<p>Phrase H2s and H3s as the questions readers actually type, and keep one idea per paragraph. Answer engines pull discrete, self-contained chunks of text; a paragraph that depends on the sentence before it to make sense is harder to lift cleanly, so it gets skipped in favour of a competitor's tidier paragraph on the same point.</p>
+<h3>3. Mark up Article and FAQ schema</h3>
+<p>Structured data does not guarantee a citation, but it removes ambiguity about what a page is and who wrote it, which is exactly the kind of friction that pushes an answer engine toward a competing source instead. FAQPage schema is a particularly good fit for AEO because it packages a question and a self-contained answer in the exact shape an engine wants to extract.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Schema type</th><th>Use it for</th></tr></thead>
+<tbody>
+<tr><td>Article / BlogPosting</td><td>Every article &mdash; establishes author, publish and update dates, and publisher entity</td></tr>
+<tr><td>FAQPage</td><td>Any page answering several distinct, self-contained questions</td></tr>
+<tr><td>HowTo</td><td>Genuinely sequential, numbered processes &mdash; not every list qualifies</td></tr>
+<tr><td>BreadcrumbList</td><td>Reinforces site structure and topical hierarchy for crawlers</td></tr>
+</tbody>
+</table>
+</div>
+<p>Keep schema honest: mark up FAQPage only for questions actually answered visibly on the page, and only apply HowTo when the content is a real sequence of steps rather than a loosely ordered list dressed up to qualify.</p>
+<h3>3.5 Optimize entities, not just keywords</h3>
+<p>Entity-first optimization treats a page's subject as a defined thing &mdash; a person, product, organization or concept &mdash; rather than a string of keywords to repeat. Answer engines parse the entities in a query and match them against the entities they can identify on a page, so a page that clearly and consistently names its primary entity, and the secondary entities that support it, is easier for a model to place correctly. A quick way to check your own entity clarity is to search your primary term in Google and see whether a Knowledge Panel or a Wikipedia/Wikidata entry appears for it &mdash; if one does, your content should reference that same entity by the same name.</p>
+<h3>4. Build topical clusters, not isolated posts</h3>
+<p>A single strong page can get cited once. A cluster of interlinked pages that together answer every reasonable sub-question on a topic gets treated as an authoritative source across many related queries. This is the same <a href="./internal-linking-for-topical-authority.html">internal linking and topical authority</a> work that underpins traditional SEO &mdash; AEO does not require a separate content strategy, it rewards the one you should already be running.</p>
+<h3>5. Keep pages demonstrably fresh</h3>
+<p>Perplexity in particular favours recently updated content, and a visible, accurate "last updated" date is a low-cost signal that a page is still maintained rather than abandoned. Update the date only when you actually change something meaningful &mdash; a sitemap or a page where every entry always shows today's date trains crawlers and readers to distrust the field.</p>
+<h3>6. Don't ignore off-site mentions</h3>
+<p>Independent research has found Reddit among the most frequently cited domains across ChatGPT, AI Mode and AI Overviews, and that YouTube mentions correlate strongly with AI visibility. The takeaway is not to spam forums; it's that genuine third-party discussion of your product or content &mdash; reviews, Q&A threads, video mentions &mdash; feeds the same trust signal answer engines use when they decide who to cite.</p>
+
+<h2>Common AEO mistakes</h2>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">×</span><div><p><strong>Treating AEO as separate from SEO</strong> is the most common and most expensive mistake. AEO is an extension of solid SEO fundamentals, not a replacement for them &mdash; 38% of AI Overview citations already come from pages ranking in the top 10 organically, so weak technical SEO caps your AEO ceiling before you write a word.</p></div></div>
+<ul>
+<li><strong>Keyword stuffing instead of entity optimization.</strong> Answer engines parse entities &mdash; people, organizations, concepts, products &mdash; not repeated keyword strings. Write for the concept, not the phrase.</li>
+<li><strong>No technical SEO underneath.</strong> A page that is orphaned, wrongly canonicalized, or blocked for AI crawlers specifically in robots.txt cannot be cited no matter how well the content itself is structured. See <a href="./technical-seo-for-ai-websites.html">technical SEO for AI websites</a> for the crawlability side of this.</li>
+<li><strong>Answering only the head query.</strong> A comprehensive cluster needs the awkward, low-volume, and inconvenient sub-questions covered too &mdash; those are exactly the follow-up questions an answer engine surfaces after its first response.</li>
+<li><strong>No schema, or schema that contradicts the visible page.</strong> Structured data should describe what a reader can actually see on the page, not an idealized or padded version of it.</li>
+</ul>
+
+<h2>Measuring AEO, realistically</h2>
+<div class="stat-strip"><div><b>Jun 2026</b><span>Search Console added AI Overview reporting</span></div><div><b>60%+</b><span>extraction rate is a reasonable topical-authority target</span></div><div><b>5&ndash;10</b><span>core questions to spot-check manually each week</span></div></div>
+<p>Google Search Console now reports generative-AI search performance directly, which is the first-party starting point. Beyond that, measurement is still mostly manual: pick five to ten core questions in your topic, ask them of ChatGPT, Perplexity and Google AI Overviews, and count how often your content appears in the answer. Hitting roughly 60% or better on your core topic is a reasonable marker that you have built real topical authority rather than a single lucky citation.</p>
+<p>Track citation frequency and brand mentions the way you'd track keyword rankings, but hold the comparison loosely &mdash; clicks may fall even as citations rise, because a well-executed AI Overview answer can satisfy the reader without a visit. Judge success by citations, referrals and assisted conversions together, not by traffic alone.</p>
+<p>Resist the urge to buy a dashboard before you have a baseline. A handful of manually logged answers, checked on the same schedule every week, tells you more in the first month than a tool subscription does, because you'll actually read every result instead of skimming a score. Add a paid tracking tool later, once you know which ten to twenty queries genuinely matter to your business and are worth tracking automatically.</p>
+
+<h2>A 30-day starting plan</h2>
+<ol>
+<li><strong>Week 1:</strong> Audit your five highest-traffic pages against the checklist above &mdash; direct answer in the first 30%, question-phrased H2s, one idea per paragraph.</li>
+<li><strong>Week 2:</strong> Add or fix Article and FAQPage schema on those same pages, and confirm AI crawlers (GPTBot, OAI-SearchBot, PerplexityBot, ClaudeBot) are not accidentally disallowed in robots.txt.</li>
+<li><strong>Week 3:</strong> Identify three to five sub-questions your cluster does not yet answer, and publish short, self-contained pieces that close those gaps.</li>
+<li><strong>Week 4:</strong> Run the manual citation check across ChatGPT, Perplexity and Google AI Overviews for your ten core queries, log the baseline, and check Search Console's AI Overview report for the same period.</li>
+</ol>
+<p>Repeat the measurement step monthly. AEO rewards the same patient, cluster-building work that <a href="./ai-seo-topical-authority.html">topical authority</a> always has &mdash; it just adds a second audience, made of models instead of readers, that judges your first sentence before it decides whether to trust the rest of the page.</p>
