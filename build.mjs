@@ -1,6 +1,7 @@
 // ---------------------------------------------------------------------------
 // StackSignal — static site generator (zero dependencies, Node 18+)
 // Run:  node build.mjs      Output: /dist  (deploy that folder anywhere)
+// Build refresh: 2026-09-27 — regenerate the current 23-post site, feeds and sitemap.
 // ---------------------------------------------------------------------------
 import { mkdir, writeFile, cp, rm, readFile } from 'node:fs/promises';
 import path from 'node:path';
