@@ -577,6 +577,29 @@ const POSTS = [
       ["How do I know if my content is being cited by AI Overviews or ChatGPT?", "Google Search Console added generative-AI search performance reporting in June 2026, which is the most direct first-party signal. Beyond that, manually asking your core queries in ChatGPT, Perplexity and Google AI Overviews on a regular schedule and logging which sources get cited is still the most reliable check."],
       ["Does AEO reduce website traffic?", "It can reduce clicks on informational queries a model can fully answer on its own, since the reader may never visit the source page. Most guidance treats this as a trade-off to measure through citations, brand mentions and assisted conversions rather than a reason to avoid AEO, since the visibility happens whether or not a specific site optimizes for it."]
     ]
+  },
+  {
+    slug: 'which-ai-model-should-i-use',
+    category: 'ai',
+    title: 'Which AI Model Should I Use in 2026? A 60-Second Picker',
+    seoTitle: 'Which AI Model Should I Use? 60-Second Picker',
+    description: 'Answer 4 quick questions to find the right AI model: GPT-6 Sol, Luna and Astra or Claude Opus, Fable, Sonnet and Haiku, matched to your task, budget and stack.',
+    date: '2026-10-12',
+    updated: '2026-10-12',
+    read: 10,
+    tags: ['AI Models', 'LLM', 'GPT-6', 'Claude'],
+    keywords: 'which ai model should i use, best ai model 2026, gpt-6 vs claude, ai model picker, cheapest ai model, llm cost calculator',
+    hero: 'Too many good models and no clear winner. Answer four questions, see what each option really costs, and get a ranked pick with the reasons behind it.',
+    body: '',
+    faq: [
+      ["Which AI model is best overall in 2026?", "There is no single best model. Frontier models such as Claude Fable 5.1 and GPT-6 Astra lead on the hardest work, while cheaper models such as GPT-6 Luna are the better choice for high-volume jobs. The right pick depends on your task, budget, ecosystem and how costly a wrong answer would be."],
+      ["Is the most expensive AI model always the best choice?", "No. In StackSignal's comparison, Claude Opus 5.5 gets close to Claude Fable 5.1 quality on most tasks at a lower price, and GPT-6 Sol gets close to GPT-6 Astra at about a fifth of the cost. Pay for the top tier only when the task justifies it."],
+      ["What is the cheapest AI model to use?", "Based on the list prices in our comparison, GPT-6 Luna is the cheapest at $0.10 per million input tokens and $0.50 per million output tokens. It is also available in the ChatGPT app, including free plans, and suits classification, extraction and other well-defined high-volume work."],
+      ["How much does it cost to run 1,000 requests?", "With 2,000 input tokens and 500 output tokens per request, list prices work out to about $0.45 on GPT-6 Luna, $9 on GPT-6 Sol, $18 on Claude Opus 5.5 and $45 on Claude Fable 5.1 or GPT-6 Astra. Use the estimator in this guide to try your own numbers."],
+      ["Can I use Claude Mythos 5.1?", "Only if your organisation is vetted. Claude Mythos 5.1 is restricted to approved cybersecurity and life-sciences organisations and is not self-serve. Most people should use Claude Fable 5.1 or Claude Opus 5.5 instead."],
+      ["Should I use more than one AI model?", "Often, yes. Route easy requests to a budget model, harder ones to a workhorse, and escalate to a frontier model only when needed. It lowers cost and gives you a fallback if one model changes or becomes unavailable."],
+      ["How accurate is this model picker?", "It is a rules-of-thumb guide built on vendor-published specs and list prices, not a benchmark. Prices, limits and availability change often, so check each provider's pricing page and run a quick test on your own tasks before committing."]
+    ]
   }
 ];
 
@@ -904,7 +927,7 @@ ${footer('./')}`;
 /* ===== 8.5. LEARNING PLATFORM PAGES ===================================== */
 const PATHS = [
   { slug:'performance', level:'Intermediate', title:'Performance Engineering', description:'Diagnose slow pages, reduce main-thread work and make static sites fast on real devices.', steps:['why-is-my-website-slow','core-web-vitals-checklist-2026','browser-rendering-explained','image-optimization-for-web','cut-javascript-bundle-size','caching-and-cdn-strategies'], skills:['Core Web Vitals','rendering','images','bundle budgets','caching','measurement'] },
-  { slug:'ai-systems', level:'Intermediate', title:'AI Systems Engineering', description:'Move from model choice to retrieval architecture and local inference without skipping production constraints.', steps:['why-does-chatgpt-forget','rag-vs-fine-tuning','embeddings-explained','vector-databases-explained','ai-agents-vs-rag','local-llm-8gb-vram-setup','llm-inference-optimization','prompt-engineering-for-production'], skills:['RAG','embeddings','agents','local LLMs','inference','prompt design'] },
+  { slug:'ai-systems', level:'Intermediate', title:'AI Systems Engineering', description:'Move from model choice to retrieval architecture and local inference without skipping production constraints.', steps:['which-ai-model-should-i-use','why-does-chatgpt-forget','rag-vs-fine-tuning','embeddings-explained','vector-databases-explained','ai-agents-vs-rag','local-llm-8gb-vram-setup','llm-inference-optimization','prompt-engineering-for-production'], skills:['RAG','embeddings','agents','local LLMs','inference','prompt design'] },
   { slug:'search', level:'Foundations', title:'Search & AI Visibility', description:'Build topic authority, structure content for modern search and connect SEO work to technical execution.', steps:['ai-seo-topical-authority','technical-seo-for-ai-websites','internal-linking-for-topical-authority','answer-engine-optimization-ai-overviews','core-web-vitals-checklist-2026'], skills:['topical authority','internal linking','technical SEO','answer engine optimization','performance'] }
 ];
 const getPostsBySlugs = (slugs) => slugs.map((slug)=>sorted.find((p)=>p.slug===slug)).filter(Boolean);

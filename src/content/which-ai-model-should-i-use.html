@@ -1,0 +1,176 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>There is no single best AI model. The right pick depends on your <strong>task</strong>, <strong>budget</strong>, <strong>ecosystem</strong> and how costly a <strong>wrong answer</strong> would be.</li><li>Prices span a 100x range: from $0.10 / $0.50 per million tokens (GPT-6 Luna) to $10 / $50 (Claude Fable 5.1 and GPT-6 Astra).</li><li>The top tier is rarely worth it by default. Mid-priced models such as GPT-6 Sol and Claude Opus 5.5 get close on most everyday work.</li><li>Output tokens cost five times as much as input tokens on every priced model here, so long answers cost more than long prompts.</li><li>Claude Mythos 5.1 is restricted to vetted organisations, so most people can ignore it.</li></ul></div>
+
+<h2>The short answer: pick by job, not by hype</h2>
+<p>Five frontier models shipped in three weeks of September 2026, and the names alone are enough to make anyone freeze. The good news is that the choice is easier than it looks. Almost every vendor sells the same three-step ladder (cheap and fast, balanced, and top of the range), so you only need to work out which step your job needs.</p>
+<div class="stat-strip"><div><b>100x</b><span>price gap from cheapest to priciest</span></div><div><b>5x</b><span>output costs vs input, per token</span></div><div><b>~1M</b><span>token context on every priced model</span></div><div><b>4</b><span>questions to get your pick</span></div></div>
+<p>Answer four quick questions below and you will get a ranked recommendation with the reasons behind it. The rest of this guide explains the tiers, shows what each model really costs for your workload, and gives you a 20-minute test to confirm the choice on your own work.</p>
+
+<h2>Take the 60-second picker</h2>
+<div class="mp" id="mp" data-mp>
+  <div class="mp__top"><span class="mp__title">Model picker</span><span class="mp__step" id="mpStep">Question 1 of 4</span></div>
+  <div class="mp__bar" id="mpBar" role="progressbar" aria-label="Picker progress" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"><i id="mpFill"></i></div>
+
+  <div id="mpQuiz">
+    <div class="mp__q is-on" data-key="task">
+      <div class="mp__eyebrow">Your task</div>
+      <div class="mp__ask">What will you mostly use it for?</div>
+      <div class="mp__opts">
+        <button type="button" class="mp__opt" data-v="code"><b>Coding</b><span>Writing, fixing and reviewing code</span></button>
+        <button type="button" class="mp__opt" data-v="agent"><b>Agents and automation</b><span>Long multi-step runs, computer use</span></button>
+        <button type="button" class="mp__opt" data-v="write"><b>Writing and analysis</b><span>Reports, research, long documents</span></button>
+        <button type="button" class="mp__opt" data-v="chat"><b>Everyday questions</b><span>Chat, learning, quick help</span></button>
+        <button type="button" class="mp__opt" data-v="bulk"><b>High-volume jobs</b><span>Classification, extraction, tagging</span></button>
+        <button type="button" class="mp__opt" data-v="sec"><b>Security or life-science research</b><span>Specialist, safety-gated work</span></button>
+      </div>
+    </div>
+
+    <div class="mp__q" data-key="budget">
+      <div class="mp__eyebrow">Your budget</div>
+      <div class="mp__ask">How much does cost matter?</div>
+      <div class="mp__opts">
+        <button type="button" class="mp__opt" data-v="cheap"><b>Keep it cheap</b><span>Lowest cost wins, free if possible</span></button>
+        <button type="button" class="mp__opt" data-v="balanced"><b>Balanced</b><span>Good quality at a sensible price</span></button>
+        <button type="button" class="mp__opt" data-v="best"><b>Best quality</b><span>Price is not the main concern</span></button>
+      </div>
+    </div>
+
+    <div class="mp__q" data-key="eco">
+      <div class="mp__eyebrow">Your stack</div>
+      <div class="mp__ask">Do you already use one ecosystem?</div>
+      <div class="mp__opts">
+        <button type="button" class="mp__opt" data-v="any"><b>No preference</b><span>Show me the best across both</span></button>
+        <button type="button" class="mp__opt" data-v="openai"><b>OpenAI</b><span>ChatGPT, Codex, GitHub Copilot, OpenAI API</span></button>
+        <button type="button" class="mp__opt" data-v="anthropic"><b>Anthropic</b><span>Claude apps, Claude Code, API, Bedrock, Vertex AI</span></button>
+      </div>
+    </div>
+
+    <div class="mp__q" data-key="stakes">
+      <div class="mp__eyebrow">Your stakes</div>
+      <div class="mp__ask">How bad is a wrong answer?</div>
+      <div class="mp__opts">
+        <button type="button" class="mp__opt" data-v="low"><b>Low stakes</b><span>Drafts and experiments, easy to recheck</span></button>
+        <button type="button" class="mp__opt" data-v="high"><b>High stakes</b><span>Production, money, clients or safety</span></button>
+      </div>
+    </div>
+    <button type="button" class="mp__link" id="mpBack" hidden>&larr; Back</button>
+  </div>
+
+  <div class="mp__result" id="mpResult" aria-live="polite" hidden>
+    <div class="mp__pick" id="mpPick"></div>
+    <div class="mp__sub">Also worth considering</div>
+    <div class="grid mp__alts" id="mpAlts"></div>
+    <div class="callout callout--warn" id="mpSec" hidden><span class="callout__icon" aria-hidden="true">!</span><div><p id="mpSecText"></p></div></div>
+    <div class="cta-row mp__actions">
+      <button type="button" class="btn btn--primary" id="mpCopy">Copy my result</button>
+      <button type="button" class="btn" id="mpRetake">Retake the picker</button>
+    </div>
+    <p class="mp__fine" id="mpFine"></p>
+  </div>
+  <noscript><p class="mp__fine">The picker needs JavaScript. Without it, see the model table and the job-by-job guidance further down this page.</p></noscript>
+</div>
+
+<h2>How the picker decides</h2>
+<p>Each model gets a score from four things: how well it fits your task, how its price matches your budget, whether it belongs to the ecosystem you already use, and whether quality or cost should count for more given the stakes. The task-fit ratings are editorial judgement based on the vendors' own positioning and our <a href="./gpt-6-vs-claude-fable-mythos-comparison.html">full model comparison</a>. They are not benchmark scores.</p>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>Treat the result as a shortlist, not a verdict. A few points on one benchmark is usually noise, so run your own test on a handful of real tasks before you commit. The 20-minute test near the end of this guide shows how.</p></div></div>
+
+<h2>Learn the three tiers first</h2>
+<p>Understanding the ladder matters more than memorising model names, because names change every few months and the ladder does not.</p>
+<h3>Budget tier: GPT-6 Luna and Claude Haiku 5.5</h3>
+<p>These are built for volume. They answer quickly, cost very little, and handle well-defined work such as classification, extraction, tagging and short replies. GPT-6 Luna lists at $0.10 input and $0.50 output per million tokens, and it is available in the ChatGPT app including free plans. Haiku is the smallest and fastest Claude tier.</p>
+<h3>Workhorse tier: GPT-6 Sol, Claude Sonnet 5.5 and Claude Opus 5.5</h3>
+<p>This is where most people should live. GPT-6 Sol ($2 / $10) gets close to GPT-6 Astra for about a fifth of the price, and it comes close to Claude Fable on coding benchmarks such as DeepSWE. Claude Opus 5.5 ($4 / $20) is Anthropic's default and approaches Fable quality at a lower cost. Sonnet 5.5 is the smart, efficient everyday option.</p>
+<h3>Frontier tier: GPT-6 Astra and Claude Fable 5.1</h3>
+<p>The ceiling models, both at $10 / $50 per million tokens. They are worth paying for when the task is hard and a wrong answer costs more than the bill. Claude Mythos 5.1 uses the same underlying weights as Fable 5.1 with more permissive safeguards for cyber and biology work, which is why access is limited to vetted organisations.</p>
+
+<h2>The models at a glance</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Model</th><th>Price in / out per 1M tokens</th><th>Context</th><th>Best for</th></tr></thead>
+<tbody>
+<tr><td>GPT-6 Luna</td><td>$0.10 / $0.50</td><td>1.05M</td><td>High-volume, cost-sensitive work</td></tr>
+<tr><td>GPT-6 Sol</td><td>$2 / $10</td><td>1.05M</td><td>Everyday and agentic coding</td></tr>
+<tr><td>Claude Opus 5.5</td><td>$4 / $20</td><td>1M</td><td>Long agentic sessions, Anthropic's default</td></tr>
+<tr><td>GPT-6 Astra</td><td>$10 / $50</td><td>1.05M</td><td>Computer use and long-horizon agents</td></tr>
+<tr><td>Claude Fable 5.1</td><td>$10 / $50</td><td>1M</td><td>Top publicly available Claude model</td></tr>
+<tr><td>Claude Mythos 5.1</td><td>$10 / $50</td><td>1M</td><td>Vetted organisations only</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> prices and context windows come from our <a href="./gpt-6-vs-claude-fable-mythos-comparison.html">Sep 26 comparison</a> and change often. Claude Sonnet 5.5 and Haiku 5.5 are in the picker too, but check Anthropic's pricing page for their current rates. Always confirm numbers with the provider before you budget.</p></div></div>
+
+<h2>What it really costs: try the estimator</h2>
+<p>Per-million-token prices are hard to feel. Put in a workload below and see what each model would cost. One pattern is worth noticing first: on every priced model in this guide, <strong>output tokens cost five times as much as input tokens</strong>.</p>
+<div class="mp mp--est" data-mp-est>
+  <div class="mp__fields">
+    <label>Requests<input type="number" id="estReq" value="1000" min="1" step="100" inputmode="numeric"></label>
+    <label>Input tokens per request<input type="number" id="estIn" value="2000" min="1" step="100" inputmode="numeric"></label>
+    <label>Output tokens per request<input type="number" id="estOut" value="500" min="1" step="50" inputmode="numeric"></label>
+  </div>
+  <div id="estRows" aria-live="polite"></div>
+  <p class="mp__fine">Estimates use list prices from our Sep 26 comparison and ignore caching, batch discounts and tool costs. 1,000 tokens is roughly 750 English words.</p>
+</div>
+<p>With the default numbers (1,000 requests, 2,000 tokens in and 500 out each), the bill is about <strong>$0.45</strong> on GPT-6 Luna, <strong>$9</strong> on GPT-6 Sol, <strong>$18</strong> on Claude Opus 5.5 and <strong>$45</strong> on Claude Fable 5.1 or GPT-6 Astra. That is a 100x gap for the same job, so if a cheaper model is good enough, the savings are not small.</p>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>Caching can change the picture. Our comparison notes that Claude Opus 5.5 cache reads cost $0.20 per million tokens, a 60% cut, which helps a lot when you resend the same long context again and again.</p></div></div>
+
+<h2>Which model for which job</h2>
+<h3>Coding</h3>
+<p>Start with GPT-6 Sol or Claude Opus 5.5. Both are strong enough for everyday and agentic coding at a sensible price. Move up to Claude Fable 5.1 for the hardest problems: on Artificial Analysis's independent Coding Agent Index, Fable scored 70 against 67 for GPT-6 Astra. Vendor numbers disagree with each other, though, so test on your own repo.</p>
+<h3>Agents and long-running automation</h3>
+<p>GPT-6 Astra leads on computer-use and long-horizon agent benchmarks such as ScreenSpot-Pro, and Claude Opus 5.5 is positioned for long agentic sessions. Remember that an agent loops. Every step re-sends context and generates output, so a model that costs twice as much per token can cost far more than twice as much per finished task.</p>
+<h3>Writing, research and analysis</h3>
+<p>Claude Opus 5.5 and Claude Fable 5.1 are natural picks for long, careful work, and every priced model now offers a window of about a million tokens. A big window is not a perfect memory, though. Models still use the middle of a very long input less reliably, as we explain in <a href="./why-does-chatgpt-forget.html">why ChatGPT forgets things</a>.</p>
+<h3>Everyday questions and learning</h3>
+<p>You probably do not need the API at all. The ChatGPT app's free tier already includes GPT-6 Luna, and Claude Sonnet 5.5 is positioned as a smart, efficient model for everyday use. Pay for a higher tier only when you keep hitting limits or want better answers on hard questions.</p>
+<h3>High-volume jobs</h3>
+<p>For tagging, extraction and classification, use GPT-6 Luna or Claude Haiku 5.5. Before you run a million rows, label 100 examples by hand and check accuracy on both. If a cheap model gets 95% and a pricey one gets 97%, the extra two points can cost 50 to 100 times more.</p>
+<h3>Security and life-science research</h3>
+<p>Both vendors gate their strongest capabilities in these areas. GPT-6 Astra's cyber capabilities are limited to vetted testers, and Claude Mythos 5.1 is restricted to vetted cybersecurity and life-sciences organisations. If you are not vetted, you will be using the safeguarded general models, and that is by design.</p>
+
+<h2>How much should you trust benchmarks?</h2>
+<p>Less than the headlines suggest. In our comparison, the vendor-published Terminal-Bench 4.0 scores put Claude Opus 5.5 at 66.4%, GPT-6 Astra at 57.9% and Claude Fable 5.1 at 55.8%. The independent Artificial Analysis indexes tell a different story: Fable 5.1 scored 66 on the Intelligence Index against 61 for Astra, and 70 against 67 on the Coding Agent Index.</p>
+<p>These results are not contradictory. Different tests measure different skills, vendors choose which tests to publish, and effort settings vary. There is also no independent head-to-head of all the models under identical conditions.</p>
+<blockquote><p>Use benchmarks to build a shortlist of two or three models, then let your own tasks decide.</p></blockquote>
+
+<h2>Six mistakes that waste money or time</h2>
+<ol>
+<li><strong>Defaulting to the flagship.</strong> The top tier is the most expensive way to learn that a cheaper one would have worked.</li>
+<li><strong>Choosing from one benchmark.</strong> A few points on a single test is usually noise.</li>
+<li><strong>Ignoring output cost.</strong> Output is five times the price of input, so ask for concise answers when you can.</li>
+<li><strong>Using one model for everything.</strong> Easy requests do not need a frontier model. Route them.</li>
+<li><strong>Confusing context size with quality.</strong> A million-token window still has limits, and long chats still drift.</li>
+<li><strong>Hard-coding a single model.</strong> Names, prices and access change. Keep the model name in config, not scattered through your code.</li>
+</ol>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">&#215;</span><div><p>Do not pick a model because it won one chart. Pick it because it passed your own tests at a price you can sustain.</p></div></div>
+
+<h2>Three rules that beat any picker</h2>
+<ol>
+<li><strong>Start one tier lower than you think.</strong> Try the mid-priced model first. If it fails on your real task, move up. Most teams overpay by defaulting to the flagship.</li>
+<li><strong>Test on your own data.</strong> Take 10 real prompts, run them through your top two picks, and compare. It takes twenty minutes and beats any leaderboard for your use case.</li>
+<li><strong>Plan a fallback.</strong> Model access can change. In June 2026, Claude Fable and Mythos were briefly suspended for export-control reasons before access was restored on July 1. If a model is critical to your product, keep a second option wired in.</li>
+</ol>
+
+<h2>A copy-paste test you can run in 20 minutes</h2>
+<p>Pick 10 real tasks from your own work, the messier the better. Run each one through your top two models with the same prompt, and score the results yourself.</p>
+<pre class="mp-code"><code>Task: [paste a real task from your work]
+Context: [the background the model needs]
+Constraints: [format, length, tone, facts that must appear]
+
+Do the task once. Then list any assumptions you made
+and anything you were unsure about.</code></pre>
+<p>Score each answer from 1 to 5 on four things: correctness, completeness, format, and how much editing it needs before you could use it. Add up the totals and note the cost of each run. The winner is the model with the best score per dollar, not the highest score alone.</p>
+
+<h2>What developers should know</h2>
+<p>If you are building a product, one model is rarely the right answer. A common pattern is <strong>routing</strong>: send simple requests to a budget model, harder ones to a workhorse, and escalate to a frontier model only when a check fails or confidence is low. This often cuts costs sharply with little loss in quality.</p>
+<ul>
+<li><strong>Keep the model name in config</strong> so you can switch without a redeploy.</li>
+<li><strong>Add a fallback.</strong> Fable and Mythos were suspended for 19 days between June 12 and July 1, 2026, a reminder that availability can change.</li>
+<li><strong>Log cost per request</strong>, not just per month, so you can see which feature is expensive.</li>
+<li><strong>Use caching</strong> when you resend the same long context.</li>
+<li><strong>Trim what you send.</strong> Retrieval beats pasting everything; see our guide to <a href="./rag-chunking-strategies.html">RAG chunking strategies</a>.</li>
+</ul>
+<p>For prompts that behave well in production, read <a href="./prompt-engineering-for-production.html">prompt engineering for production</a>. If you would rather run a model yourself, the <a href="./local-llm-8gb-vram-setup.html">8GB VRAM local LLM guide</a> shows what fits on a modest GPU.</p>
+
+<h2>The bottom line</h2>
+<p>The best AI model is the cheapest one that reliably does your job. Use the picker to shortlist, run the 20-minute test to confirm, and revisit the choice when prices or models change. A model that was right in September can be the wrong one by December.</p>
+
+<script src="../assets/js/picker.js" defer></script>
