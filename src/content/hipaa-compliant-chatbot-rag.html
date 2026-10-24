@@ -1,0 +1,166 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>No chatbot or model is &ldquo;HIPAA-compliant&rdquo; on its own &mdash; compliance is a property of the <strong>whole system</strong>: vendors, storage, access control and logging.</li><li>Every vendor that can see protected health information (PHI) needs a signed <strong>Business Associate Agreement (BAA)</strong>, including the logging and monitoring tools people forget.</li><li>RAG fits healthcare well because answers come from approved documents and can be <strong>filtered per user at retrieval time</strong> &mdash; something a system prompt cannot guarantee.</li><li>Send the model the <strong>minimum necessary</strong> data, and write audit logs that record IDs and hashes rather than raw PHI.</li></ul></div>
+
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p><strong>Not legal advice.</strong> HIPAA obligations depend on your organization, your data and your contracts. This is an engineering guide &mdash; have your compliance officer or counsel review the final design.</p></div></div>
+
+<h2>What makes a chatbot HIPAA-compliant?</h2>
+<p>A HIPAA-compliant chatbot is one that handles protected health information under the safeguards HIPAA requires: signed agreements with every vendor that touches the data, encryption in transit and at rest, access control, and audit logging. The model is only one component. A chatbot built on a perfectly capable model is still non-compliant if its transcripts land in an analytics tool that never signed a BAA.</p>
+<p>The most practical architecture for a healthcare assistant is retrieval-augmented generation. Instead of letting the model answer from memory, your system retrieves passages from approved documents &mdash; clinic policies, patient education material, scheduling rules &mdash; and the model answers only from those, with citations. If the pattern is new to you, start with <a href="./rag-vs-fine-tuning.html">RAG vs fine-tuning</a> to see why retrieval beats retraining for this kind of work.</p>
+
+<h2>First decide: does the chatbot touch PHI?</h2>
+<p>This one decision changes the whole project, so make it before writing any code. A bot that answers questions from public clinic pages never needs patient identifiers. A bot that discusses a specific patient&rsquo;s appointments or results does.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Scenario</th><th>Touches PHI?</th><th>What it means</th></tr></thead>
+<tbody>
+<tr><td>General questions from public clinic content (hours, accepted insurance, visit prep)</td><td>No</td><td>Far lighter requirements. Still avoid collecting identifiers.</td></tr>
+<tr><td>Questions about a specific patient (appointments, billing, results)</td><td>Yes</td><td>Full safeguards and BAAs apply.</td></tr>
+<tr><td>Staff assistant that summarizes patient records</td><td>Yes</td><td>Strictest access control and audit needs.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>If you can ship a useful first version that never receives PHI, do that. It is the safest design, and you can add authenticated, PHI-aware features later once the foundations are proven.</p></div></div>
+
+<h2>Reference architecture</h2>
+<p>Every component that can see PHI sits inside your compliance boundary and is covered by a BAA. The request path looks like this:</p>
+<pre><code>User (authenticated, over TLS)
+  -&gt; API gateway: authentication + role check
+  -&gt; PHI redaction / minimum-necessary filter
+  -&gt; Retriever -&gt; vector store (encrypted, access-filtered, under BAA)
+  -&gt; Prompt builder (approved passages only)
+  -&gt; LLM endpoint (under BAA, no training on your data)
+  -&gt; Response filter + citations
+  -&gt; Audit log (IDs and hashes, not raw PHI)</code></pre>
+<p>Notice that access control appears <em>before</em> retrieval, not after generation. That ordering is the single most important design choice in the whole system.</p>
+
+<h2>The compliance decisions that matter</h2>
+
+<h3>1. Sign a BAA with every vendor that sees PHI</h3>
+<p>Several major cloud and model providers offer BAAs for eligible services, but not every product or pricing plan qualifies, and terms change. Confirm coverage for each component:</p>
+<ul>
+<li>The LLM provider or hosted model endpoint</li>
+<li>The vector database or search service</li>
+<li>Cloud hosting and storage</li>
+<li>Logging, monitoring and error-tracking tools</li>
+</ul>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">&#215;</span><div><p>The most common accidental violation is shipping full chat transcripts to a third-party analytics or error-tracking service with no BAA. Check every tool that receives request bodies.</p></div></div>
+<p>If a vendor will not sign a BAA, PHI must not reach it. Many teams solve this by running an open-weight model inside their own cloud account &mdash; see our <a href="./local-llm-8gb-vram-setup.html">local LLM setup guide</a> for the basics of self-hosting, and <a href="./which-ai-model-should-i-use.html">which AI model to use</a> if you are comparing hosted options.</p>
+
+<h3>2. Apply the minimum necessary standard</h3>
+<p>Send the model only what it needs to answer. A scheduling question needs an appointment slot, not a diagnosis history. Build the retriever and prompt builder so sensitive fields are excluded by default and added only when a feature genuinely requires them.</p>
+
+<h3>3. Encrypt everywhere</h3>
+<p>Use TLS for data in transit and encryption at rest for the vector store, document storage, backups and logs. Manage keys in your cloud provider&rsquo;s key management service, never in application code.</p>
+
+<h3>4. Enforce access at retrieval time</h3>
+<p>Never rely on a system prompt such as &ldquo;only show this user their own records.&rdquo; Prompts can be bypassed. Instead, filter inside the database query so unauthorized documents are never retrieved in the first place. This is a major reason <a href="./rag-vs-fine-tuning.html">retrieval beats fine-tuning</a> in regulated settings: you can filter retrieval per user, but you cannot filter what a model has memorized.</p>
+
+<h3>5. Keep audit trails and set retention rules</h3>
+<p>You must be able to answer who accessed what, when, and through which feature. Log identifiers and document IDs rather than raw questions and answers. Decide how long transcripts are kept, who can read them and how they are deleted &mdash; shorter retention means less exposure.</p>
+
+<div class="stat-strip"><div><b>BAA</b><span>required for every vendor that sees PHI</span></div><div><b>0</b><span>raw PHI values in audit logs</span></div><div><b>1st</b><span>access check happens before retrieval</span></div></div>
+
+<h2>Build it: Python implementation</h2>
+<p>The code below uses small placeholder interfaces &mdash; <code>embed</code>, <code>vector_store</code> and <code>llm</code> &mdash; so you can plug in any provider that is covered by a BAA. It focuses on the compliance-critical logic rather than on any one SDK.</p>
+
+<h3>Step 1: Redact identifiers before they leave your boundary</h3>
+<pre><code>import re
+
+PATTERNS = {
+    "SSN":   re.compile(r"\b\d{3}-\d{2}-\d{4}\b"),
+    "PHONE": re.compile(r"\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b"),
+    "EMAIL": re.compile(r"\b[\w.+-]+@[\w-]+\.[\w.-]+\b"),
+    "DATE":  re.compile(r"\b\d{1,2}/\d{1,2}/\d{2,4}\b"),
+    "MRN":   re.compile(r"\bMRN[:\s]*\d{5,10}\b", re.IGNORECASE),
+}
+
+def redact(text: str) -&gt; str:
+    for label, pattern in PATTERNS.items():
+        text = pattern.sub(f"[{label}]", text)
+    return text</code></pre>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Watch out:</strong> regex only catches obvious patterns. Names, street addresses and free-text details slip straight through. In production, use a dedicated de-identification service or a clinical NER model, and treat regex as a safety net rather than the main control.</p></div></div>
+
+<h3>Step 2: Retrieve with access control inside the query</h3>
+<pre><code>def retrieve(question: str, user, k: int = 4):
+    query_vector = embed(redact(question))
+
+    # The filter runs inside the vector store, so documents the
+    # user may not see are never returned.
+    return vector_store.search(
+        vector=query_vector,
+        top_k=k,
+        filter={
+            "tenant_id": user.tenant_id,
+            "allowed_roles": {"contains": user.role},
+        },
+    )</code></pre>
+<p>Put <code>tenant_id</code> &mdash; and, for patient-specific data, <code>patient_id</code> &mdash; in the metadata of every chunk when you ingest documents, and always filter on it. How you split documents matters here too: see <a href="./rag-chunking-strategies.html">RAG chunking strategies</a> and <a href="./vector-databases-explained.html">vector databases explained</a> for the layers underneath this step.</p>
+
+<h3>Step 3: Build a grounded, minimal prompt</h3>
+<pre><code>SYSTEM_PROMPT = (
+    "You are a clinic assistant. Answer ONLY from the provided sources. "
+    "If the sources do not contain the answer, say you don't know and "
+    "suggest contacting the clinic. Do not give diagnoses or medical "
+    "advice. Cite the source IDs you used."
+)
+
+def build_prompt(question: str, passages: list) -&gt; list[dict]:
+    context = "\n\n".join(f"[{p.id}] {p.text}" for p in passages)
+    return [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user",
+         "content": f"Sources:\n{context}\n\nQuestion: {redact(question)}"},
+    ]</code></pre>
+
+<h3>Step 4: Answer, then write an audit record without raw PHI</h3>
+<pre><code>import hashlib, json, logging, time
+
+audit = logging.getLogger("audit")
+
+def answer(question: str, user) -&gt; dict:
+    passages = retrieve(question, user)
+    reply = llm.generate(build_prompt(question, passages))
+
+    audit.info(json.dumps({
+        "ts": int(time.time()),
+        "user_id": user.id,
+        "role": user.role,
+        "question_hash": hashlib.sha256(question.encode()).hexdigest(),
+        "doc_ids": [p.id for p in passages],
+        "model": llm.model_name,
+    }))
+
+    return {"answer": reply, "sources": [p.id for p in passages]}</code></pre>
+<p>The hash lets you spot repeated queries and investigate incidents without storing the question itself. Ship these logs to a store that is also encrypted and covered by your BAA.</p>
+
+<h3>Step 5: Add safety rails for medical content</h3>
+<ul>
+<li><strong>Refuse diagnosis and treatment advice</strong> and route those questions to a clinician.</li>
+<li><strong>Detect emergency language</strong> such as chest pain or suicidal thoughts, and reply with emergency instructions and a human handoff instead of a generated answer.</li>
+<li><strong>Show a clear disclaimer</strong> that the assistant is not a substitute for professional care.</li>
+<li><strong>Test refusals</strong> the same way you test answers. Build a set of risky questions and check the bot declines every one &mdash; the evaluation habit from <a href="./rag-chunking-strategies.html">chunking</a> applies here as well.</li>
+</ul>
+
+<h2>Common mistakes</h2>
+<ol>
+<li><strong>Logging full conversations to a tool with no BAA.</strong> Review every service that receives request bodies, including error trackers.</li>
+<li><strong>Putting access rules in the prompt</strong> instead of in the retrieval filter.</li>
+<li><strong>Sending whole patient records</strong> to the model &ldquo;for context&rdquo; instead of the minimum needed.</li>
+<li><strong>Forgetting that embeddings come from PHI.</strong> Treat the vector store as PHI storage, with the same encryption and access rules.</li>
+<li><strong>Using a consumer or free AI tier</strong> that offers no BAA or may retain your data.</li>
+<li><strong>Skipping the documented risk assessment.</strong> HIPAA expects written risk analysis, not just well-written code.</li>
+</ol>
+
+<h2>Launch checklist</h2>
+<ul>
+<li>BAAs signed with every vendor that handles PHI</li>
+<li>Encryption in transit and at rest, with keys in a managed service</li>
+<li>Authentication and role-based access on every request</li>
+<li>Access filtering enforced inside the vector store query</li>
+<li>PHI redaction or de-identification tested on realistic data</li>
+<li>Audit logging with no raw PHI, plus a defined retention policy</li>
+<li>Emergency and out-of-scope handling tested</li>
+<li>Security review completed, and compliance or legal sign-off obtained</li>
+</ul>
+
+<h2>Where to go next</h2>
+<p>Once the compliant foundation is in place, quality work begins: tune <a href="./rag-chunking-strategies.html">chunking</a>, pick a model that fits your privacy and budget constraints with the <a href="./which-ai-model-should-i-use.html">AI model picker</a>, and keep the chat interface fast with <a href="./core-web-vitals-for-ai-chat-interfaces.html">Core Web Vitals for AI chat interfaces</a>.</p>

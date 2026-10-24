@@ -1,0 +1,136 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li><strong>Prompt engineering jobs</strong> still exist, but the title is shifting toward &ldquo;AI engineer&rdquo; and &ldquo;applied AI engineer&rdquo; as the work grows to include evaluation, retrieval and integration.</li><li>US <strong>prompt engineering salary</strong> figures vary widely by source, from roughly $108K to $143K on average, because one title covers very different jobs.</li><li>The durable skills are <strong>evaluation, retrieval and domain knowledge</strong>, not clever wording. Those are the skills that move pay.</li><li>You can build a hireable profile with a free course, a public prompt library and two or three measured projects &mdash; no certification is required.</li></ul></div>
+
+<h2>What do prompt engineering jobs look like in 2026?</h2>
+<p>A prompt engineer designs, tests and improves the instructions given to AI models so they produce reliable, useful output. In 2026 that rarely means writing one clever sentence. It means building prompt systems: versioned prompts, test sets, scoring rubrics, and the plumbing that feeds the right context to a model at the right moment.</p>
+<p>Hiring has also changed shape. Dedicated &ldquo;Prompt Engineer&rdquo; postings are fewer than at the 2023 peak, while the same work now appears under titles such as AI Engineer, Generative AI Developer, LLM Engineer and AI Automation Engineer. When you search for prompt engineering jobs, search all of those titles, not just the original one.</p>
+<div class="callout"><span class="callout__icon" aria-hidden="true">i</span><div><p>Three employer types hire most often: frontier AI labs, software companies adding AI features, and regulated industries such as healthcare and finance. Each values a different mix of skills.</p></div></div>
+
+<h2>Prompt engineering salary: what sources report</h2>
+<p>Salary data for this role is messy, and honest numbers show it. Public aggregators disagree by tens of thousands of dollars because &ldquo;prompt engineer&rdquo; can mean a junior content-tuning role or a senior applied-AI position.</p>
+<div class="stat-strip"><div><b>~$108K</b><span>Indeed average, US</span></div><div><b>~$115K</b><span>Jobicy average, US</span></div><div><b>~$143K</b><span>Glassdoor average, US</span></div></div>
+<p>A 2026 salary guide from the staffing firm KORE1 splits the range by seniority, which is more useful than a single average:</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Level</th><th>Typical US base salary</th><th>Typical experience</th></tr></thead>
+<tbody>
+<tr><td>Junior / associate</td><td>$95K &ndash; $130K</td><td>0&ndash;2 years</td></tr>
+<tr><td>Mid-level prompt / applied AI engineer</td><td>$135K &ndash; $185K</td><td>3&ndash;5 years</td></tr>
+<tr><td>Senior prompt / applied AI engineer</td><td>$185K &ndash; $260K</td><td>5&ndash;8 years</td></tr>
+<tr><td>Frontier-lab prompt / eval engineer</td><td>$280K &ndash; $425K</td><td>3+ years, ML background</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Prompt engineering salary in India</h3>
+<p>Indian figures are lower and thinner. Indeed&rsquo;s India data, based on a small sample of reported salaries, showed an average base near &#8377;4.95 lakh per year in August 2026. Fresher-oriented guides commonly cite &#8377;4&ndash;8 lakh per year, and internship or entry listings often pay &#8377;15,000&ndash;30,000 per month. Senior and remote roles for international companies sit far above that, so the spread is large.</p>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Treat every salary figure as a range, not a promise.</strong> Sample sizes are small, titles are inconsistent, and total compensation at labs and startups includes equity that base-salary tables leave out.</p></div></div>
+
+<h2>Is prompt engineering still relevant?</h2>
+<p>Yes, but not in the form most people picture. Models follow instructions far better than they did two years ago, so pure prompt-wording tricks matter less. What has become more valuable is everything around the prompt: testing whether it works, measuring cost and latency, grounding answers in real data, and knowing a specific domain well enough to spot a wrong answer.</p>
+<p>That is why the pay premium sits with people who combine prompting with adjacent skills. Several 2026 salary guides report a premium of roughly 20&ndash;40% for retrieval, evaluation or domain expertise such as legal, medical or finance. The market is paying for reliable AI systems, not for phrasing.</p>
+<blockquote><p>The job is shifting from writing prompts to proving they work.</p></blockquote>
+
+<h2>Context engineering vs prompt engineering</h2>
+<p>You will see these two terms compared constantly. Prompt engineering is the craft of writing the instructions. Context engineering is the wider job of deciding everything the model sees on each call: the instructions, retrieved documents, conversation history, memory, tool definitions and examples.</p>
+<p>Context engineering is a superset, and it is where most production problems actually live. A model that gives a wrong answer has often been handed the wrong or incomplete context, not a badly worded prompt. If you want to be hireable, learn both. Our guide to <a href="./prompt-engineering-for-production.html">prompt engineering for production</a> covers the prompt side, and <a href="./rag-chunking-strategies.html">RAG chunking strategies</a> covers a core part of the context side.</p>
+
+<h2>Prompt engineering skills employers ask for</h2>
+<p>Job postings repeat a consistent set of prompt engineering skills. Prioritize in this order:</p>
+<ol>
+<li><strong>Prompt design techniques:</strong> clear instructions, role and format control, few-shot examples, step-by-step reasoning, structured output.</li>
+<li><strong>Evaluation:</strong> building test sets, scoring rubrics and regression checks so a prompt change can be measured instead of guessed.</li>
+<li><strong>Retrieval and RAG:</strong> grounding answers in documents. Start with <a href="./rag-vs-fine-tuning.html">RAG vs fine-tuning</a>.</li>
+<li><strong>Python and APIs:</strong> calling models, parsing structured responses, handling errors and rate limits.</li>
+<li><strong>Cost and latency awareness:</strong> choosing the right model for each job with the <a href="./which-ai-model-should-i-use.html">AI model picker</a>.</li>
+<li><strong>Domain knowledge:</strong> the multiplier that raises pay in regulated fields.</li>
+</ol>
+
+<h2>Fine-tuning vs prompt engineering: which skill matters more?</h2>
+<p>For most roles, prompting and retrieval come first. Fine-tuning changes how a model behaves, such as its tone or output format, while prompting steers a model that already exists and costs far less to iterate on. A sensible rule is to exhaust prompting and retrieval before fine-tuning. The full decision framework is in <a href="./rag-vs-fine-tuning.html">RAG vs fine-tuning</a>, and for agent-style systems see <a href="./ai-agents-vs-rag.html">AI agents vs RAG</a>.</p>
+
+<h2>Prompt engineering examples: weak vs strong</h2>
+<p>Good prompts are specific about the task, the audience, the format and the limits. Here is the same request written two ways.</p>
+<pre><code>Weak:
+Summarize this support ticket.
+
+Strong:
+You are a support triage assistant.
+Summarize the ticket below in 2 sentences for an engineer.
+Then output JSON with keys: severity (low|medium|high),
+product_area, and needs_human (true|false).
+If information is missing, use "unknown". Do not invent details.
+
+Ticket:
+{ticket_text}</code></pre>
+<p>The strong version defines the role, the length, the audience and the exact output shape, and it tells the model what to do when information is missing. That last instruction reduces made-up answers.</p>
+
+<h3>A simple prompt engineering framework</h3>
+<p>You do not need a complicated method. A reliable prompt engineering framework has five parts, and you can remember them as <strong>Role, Context, Task, Format, Constraints</strong>.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Part</th><th>What to write</th></tr></thead>
+<tbody>
+<tr><td>Role</td><td>Who the model is acting as</td></tr>
+<tr><td>Context</td><td>The background and data it needs</td></tr>
+<tr><td>Task</td><td>The single thing you want done</td></tr>
+<tr><td>Format</td><td>The exact shape of the output</td></tr>
+<tr><td>Constraints</td><td>What to avoid, length limits, what to do when unsure</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Reusable prompt engineering templates</h3>
+<p>Save your best prompts as prompt engineering templates with placeholders, then version and test them like code. Here is a starter you can adapt:</p>
+<pre><code>ROLE: You are a {role}.
+CONTEXT: {background_and_data}
+TASK: {one_clear_task}
+FORMAT: Respond as {format}. Keep it under {limit}.
+CONSTRAINTS: Use only the context above. If the answer is not
+there, reply "I don't know." Do not guess.</code></pre>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>A template alone is not a skill. What impresses hiring managers is a template plus a test set that shows how often it works and what it costs per call.</p></div></div>
+
+<h2>Advanced prompt engineering techniques</h2>
+<p>Once the basics are solid, these advanced prompt engineering techniques separate junior candidates from mid-level ones:</p>
+<ul>
+<li><strong>Few-shot examples:</strong> show two or three input and output pairs so the model copies the pattern.</li>
+<li><strong>Structured output:</strong> request JSON that matches a schema, and validate it in code.</li>
+<li><strong>Prompt chaining:</strong> split a hard task into steps, each with its own prompt and checks.</li>
+<li><strong>Self-checks:</strong> ask the model to verify its answer against the source before responding.</li>
+<li><strong>Automated evaluation:</strong> use a scoring prompt or code checks to compare prompt versions at scale.</li>
+</ul>
+<p>Many of these tools overlap with productivity prompting, which is a good place to practice. See our <a href="./chatgpt-prompts-productivity.html">ChatGPT prompts for productivity</a> guide for everyday patterns.</p>
+
+<h2>Best prompt engineering course options (including free ones)</h2>
+<p>You do not need to spend money to learn this. A free prompt engineering course from a reputable source is enough to start, and most employers care more about what you have built than which course you took. Good places to look:</p>
+<ul>
+<li><strong>Provider tutorials:</strong> Anthropic, OpenAI and Google all publish prompting guides, and Anthropic offers an interactive prompt engineering tutorial.</li>
+<li><strong>DeepLearning.AI:</strong> a short course titled ChatGPT Prompt Engineering for Developers aimed at people who can code.</li>
+<li><strong>Coursera and similar platforms:</strong> structured courses, some free to audit, some paid.</li>
+</ul>
+<p>When comparing the best prompt engineering course for you, check that it includes hands-on exercises and covers evaluation, not only prompt tips. Course catalogs change often, so confirm current availability and pricing on each provider&rsquo;s site.</p>
+
+<h3>Do you need a prompt engineering certification?</h3>
+<p>No certification is an industry standard. A prompt engineering certification can show commitment, and it may help a fresher get a first interview, but it does not replace proof of skill. If a certificate costs money, spend that effort on a public project instead. The recommended order is a free course first, projects second, and a paid certificate only if an employer or program you want asks for it.</p>
+<p>For deeper reading, prompt engineering books can help once you have the basics. O&rsquo;Reilly publishes <em>Prompt Engineering for Generative AI</em>, and you can pair a book with official guides, which are free and usually newer.</p>
+
+<h2>Prompt engineering tools worth learning</h2>
+<ul>
+<li><strong>Model playgrounds and APIs</strong> from the major providers for rapid testing.</li>
+<li><strong>Evaluation tooling</strong> for running a prompt against a test set and scoring results.</li>
+<li><strong>Prompt versioning</strong> in Git, so every change is tracked and reversible.</li>
+<li><strong>RAG tooling</strong> such as vector databases. Start with <a href="./vector-databases-explained.html">vector databases explained</a>.</li>
+</ul>
+
+<h2>How to get hired: a 6-week plan</h2>
+<ol>
+<li><strong>Weeks 1&ndash;2:</strong> finish one free course and practice daily with real tasks.</li>
+<li><strong>Week 3:</strong> build a public prompt library on GitHub with templates, examples and notes.</li>
+<li><strong>Weeks 4&ndash;5:</strong> ship one measured project, such as a small RAG assistant over a document set. A healthcare-style build like our <a href="./hipaa-compliant-chatbot-rag.html">HIPAA-compliant chatbot guide</a> shows the kind of depth that stands out.</li>
+<li><strong>Week 6:</strong> write a short case study with before-and-after results, cost per call and what failed. Then apply under every relevant title.</li>
+</ol>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">&#215;</span><div><p>Avoid a portfolio of screenshots. Show test results, failure cases and numbers. Evidence of measurement is the strongest signal you can give.</p></div></div>
+
+<h2>Is a prompt engineering side hustle realistic?</h2>
+<p>A prompt engineering side hustle is possible, usually as freelance work building chatbots, automations or prompt libraries for small businesses. It is project-based and uneven, and income depends heavily on your ability to find clients and prove results. Treat it as a way to build a portfolio and earn some extra money rather than a guaranteed income, and be cautious of anyone promising fast money from prompts alone.</p>
+
+<h2>Where to go next</h2>
+<p>Start with <a href="./prompt-engineering-for-production.html">prompt engineering for production</a>, then build a retrieval project using <a href="./rag-chunking-strategies.html">chunking strategies</a>. Pair those with measurement, and you will have the evidence that gets interviews.</p>

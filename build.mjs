@@ -600,6 +600,51 @@ const POSTS = [
       ["Should I use more than one AI model?", "Often, yes. Route easy requests to a budget model, harder ones to a workhorse, and escalate to a frontier model only when needed. It lowers cost and gives you a fallback if one model changes or becomes unavailable."],
       ["How accurate is this model picker?", "It is a rules-of-thumb guide built on vendor-published specs and list prices, not a benchmark. Prices, limits and availability change often, so check each provider's pricing page and run a quick test on your own tasks before committing."]
     ]
+  },
+  {
+    slug: 'prompt-engineering-jobs-2026',
+    category: 'ai',
+    title: 'Prompt Engineering Jobs in 2026: Salary, Skills and How to Get Hired',
+    seoTitle: 'Prompt Engineering Jobs 2026: Salary, Skills, How to Start',
+    description: 'Prompt engineering jobs in 2026: real salary ranges, skills employers want, free course options, and a 6-week plan to build a hireable portfolio.',
+    date: '2026-10-24',
+    updated: '2026-10-24',
+    read: 11,
+    tags: ['Prompt Engineering', 'Careers', 'LLM'],
+    keywords: 'prompt engineering jobs, prompt engineering salary, is prompt engineering still relevant, context engineering vs prompt engineering, prompt engineering skills, fine-tuning vs prompt engineering, prompt engineering examples, prompt engineering framework, prompt engineering templates, advanced prompt engineering techniques, best prompt engineering course, free prompt engineering course, prompt engineering certification, prompt engineering books, prompt engineering tools, prompt engineering side hustle',
+    hero: 'The job title is changing, but the demand for people who can make AI systems reliable is not. Here is what the work pays and how to get started.',
+    body: '',
+    faq: [
+      ["How much do prompt engineering jobs pay in 2026?", "In the United States, public salary sources report averages from roughly $108,000 to $143,000, with junior roles around $95,000 to $130,000 and senior or applied AI roles well above that. Pay varies because the title covers very different jobs, so treat every figure as a range."],
+      ["Is prompt engineering still relevant in 2026?", "Yes, but the role is changing. Pure prompt wording matters less as models improve, while evaluation, retrieval and domain expertise matter more. Many employers now hire for AI engineer or applied AI engineer titles that include prompt work."],
+      ["What is the difference between context engineering and prompt engineering?", "Prompt engineering is writing the instructions. Context engineering is deciding everything the model sees on each call, including instructions, retrieved documents, memory, tool definitions and examples. Context engineering is the broader discipline."],
+      ["Should I learn fine-tuning or prompt engineering first?", "Start with prompt engineering and retrieval. They are cheaper to iterate on and solve most problems, so fine-tuning is usually a later step for behavior or format that prompting cannot reliably achieve."],
+      ["Is there a free prompt engineering course worth taking?", "Yes. Major AI providers publish free prompting guides and tutorials, and short courses such as DeepLearning.AI's prompt engineering course for developers are widely used. Confirm current availability on each provider's site, then build a project to prove the skill."],
+      ["Do I need a prompt engineering certification to get hired?", "No certification is an industry standard. Employers weight demonstrated projects, test results and domain knowledge more heavily than a certificate."],
+      ["Can I earn money from a prompt engineering side hustle?", "Possibly, through freelance chatbots, automations or prompt libraries, but income is project-based and uneven. Use it to build a portfolio and treat any promise of guaranteed fast income with caution."]
+    ]
+  },
+  {
+    slug: 'hipaa-compliant-chatbot-rag',
+    category: 'ai',
+    title: 'HIPAA-Compliant Chatbot: How to Build One With RAG',
+    seoTitle: 'HIPAA-Compliant Chatbot With RAG: Architecture + Code',
+    description: 'Build a HIPAA-compliant chatbot with RAG: architecture, BAAs, PHI redaction, access control, audit logging, Python code and a launch checklist.',
+    date: '2026-10-24',
+    updated: '2026-10-24',
+    read: 11,
+    tags: ['RAG', 'Healthcare AI', 'Security'],
+    keywords: 'hipaa-compliant chatbot, hipaa compliant ai chatbot, healthcare chatbot rag, phi redaction, rag chatbot',
+    hero: 'Compliance is a property of the whole system, not the model. Here is the architecture and the code that keeps patient data protected.',
+    body: '',
+    faq: [
+      ["Is there such a thing as a HIPAA-compliant AI model?", "Models are not compliant on their own. A deployment is compliant when every vendor that handles protected health information signs a Business Associate Agreement and your overall system implements the required safeguards, including encryption, access control and audit logging."],
+      ["Can I use ChatGPT, Claude or Gemini for a HIPAA chatbot?", "Only through an offering where the provider will sign a Business Associate Agreement for your use case, and only with the other safeguards in place. Consumer chat apps are generally not appropriate for protected health information, and terms change, so check each provider's current documentation."],
+      ["Does RAG make a chatbot HIPAA-compliant?", "No, but it makes compliance easier. RAG keeps answers grounded in approved documents, makes answers traceable to sources, and lets you filter retrieval per user so unauthorized records are never fetched."],
+      ["Do I need to de-identify data before sending it to the model?", "Not always, but sending de-identified or minimal data reduces risk and supports the minimum necessary standard. If a vendor will not sign a Business Associate Agreement, protected health information must not be sent to it at all."],
+      ["Can I self-host the model instead?", "Yes. Running an open-weight model inside your own cloud account removes one third party from the chain, although you still own all of the security, encryption and logging work."],
+      ["Is this article legal advice?", "No. HIPAA obligations depend on your organization, data and contracts, so have your compliance officer or legal counsel review your final design."]
+    ]
   }
 ];
 
@@ -927,7 +972,7 @@ ${footer('./')}`;
 /* ===== 8.5. LEARNING PLATFORM PAGES ===================================== */
 const PATHS = [
   { slug:'performance', level:'Intermediate', title:'Performance Engineering', description:'Diagnose slow pages, reduce main-thread work and make static sites fast on real devices.', steps:['why-is-my-website-slow','core-web-vitals-checklist-2026','browser-rendering-explained','image-optimization-for-web','cut-javascript-bundle-size','caching-and-cdn-strategies'], skills:['Core Web Vitals','rendering','images','bundle budgets','caching','measurement'] },
-  { slug:'ai-systems', level:'Intermediate', title:'AI Systems Engineering', description:'Move from model choice to retrieval architecture and local inference without skipping production constraints.', steps:['which-ai-model-should-i-use','why-does-chatgpt-forget','rag-vs-fine-tuning','embeddings-explained','vector-databases-explained','ai-agents-vs-rag','local-llm-8gb-vram-setup','llm-inference-optimization','prompt-engineering-for-production'], skills:['RAG','embeddings','agents','local LLMs','inference','prompt design'] },
+  { slug:'ai-systems', level:'Intermediate', title:'AI Systems Engineering', description:'Move from model choice to retrieval architecture and local inference without skipping production constraints.', steps:['which-ai-model-should-i-use','why-does-chatgpt-forget','rag-vs-fine-tuning','embeddings-explained','vector-databases-explained','ai-agents-vs-rag','local-llm-8gb-vram-setup','llm-inference-optimization','prompt-engineering-for-production','prompt-engineering-jobs-2026','hipaa-compliant-chatbot-rag'], skills:['RAG','embeddings','agents','local LLMs','inference','prompt design'] },
   { slug:'search', level:'Foundations', title:'Search & AI Visibility', description:'Build topic authority, structure content for modern search and connect SEO work to technical execution.', steps:['ai-seo-topical-authority','technical-seo-for-ai-websites','internal-linking-for-topical-authority','answer-engine-optimization-ai-overviews','core-web-vitals-checklist-2026'], skills:['topical authority','internal linking','technical SEO','answer engine optimization','performance'] }
 ];
 const getPostsBySlugs = (slugs) => slugs.map((slug)=>sorted.find((p)=>p.slug===slug)).filter(Boolean);
