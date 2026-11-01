@@ -645,6 +645,42 @@ const POSTS = [
       ["Can I self-host the model instead?", "Yes. Running an open-weight model inside your own cloud account removes one third party from the chain, although you still own all of the security, encryption and logging work."],
       ["Is this article legal advice?", "No. HIPAA obligations depend on your organization, data and contracts, so have your compliance officer or legal counsel review your final design."]
     ]
+  },
+  {
+    slug: 'linux-commands-cheat-sheet',
+    category: 'tech',
+    title: 'Linux Commands Cheat Sheet: Essential Commands With Examples',
+    seoTitle: 'Linux Commands Cheat Sheet: Essential Commands (2026)',
+    description: 'Linux commands cheat sheet with essential terminal commands for files, permissions, processes, networking and pipes, each with a copy-ready example.',
+    date: '2026-11-01', updated: '2026-11-01', read: 9,
+    tags: ['Linux', 'Terminal', 'Command Line'],
+    keywords: 'linux commands, linux commands cheat sheet, basic linux commands, linux terminal commands, common linux commands',
+    hero: 'Most daily Linux work uses fewer than twenty commands. Learn those first and look up the rest.',
+    body: '',
+    faq: [
+      ['What are the most important Linux commands to learn first?', 'Start with pwd, ls, cd, mkdir, cp, mv, rm, cat, grep and chmod. Those cover moving around, reading files, searching text and fixing permissions, which is most daily work.'],
+      ['Is rm permanent in Linux?', 'Yes. rm deletes files without moving them to a trash folder. Run ls on the same path first and consider moving files to a backup folder while you are unsure.'],
+      ['What does chmod 777 do and why should I avoid it?', 'chmod 777 gives read, write and execute rights to every user on the system. It removes a useful safety boundary and is a common security mistake. Set the narrowest permission that works, such as 644 for files or 600 for private keys.'],
+      ['How do I see which commands a program accepts?', 'Run man followed by the command name, or the command followed by --help. The options can differ slightly between Linux versions, so check the output on your own machine.']
+    ]
+  },
+  {
+    slug: 'open-source-ai-agents',
+    category: 'ai',
+    title: 'Open-Source AI Agents: What They Are and Which to Use',
+    seoTitle: 'Open-Source AI Agents: Best Free Options (2026 Guide)',
+    description: 'Open-source AI agents explained: how they work, the main frameworks and tools, how to choose one and how to run it safely on your own hardware.',
+    date: '2026-11-01', updated: '2026-11-01', read: 10,
+    tags: ['AI Agents', 'Open Source', 'LLM'],
+    keywords: 'open-source ai agents, open source ai agents, ai agent frameworks, self hosted ai agents, local ai agents',
+    hero: 'An AI agent is a model in a loop that can call tools. Choose the type of tool before you choose the name.',
+    body: '',
+    faq: [
+      ['What is the difference between an AI agent and a chatbot?', 'A chatbot replies to a message. An agent is given a goal and takes several steps, using tools and reading their results, until the goal is met or it gets stuck.'],
+      ['Are open-source AI agents free to use?', 'The software is usually free, but running it costs money in compute, hardware, electricity and the time to maintain it. Hosted model APIs are a separate cost if you use them.'],
+      ['Can an open-source agent run without an internet connection?', 'Yes, if you run a local model and keep the tools limited to local files and services. Smaller local models handle short, specific tasks better than long multi-step plans.'],
+      ['How do I stop an AI agent from doing something harmful?', 'Grant only the tools it needs, require approval for irreversible actions, set a maximum number of steps, log every tool call and run risky actions in a sandbox.']
+    ]
   }
 ];
 

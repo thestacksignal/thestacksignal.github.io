@@ -1,0 +1,100 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>Most daily Linux work uses fewer than <strong>twenty commands</strong>. Learn those first and look up the rest.</li><li>Every command has a safe way to test it. Use <code>ls</code> before <code>rm</code>, and <code>--dry-run</code> where a tool offers it.</li><li>Pipes (<code>|</code>) and redirection (<code>&gt;</code>) turn small commands into real tools.</li></ul></div>
+
+<h2>How to use this cheat sheet</h2>
+<p>This is a working reference, not a tutorial. Each section groups commands by the job you are trying to do, with one example you can copy into a terminal. Most examples are safe to run in an empty test folder. The ones that change or delete data are marked clearly.</p>
+<p>If you are new to the terminal, start with the first two sections. Once they feel natural, the rest will make more sense in context. For a broader introduction to running local tools, see <a href="./local-llm-8gb-vram-setup.html">how to set up a local LLM on 8 GB of VRAM</a>, which relies on many of the same commands.</p>
+
+<h2>Moving around files and folders</h2>
+<div class="table-wrap"><table><thead><tr><th>Command</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+<tr><td><code>pwd</code></td><td>Print the folder you are in</td><td><code>pwd</code></td></tr>
+<tr><td><code>ls -la</code></td><td>List files, including hidden ones, with details</td><td><code>ls -la ~/projects</code></td></tr>
+<tr><td><code>cd</code></td><td>Change folder</td><td><code>cd ~/projects/blog</code></td></tr>
+<tr><td><code>mkdir</code></td><td>Create a folder</td><td><code>mkdir -p notes/2026/november</code></td></tr>
+<tr><td><code>cp</code></td><td>Copy a file or folder</td><td><code>cp -r site site-backup</code></td></tr>
+<tr><td><code>mv</code></td><td>Move or rename</td><td><code>mv draft.md post.md</code></td></tr>
+<tr><td><code>rm</code></td><td>Delete a file (permanent)</td><td><code>rm old-notes.txt</code></td></tr>
+<tr><td><code>find</code></td><td>Search for files by name</td><td><code>find . -name "*.html"</code></td></tr>
+</tbody></table></div>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">×</span><div><p><strong>There is no trash bin in the terminal.</strong> <code>rm</code> deletes permanently. Run <code>ls</code> on the same path first to confirm what you are about to remove.</p></div></div>
+
+<h2>Reading and editing text</h2>
+<p>Most configuration, logs and code are plain text. These commands let you read, search and change it without opening an editor.</p>
+<ul>
+<li><code>cat file.txt</code> prints a whole file. Use it on small files only.</li>
+<li><code>less file.log</code> lets you scroll through a large file. Press <code>q</code> to quit.</li>
+<li><code>head -n 20 file.log</code> shows the first 20 lines, and <code>tail -f app.log</code> follows a log as new lines arrive.</li>
+<li><code>grep -rn "TODO" src/</code> searches every file under <code>src/</code> and shows line numbers.</li>
+<li><code>wc -l file.txt</code> counts lines. It is useful for checking how much data you have.</li>
+<li><code>nano notes.txt</code> opens a simple editor. Press <code>Ctrl+O</code> to save and <code>Ctrl+X</code> to exit.</li>
+</ul>
+
+<h2>Permissions and ownership</h2>
+<p>Run <code>ls -l</code> and the first column shows who can read, write and run each file. For example, <code>-rwxr-xr--</code> means the owner can read, write and execute, the group can read and execute, and everyone else can only read.</p>
+<ul>
+<li><code>chmod +x deploy.sh</code> makes a script runnable.</li>
+<li><code>chmod 600 ~/.ssh/id_ed25519</code> restricts a private key so only you can read it. SSH will refuse to work if it is too open.</li>
+<li><code>sudo apt update</code> runs one command with administrator rights. Use it only for commands you understand.</li>
+</ul>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Avoid <code>chmod 777</code>.</strong> It makes a file writable by everyone on the system. It is the most common shortcut people reach for after a permission error, and the least safe.</p></div></div>
+
+<h2>Processes, disk and system health</h2>
+<div class="table-wrap"><table><thead><tr><th>Command</th><th>What it does</th></tr></thead><tbody>
+<tr><td><code>ps aux | grep node</code></td><td>Find running processes by name</td></tr>
+<tr><td><code>top</code> or <code>htop</code></td><td>Live view of CPU and memory use</td></tr>
+<tr><td><code>kill 12345</code></td><td>Ask process 12345 to stop (use <code>kill -9</code> only as a last resort)</td></tr>
+<tr><td><code>df -h</code></td><td>Free disk space per drive, in readable units</td></tr>
+<tr><td><code>du -sh *</code></td><td>Size of each item in the current folder</td></tr>
+<tr><td><code>free -h</code></td><td>Memory in use and available</td></tr>
+<tr><td><code>uptime</code></td><td>How long the system has been running, and its load</td></tr>
+</tbody></table></div>
+
+<h2>Networking basics</h2>
+<ul>
+<li><code>ping -c 4 example.com</code> checks whether a host responds. Stop it after four packets.</li>
+<li><code>ip addr</code> shows your network interfaces and IP addresses.</li>
+<li><code>ss -tlnp</code> lists the ports your machine is listening on, which helps when a port is already in use.</li>
+<li><code>curl -I https://example.com</code> fetches only the response headers, a quick way to check status codes and caching.</li>
+<li><code>ssh user@server</code> connects to a remote machine. <code>scp file.txt user@server:/home/user/</code> copies a file to it.</li>
+</ul>
+
+<h2>Pipes and redirection</h2>
+<p>The real power of the terminal comes from combining commands. A pipe (<code>|</code>) sends the output of one command into the next.</p>
+<ol>
+<li><code>cat access.log | grep " 500 " | wc -l</code> counts how many requests returned a 500 error.</li>
+<li><code>ls -la &gt; listing.txt</code> saves output to a file, replacing anything already there. Use <code>&gt;&gt;</code> to append instead.</li>
+<li><code>npm test &amp;&amp; npm run build</code> runs the build only if the tests pass.</li>
+<li><code>command 2&gt;&amp;1 | tee log.txt</code> shows output on screen and saves it, including error messages.</li>
+</ol>
+<blockquote><p>Learn to read a pipeline from left to right: each step takes the previous output and does one job.</p></blockquote>
+
+<h2>Installing software</h2>
+<p>On Debian and Ubuntu systems, use <code>apt</code>. On Fedora and Red Hat systems, use <code>dnf</code>. Always refresh the package list before installing.</p>
+<ul>
+<li><code>sudo apt update</code> refreshes the list of available packages.</li>
+<li><code>sudo apt install git</code> installs a package. Check the name first with <code>apt search</code>.</li>
+<li><code>sudo apt upgrade</code> updates everything already installed. Run it on a schedule, not only when something breaks.</li>
+</ul>
+
+<h2>Common mistakes to avoid</h2>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">×</span><div><p><strong>Never paste a command you do not understand from a random website into a root terminal.</strong> Many dangerous commands look harmless, and a single wrong path can delete an entire system.</p></div></div>
+<ul>
+<li><strong>Typing the wrong path with <code>rm -rf</code>.</strong> Double-check the path, and prefer moving files to a backup folder while you are unsure.</li>
+<li><strong>Using <code>sudo</code> for everything.</strong> Files created with root rights are often owned by root, which breaks later work in your own folders.</li>
+<li><strong>Ignoring the error text.</strong> Most errors name the file or setting that caused them. Read the first line before searching the web.</li>
+<li><strong>Forgetting tab completion.</strong> Press <code>Tab</code> to complete file names and reduce typos.</li>
+</ul>
+
+<h2>A practice path for the first week</h2>
+<ol>
+<li>Create a test folder and practise <code>mkdir</code>, <code>cd</code>, <code>ls -la</code> and <code>pwd</code> until moving around feels automatic.</li>
+<li>Create three files, copy one, rename one and delete one, using only the terminal.</li>
+<li>Run <code>grep</code> on a folder of text files and count the matches with <code>wc -l</code>.</li>
+<li>Pick one process from <code>top</code>, find it with <code>ps</code>, and stop it safely with <code>kill</code>.</li>
+<li>Write a short shell script that prints the date and your disk usage, then make it runnable with <code>chmod +x</code>.</li>
+</ol>
+
+<h2>When a command behaves differently</h2>
+<p>The commands on this page work on most Linux distributions, but options can differ slightly between versions. When an example fails or looks different on your machine, run <code>man command</code> or <code>command --help</code> to see the options your version supports.</p>
+
+<hr>
+<p>Bookmark this page and return to it when you need a reminder. The commands you use most will soon become automatic.</p>

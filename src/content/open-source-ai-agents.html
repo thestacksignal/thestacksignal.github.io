@@ -1,0 +1,63 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li>An <strong>AI agent</strong> is a model in a loop that can call tools. A chatbot only answers; an agent takes steps toward a goal.</li><li>Open-source options fall into two groups: <strong>frameworks</strong> you build with, and <strong>ready-made agent apps</strong> you run. Pick the group before the name.</li><li>Most agent failures come from unclear tools and missing limits, not from the model being too weak.</li></ul></div>
+
+<h2>What an AI agent actually does</h2>
+<p>A chatbot takes a message and returns a reply. An agent is given a goal and works toward it over several steps. It decides what to do next, uses a tool, reads the result, and repeats until it finishes or gets stuck.</p>
+<p>The basic loop has four parts. The model reads the goal and the history so far. It chooses an action, such as searching a database, running a command or calling an API. The tool runs and returns a result. The result goes back into the model's context, and the loop continues. Everything interesting about agents, including their reliability problems, comes from that loop.</p>
+<p>This is also why agents differ from retrieval. A retrieval system fetches information once, while an agent decides when and how often to use its tools. If you are still choosing between the two, read <a href="./ai-agents-vs-rag.html">AI agents vs RAG</a> first.</p>
+
+<h2>Why open source matters here</h2>
+<p>Open-source agent tools let you read the code that decides what your agent does, change the prompts and tool definitions, and run the whole system on your own hardware. That matters when your data is private, when a vendor's pricing changes, or when you need to explain exactly how a decision was made.</p>
+<p>The trade-off is effort. Hosted products handle logging, retries, permissions and updates for you. With open source, you own those jobs. Budget for that work before you commit.</p>
+
+<h2>The main types of open-source agents</h2>
+<div class="table-wrap"><table><thead><tr><th>Type</th><th>What it is</th><th>Best for</th></tr></thead><tbody>
+<tr><td>Agent frameworks</td><td>Libraries for building your own agent loop, such as LangGraph, CrewAI, AutoGen and smolagents</td><td>Custom workflows where you need control over each step</td></tr>
+<tr><td>Coding agents</td><td>Ready-made apps that read a repository, edit files and run tests, such as OpenHands</td><td>Developer tasks with clear success checks</td></tr>
+<tr><td>Local assistant stacks</td><td>Combinations of a local model runner, such as Ollama, with a tool-calling layer</td><td>Private, offline or low-cost experiments</td></tr>
+</tbody></table></div>
+<p>Names and features in this space change quickly. Check each project's documentation and release notes before you adopt one, because a framework that was popular last year may now be superseded.</p>
+
+<h2>How to choose one for real work</h2>
+<p>Start from the job, not the tool. Ask four questions before you install anything.</p>
+<ol>
+<li><strong>How many steps does the task really need?</strong> If the answer is one or two, a single prompt with a function call is simpler and more reliable than an agent.</li>
+<li><strong>Can you check the result automatically?</strong> Agents work best when a test, a schema or a rule can say whether the output is correct.</li>
+<li><strong>Where must the data live?</strong> If it cannot leave your network, you need a stack that supports local models from the start.</li>
+<li><strong>Who will maintain it?</strong> A framework needs developers. A ready-made app needs someone who can configure it and watch its logs.</li>
+</ol>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>Build the smallest agent that does one task end to end. Add tools one at a time, and only after the previous one works reliably.</p></div></div>
+
+<h2>Running an agent on your own hardware</h2>
+<p>You can run much of an agent stack locally. The model runs through a local server, and the agent calls it as if it were a hosted API. Smaller open models handle simple tool calls well, but they struggle more with long plans, so expect to keep tasks short and specific.</p>
+<p>Hardware sets the limits. A graphics card with 8 GB of memory can run small quantised models comfortably, as covered in <a href="./local-llm-8gb-vram-setup.html">our local LLM setup guide</a>. Larger models need more memory, and running them slowly can make a multi-step loop frustrating to watch.</p>
+
+<h2>Keep control: permissions and limits</h2>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Treat every tool as a permission.</strong> An agent that can send email, delete files or spend money will eventually do the wrong thing with that access. Grant the smallest set of tools, and require approval for anything irreversible.</p></div></div>
+<ul>
+<li><strong>Set a step limit.</strong> Stop the loop after a fixed number of actions so a confused agent cannot run forever.</li>
+<li><strong>Log every tool call.</strong> When something goes wrong, the log is the only way to find which step caused it.</li>
+<li><strong>Run risky actions in a sandbox.</strong> A container or throwaway folder limits the damage from a bad command.</li>
+<li><strong>Keep secrets out of prompts.</strong> Store keys in environment variables and pass them to tools directly.</li>
+</ul>
+
+<h2>Common failure modes</h2>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">×</span><div><p><strong>Do not assume an agent is finished because it says so.</strong> Agents often report success before verifying the result. Check the output yourself or with a test.</p></div></div>
+<ul>
+<li><strong>Vague tool descriptions.</strong> If the model cannot tell when to use a tool, it will guess. Write each description as a short instruction with an example.</li>
+<li><strong>Loops that repeat the same action.</strong> Detect identical consecutive calls and stop them.</li>
+<li><strong>Context overflow.</strong> Long tool outputs fill the context window. Trim or summarise results before feeding them back.</li>
+<li><strong>Trusting tool output blindly.</strong> A web page or file can contain text that tries to change the agent's instructions. Treat tool results as data, not commands.</li>
+</ul>
+
+<h2>A simple way to start</h2>
+<ol>
+<li>Pick one repetitive task, such as summarising a folder of notes into a weekly report.</li>
+<li>Write the steps by hand first. Only automate what you already do correctly.</li>
+<li>Give the agent two or three tools, such as reading files and writing a summary.</li>
+<li>Add a step limit, a log, and a check that the report exists and is not empty.</li>
+<li>Run it on a copy of your data for a week before trusting it with the real folder.</li>
+</ol>
+<p>Once that works, add one tool at a time. Each addition is a new place where things can break, so test it separately before you combine it with the rest.</p>
+
+<hr>
+<p>Open-source AI agents are useful when you know what you want them to do and how you will check their work. Start small, keep the permissions tight, and let the logs teach you where the loop needs work.</p>
