@@ -706,9 +706,33 @@ function head({ title, description, canonical, base, theme, keywords = '', jsonl
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><meta name="google-site-verification" content="FiMCatCEiTf1EalryWxrZlbAbu8dzmmsaXsjYCkXz0Y" />
 <meta name="monetag" content="15c08b13d85d0413f44054b41faa5389">
-${noindex ? '' : `<script>(function(s){s.dataset.zone='12166234',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>`}
-${noindex ? '' : `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7241338278112912"
-     crossorigin="anonymous"></script>`}
+${noindex ? '' : `<script>
+(function () {
+  var KEY = 'ss-consent', loaded = false;
+  function loadAds() {
+    if (loaded) return; loaded = true;
+    var a = document.createElement('script');
+    a.async = true; a.crossOrigin = 'anonymous';
+    a.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7241338278112912';
+    document.head.appendChild(a);
+    var m = document.createElement('script');
+    m.dataset.zone = '12166234'; m.src = 'https://nap5k.com/tag.min.js';
+    (document.body || document.documentElement).appendChild(m);
+  }
+  function hideBanner() { var b = document.getElementById('ss-consent'); if (b) b.hidden = true; }
+  window.ssConsent = {
+    accept: function () { try { localStorage.setItem(KEY, 'accepted'); } catch (e) {} hideBanner(); loadAds(); },
+    decline: function () { try { localStorage.setItem(KEY, 'declined'); } catch (e) {} hideBanner(); }
+  };
+  var choice = null;
+  try { choice = localStorage.getItem(KEY); } catch (e) {}
+  if (choice === 'accepted') loadAds();
+  document.addEventListener('DOMContentLoaded', function () {
+    var b = document.getElementById('ss-consent');
+    if (b && !choice) b.hidden = false;
+  });
+})();
+</script>`}
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 ${keywords ? `<meta name="keywords" content="${esc(keywords)}">` : ''}
@@ -805,12 +829,22 @@ const footer = (base) => `<footer class="foot">
       <li><a href="${base}ai.html">AI</a></li>
       <li><a href="${base}blog/index.html">All posts</a></li>
       <li><a href="${base}about.html">About</a></li>
+      <li><a href="${base}privacy.html">Privacy policy</a></li>
     </ul></div>
     <div><h4>Popular topics</h4><ul>
       ${[...new Set(POSTS.flatMap((p) => p.tags))].slice(0, 5).map((t) => `<li>${esc(t)}</li>`).join('')}
     </ul></div>
   </div>
   <div class="wrap" style="margin-top:2rem;font-size:.82rem">© ${new Date().getFullYear()} ${SITE.name}. Built as a static site — ${SITE.tagline}</div>
+  <div id="ss-consent" hidden role="dialog" aria-label="Cookie consent" style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#0d0f17;color:#e6e8ef;padding:1rem 1.2rem;box-shadow:0 -4px 16px rgba(0,0,0,.35);font-size:.9rem">
+    <div style="display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap;max-width:1100px;margin:0 auto">
+      <p style="margin:0;max-width:62ch">We use cookies from advertising partners (Google AdSense and Monetag) to show ads. <a href="${base}privacy.html" style="color:inherit;text-decoration:underline">Privacy policy</a></p>
+      <div style="display:flex;gap:.6rem">
+        <button type="button" onclick="ssConsent.decline()" style="padding:.5rem .9rem;cursor:pointer">Decline</button>
+        <button type="button" onclick="ssConsent.accept()" style="padding:.5rem .9rem;cursor:pointer">Accept</button>
+      </div>
+    </div>
+  </div>
 </footer>
 <div class="cmd-palette" data-palette hidden>
   <div class="cmd-palette__backdrop" data-command-close></div>
@@ -1042,6 +1076,42 @@ ${footer('../')}`;
 }
 
 
+function privacyPage() {
+  return `${head({ title: `Privacy Policy | ${SITE.name}`, description: `How ${SITE.name} handles cookies, advertising partners and visitor data.`, canonical: 'privacy.html', base: './', theme: 'default', jsonld: [{ '@context': 'https://schema.org', '@type': 'WebPage', url: `${SITE.url}/privacy.html`, name: 'Privacy Policy' }] })}
+${header('./', 'privacy')}
+<main id="main"><div class="wrap"><article class="article" style="padding-top:3rem">
+  <h1>Privacy Policy</h1>
+  <p class="article__lede">Last updated 1 November 2026.</p>
+  <div class="prose">
+    <h2>Who runs this site</h2>
+    <p>${SITE.name} is a blog written and maintained by ${SITE.author}. For questions about this policy, contact: [ADD CONTACT EMAIL].</p>
+    <h2>What we collect</h2>
+    <p>${SITE.name} has no user accounts, comment forms or newsletter sign-up, and we do not run our own analytics. The site is hosted on GitHub Pages, which keeps standard server logs (IP address, browser type, pages requested) under its own privacy policy.</p>
+    <p>We store one value in your browser's local storage: whether you accepted or declined advertising cookies. It stays on your device.</p>
+    <h2>Advertising and cookies</h2>
+    <p>We show ads from two partners, which may set cookies or use device identifiers to show ads and measure performance:</p>
+    <ul>
+      <li><b>Google AdSense</b> (Google LLC), governed by Google's privacy policy and advertising terms.</li>
+      <li><b>Monetag</b> (Propeller Ads), governed by Monetag's privacy policy.</li>
+    </ul>
+    <p>These partners may use information about your visit, such as pages viewed and approximate location, to show ads. Ad scripts do not load until you accept advertising cookies, and you can decline at any time.</p>
+    <h2>Your choices</h2>
+    <ul>
+      <li>Accept or decline advertising cookies in the banner shown on the site.</li>
+      <li>Reset your choice by clearing this site's data in your browser settings.</li>
+      <li>Manage Google ad personalisation at <a href="https://adssettings.google.com">adssettings.google.com</a>, or opt out of many ad networks at <a href="https://www.aboutads.info">aboutads.info</a>.</li>
+    </ul>
+    <h2>Visitors in the EU and UK</h2>
+    <p>Where EU or UK law applies, we ask for your consent before setting advertising cookies.</p>
+    <h2>Children</h2>
+    <p>The site is written for a general technical audience and is not directed at children under 13.</p>
+    <h2>Changes</h2>
+    <p>If this policy changes, the date at the top of this page is updated.</p>
+  </div>
+</article></div></main>
+${footer('./')}`;
+}
+
 function aboutPage() {
   return `${head({ title: `About ${SITE.name} — Editorial Standards & SEO Method`, description: `Who writes ${SITE.name}, how articles are researched and updated, and the SEO methodology behind the site.`, canonical: 'about.html', base: './', theme: 'default', jsonld: [{ '@context': 'https://schema.org', '@type': 'AboutPage', url: `${SITE.url}/about.html`, mainEntity: { '@type': 'Person', name: SITE.author, jobTitle: 'Full-stack developer', knowsAbout: ['Web performance', 'SEO', 'LLM applications'] } }] })}
 ${header('./', 'about')}
@@ -1105,7 +1175,7 @@ const sitemap = () => {
   const urls = [
     ['', '1.0', 'weekly'], ['tech.html', '0.9', 'weekly'], ['ai.html', '0.9', 'weekly'],
     ['paths.html', '0.7', 'monthly'], ['topics.html', '0.7', 'monthly'],
-    ['blog/index.html', '0.8', 'weekly'], ['about.html', '0.4', 'yearly'],
+    ['blog/index.html', '0.8', 'weekly'], ['about.html', '0.4', 'yearly'], ['privacy.html', '0.3', 'yearly'],
     ...sorted.map((p) => [postUrl(p), '0.8', 'monthly'])
   ];
   const lastmod = (u) => (sorted.find((p) => postUrl(p) === u)?.updated) || hubDate[u] || new Date().toISOString().slice(0, 10);
@@ -1201,6 +1271,7 @@ written.push(await w('topics.html', topicsPage()));
 written.push(await w('blog/index.html', blogIndexPage()));
 for (const p of sorted) written.push(await w(postUrl(p), postPage(p)));
 written.push(await w('about.html', aboutPage()));
+written.push(await w('privacy.html', privacyPage()));
 written.push(await w('404.html', notFoundPage()));
 written.push(await w('search-index.json', JSON.stringify(searchIndex)));
 written.push(await w('sitemap.xml', sitemap()));
