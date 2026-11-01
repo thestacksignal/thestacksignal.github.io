@@ -706,6 +706,7 @@ function head({ title, description, canonical, base, theme, keywords = '', jsonl
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><meta name="google-site-verification" content="FiMCatCEiTf1EalryWxrZlbAbu8dzmmsaXsjYCkXz0Y" />
 <meta name="monetag" content="15c08b13d85d0413f44054b41faa5389">
+${noindex ? '' : `<script>(function(s){s.dataset.zone='12166234',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>`}
 ${noindex ? '' : `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7241338278112912"
      crossorigin="anonymous"></script>`}
 <title>${esc(title)}</title>
