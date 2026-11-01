@@ -1084,7 +1084,7 @@ ${header('./', 'privacy')}
   <p class="article__lede">Last updated 1 November 2026.</p>
   <div class="prose">
     <h2>Who runs this site</h2>
-    <p>${SITE.name} is a blog written and maintained by ${SITE.author}. For questions about this policy, contact: [ADD CONTACT EMAIL].</p>
+    <p>${SITE.name} is a blog written and maintained by ${SITE.author}. For questions about this policy, open an issue on the site's GitHub repository (github.com/thestacksignal/thestacksignal.github.io), as described on the <a href="./about.html">About page</a>.</p>
     <h2>What we collect</h2>
     <p>${SITE.name} has no user accounts, comment forms or newsletter sign-up, and we do not run our own analytics. The site is hosted on GitHub Pages, which keeps standard server logs (IP address, browser type, pages requested) under its own privacy policy.</p>
     <p>We store one value in your browser's local storage: whether you accepted or declined advertising cookies. It stays on your device.</p>
