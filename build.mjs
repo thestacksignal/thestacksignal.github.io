@@ -706,6 +706,14 @@ function head({ title, description, canonical, base, theme, keywords = '', jsonl
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><meta name="google-site-verification" content="FiMCatCEiTf1EalryWxrZlbAbu8dzmmsaXsjYCkXz0Y" />
 <meta name="monetag" content="15c08b13d85d0413f44054b41faa5389">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0FZ1WZG13R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-0FZ1WZG13R');
+</script>
 ${noindex ? '' : `<script>
 (function () {
   var KEY = 'ss-consent', loaded = false;
