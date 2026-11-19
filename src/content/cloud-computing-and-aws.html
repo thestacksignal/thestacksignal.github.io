@@ -1,0 +1,69 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li><strong>Cloud computing</strong> replaces up-front hardware purchases with pay-as-you-go use. You pay for what you run, and you can scale up or down in minutes.</li><li>Cloud services come in three models: <strong>IaaS</strong>, <strong>PaaS</strong> and <strong>SaaS</strong>. They differ in how much you manage yourself.</li><li>Most beginners need only five AWS building blocks: compute, storage, a database, networking and access control. Learn those first.</li><li>Cost surprises come from forgotten resources, not from the services themselves. Set a budget alert before you build anything.</li></ul></div>
+<h2>What cloud computing actually is</h2>
+<p>Before the cloud, running a website or an app meant buying servers, placing them in a data centre and hiring people to maintain them. You paid for peak capacity all year, even if you needed it for a few hours.</p>
+<p>Cloud computing turns that into a service. A provider runs large data centres and rents out slices of them. You request a server, a storage bucket or a database through a web console or an API, use it, and pay only for the time and capacity you used.</p>
+<p>Three ideas explain most of the value:</p>
+<ul>
+<li><strong>On-demand.</strong> Resources are available in minutes, not weeks.</li>
+<li><strong>Elastic.</strong> You can add capacity during a traffic spike and remove it afterwards.</li>
+<li><strong>Metered.</strong> The bill follows usage, so small projects can start cheaply.</li>
+</ul>
+<h2>IaaS, PaaS and SaaS: the three service models</h2>
+<p>The model tells you who is responsible for what.</p>
+<div class="table-wrap"><table><thead><tr><th>Model</th><th>You manage</th><th>The provider manages</th><th>Example</th></tr></thead><tbody>
+<tr><td>IaaS (infrastructure as a service)</td><td>Operating system, runtime, application, data</td><td>Physical hardware, networking, virtualisation</td><td>A virtual server on Amazon EC2</td></tr>
+<tr><td>PaaS (platform as a service)</td><td>Application and data</td><td>Servers, operating system, scaling</td><td>A managed web app platform such as AWS Elastic Beanstalk</td></tr>
+<tr><td>SaaS (software as a service)</td><td>Your own settings and data</td><td>Everything else</td><td>Email, CRM or accounting software in a browser</td></tr>
+</tbody></table></div>
+<p>Pick the model with the least management that still meets your needs. Running your own server gives control but also means you patch it, secure it and fix it at 2 a.m.</p>
+<h2>What AWS is and why people use it</h2>
+<p>Amazon Web Services is Amazon's cloud platform. It offers hundreds of services, from basic servers to machine learning tools, and it runs in data centres grouped into <strong>regions</strong> around the world. Each region contains several <strong>availability zones</strong>, which are separate facilities that let you keep an app running if one has a problem.</p>
+<p>People choose AWS for its breadth, its large community and the amount of documentation and tutorials available. The same breadth is also the main difficulty for beginners, because the service list is long and the names are not obvious. The next section cuts it down to what matters.</p>
+<blockquote><p>Most beginners need five building blocks: compute, storage, a database, networking and access control.</p></blockquote>
+<h2>The core AWS services to learn first</h2>
+<div class="table-wrap"><table><thead><tr><th>Need</th><th>AWS service</th><th>What it does</th></tr></thead><tbody>
+<tr><td>Compute</td><td>Amazon EC2</td><td>Rents virtual servers you control</td></tr>
+<tr><td>Serverless compute</td><td>AWS Lambda</td><td>Runs small pieces of code without managing a server</td></tr>
+<tr><td>Cloud computing file storage</td><td>Amazon S3</td><td>Stores files and objects such as images, backups and static sites</td></tr>
+<tr><td>Block storage</td><td>Amazon EBS</td><td>Provides disks that attach to EC2 servers</td></tr>
+<tr><td>Database</td><td>Amazon RDS</td><td>Runs managed relational databases such as PostgreSQL and MySQL</td></tr>
+<tr><td>Networking</td><td>Amazon VPC</td><td>Creates your private network and controls traffic</td></tr>
+<tr><td>Access control</td><td>AWS IAM</td><td>Controls who and what can use which services</td></tr>
+<tr><td>Content delivery</td><td>Amazon CloudFront</td><td>Serves content from locations close to your users</td></tr>
+</tbody></table></div>
+<p>Service names and features change, so check the current AWS documentation before you design anything important.</p>
+<h3>Cloud storage on AWS</h3>
+<p>Amazon S3 is the service most people meet first. It stores files as objects in containers called buckets, and it is commonly used for backups, images, downloads and static websites. Access is private by default, which is the setting you should keep unless a file truly needs to be public.</p>
+<div class="callout callout--tip"><span class="callout__icon" aria-hidden="true">&#10003;</span><div><p>Keep new S3 buckets private, and turn on the account-level setting that blocks public access. Make a file public only on purpose, and one file at a time.</p></div></div>
+<h2>Cloud computing and AI</h2>
+<p>Cloud platforms are also where most teams run machine learning and AI workloads, because training and serving models needs large amounts of computing power for short periods. AWS offers managed services for this, and other providers offer similar tools.</p>
+<p>If you are building an AI product, read our guide to a <a href="./hipaa-compliant-chatbot-rag.html">HIPAA-compliant chatbot with RAG</a> for an example of how cloud architecture and data rules fit together. If you only need to try small models, our <a href="./local-llm-8gb-vram-setup.html">local LLM setup guide</a> shows what you can run without renting anything.</p>
+<h2>How AWS billing works</h2>
+<p>AWS charges for what you use. The main cost drivers are compute time, storage, data moved out of AWS and some managed services that bill by the hour even when idle.</p>
+<ul>
+<li><strong>Compute</strong> is billed by the time a server runs, so stopping an unused server stops most of its compute cost.</li>
+<li><strong>Storage</strong> is billed by the amount you keep, even if you never open the files.</li>
+<li><strong>Data transfer out</strong> to the internet usually costs money, while data coming in is usually free.</li>
+<li><strong>Free tier</strong> offers change over time, so read the current terms on the AWS pricing page before you rely on them.</li>
+</ul>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Set a budget alert before you launch anything.</strong> A forgotten server, database or load balancer can run for weeks and produce a bill you did not expect. Create a budget with an email alert in the billing console on day one.</p></div></div>
+<h2>Common beginner mistakes</h2>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">&#215;</span><div><p><strong>Do not use your root account for daily work.</strong> The root account has unlimited power. Create a separate user with limited permissions, protect the root login with multi-factor authentication and keep it for emergencies only.</p></div></div>
+<ul>
+<li><strong>Leaving resources running.</strong> Delete test servers, databases and unused storage when you finish.</li>
+<li><strong>Opening a server to the whole internet.</strong> Allow only the ports you need and only from the addresses that need them.</li>
+<li><strong>Hard-coding access keys in code.</strong> Keys committed to a public repository are found and abused quickly. Use roles and environment variables instead.</li>
+<li><strong>Choosing a region by default.</strong> Pick a region close to your users and check that it offers the services you need.</li>
+<li><strong>Skipping backups.</strong> A managed database still needs backups and a tested way to restore them.</li>
+</ul>
+<h2>A safe 5-step plan for your first AWS project</h2>
+<ol>
+<li><strong>Create the account and secure it.</strong> Turn on multi-factor authentication for the root user, then create an administrator user for daily work.</li>
+<li><strong>Set a budget alert.</strong> Choose a small monthly limit and send alerts to your email.</li>
+<li><strong>Build one small thing.</strong> For example, host a static website on S3 with CloudFront in front of it.</li>
+<li><strong>Record what you create.</strong> Keep a list of every resource so nothing is left running by accident.</li>
+<li><strong>Delete it, then rebuild it.</strong> Tearing it down teaches you which pieces depend on each other, and it keeps the bill at zero.</li>
+</ol>
+<p>If you want to work from a terminal, our <a href="./linux-commands-cheat-sheet.html">Linux commands cheat sheet</a> covers the commands you will use to connect to and manage a server.</p>
+<hr>
+<p>Cloud computing and AWS look large from the outside, but the beginner path is short: learn the three service models, master the five building blocks, set a budget alert and start with one small project. Comparing providers comes after that. Read our <a href="./google-cloud-computing.html">Google Cloud computing guide</a> to see how the other major platform approaches the same problems.</p>

@@ -1,0 +1,73 @@
+<div class="takeaways"><h4>Key takeaways</h4><ul><li><strong>Google Cloud Platform (GCP)</strong> offers the same core building blocks as other clouds: compute, storage, databases, networking and access control.</li><li>Its best-known strengths are <strong>data analytics with BigQuery</strong>, <strong>containers with Kubernetes</strong> and a clean, developer-friendly console.</li><li>Pricing is pay-as-you-go. Costs are driven by compute time, storage and data leaving Google's network, so a budget alert is the first thing to set up.</li><li>Choose a cloud by your workload and your team's skills, not by brand loyalty.</li></ul></div>
+<h2>What Google Cloud computing is</h2>
+<p>Google Cloud runs on the same global infrastructure that powers Google's own products. You can rent a slice of it through a web console, a command-line tool or an API, and you pay for what you use.</p>
+<p>Like other major providers, it organises its data centres into <strong>regions</strong>, each made of several <strong>zones</strong>. Placing parts of your app in different zones keeps it running if one zone fails.</p>
+<p>If cloud computing is new to you, start with our guide to <a href="./cloud-computing-and-aws.html">cloud computing and AWS</a>, which explains IaaS, PaaS and SaaS. The ideas carry over directly to Google Cloud.</p>
+<h2>The core Google Cloud computing services</h2>
+<div class="table-wrap"><table><thead><tr><th>Need</th><th>Google Cloud service</th><th>What it does</th></tr></thead><tbody>
+<tr><td>Virtual servers</td><td>Compute Engine</td><td>Rents virtual machines you control</td></tr>
+<tr><td>Containers on Kubernetes</td><td>Google Kubernetes Engine (GKE)</td><td>Runs and manages containerised apps at scale</td></tr>
+<tr><td>Serverless containers</td><td>Cloud Run</td><td>Runs a container without managing servers and scales to zero</td></tr>
+<tr><td>Serverless functions</td><td>Cloud Run functions</td><td>Runs small pieces of code in response to events</td></tr>
+<tr><td>File and object storage</td><td>Cloud Storage</td><td>Stores files, backups and static assets in buckets</td></tr>
+<tr><td>Relational database</td><td>Cloud SQL</td><td>Runs managed PostgreSQL, MySQL and SQL Server</td></tr>
+<tr><td>Data warehouse</td><td>BigQuery</td><td>Runs fast SQL queries over very large datasets</td></tr>
+<tr><td>Networking</td><td>Virtual Private Cloud (VPC)</td><td>Creates your private network and controls traffic</td></tr>
+<tr><td>Access control</td><td>Identity and Access Management (IAM)</td><td>Controls who and what can use which services</td></tr>
+</tbody></table></div>
+<p>Service names and features change, so check Google's current documentation before you design anything important.</p>
+<h3>Where Google Cloud stands out</h3>
+<p>Three areas come up most often when teams choose Google Cloud.</p>
+<ul>
+<li><strong>BigQuery.</strong> It lets analysts run SQL over very large datasets without managing servers, which suits reporting and analytics work.</li>
+<li><strong>Kubernetes.</strong> Google created Kubernetes, and GKE is a mature way to run containers if your team already uses them.</li>
+<li><strong>Cloud Run.</strong> It runs a container and scales it automatically, including down to zero when nobody is using it. That keeps small projects inexpensive.</li>
+</ul>
+<h2>Google Cloud computing pricing: how the cost works</h2>
+<p>Google Cloud bills for what you use, and the bill usually has four parts.</p>
+<ul>
+<li><strong>Compute</strong> is charged by the time and size of the virtual machines or containers you run.</li>
+<li><strong>Storage</strong> is charged by the amount you keep and the storage class you choose.</li>
+<li><strong>Network egress</strong> is charged when data leaves Google's network, for example when users download files.</li>
+<li><strong>Managed services</strong> such as databases and analytics can bill by the hour or by the amount of data processed.</li>
+</ul>
+<p>Google also offers free usage tiers and trial credits for new accounts. These terms change, so read the current offer on Google Cloud's pricing pages before you rely on it. The pricing calculator on the same site estimates the Google Cloud computing cost of a design before you build it.</p>
+<div class="callout callout--warn"><span class="callout__icon" aria-hidden="true">!</span><div><p><strong>Set a budget and an alert before you create anything.</strong> In the billing section, create a budget with email alerts. Forgotten virtual machines, databases and large analytics queries are the usual causes of surprise bills.</p></div></div>
+<blockquote><p>Choose a cloud by your workload and your team's skills, not by brand loyalty.</p></blockquote>
+<h2>Google Cloud vs AWS: how to decide</h2>
+<p>Both platforms can run almost any workload, and the practical differences are smaller than the marketing suggests.</p>
+<div class="table-wrap"><table><thead><tr><th>Question</th><th>Points toward Google Cloud</th><th>Points toward AWS</th></tr></thead><tbody>
+<tr><td>Main workload</td><td>Data analytics, machine learning, containers</td><td>Broad range of general workloads</td></tr>
+<tr><td>Team skills</td><td>Already uses Kubernetes, BigQuery or Google Workspace</td><td>Already has AWS experience or certifications</td></tr>
+<tr><td>Ecosystem</td><td>Wants simple, consistent tooling</td><td>Needs the widest choice of services and third-party tools</td></tr>
+<tr><td>Existing contracts</td><td>Company already buys Google products</td><td>Company already buys Amazon services</td></tr>
+</tbody></table></div>
+<p>Service coverage and pricing change often on both sides, so compare current options for your specific workload. Many companies also use more than one cloud.</p>
+<p>For most beginners, the best choice is the platform where you can find help fastest. Pick one, learn its core five services, and the skills transfer to the other.</p>
+<h2>Getting a Google Cloud certification</h2>
+<p>Google offers certifications that prove cloud skills, from an entry-level cloud digital leader exam to professional-level roles such as cloud architect and data engineer. Certification can help when you apply for cloud jobs, but practical projects matter just as much to employers.</p>
+<ul>
+<li><strong>Start with the fundamentals.</strong> Learn the core services in the table above before you pick an exam.</li>
+<li><strong>Build as you study.</strong> Deploy a small app with Cloud Run and store its files in Cloud Storage.</li>
+<li><strong>Check the current exam list.</strong> Exam names, formats and fees change, so use Google's official certification page.</li>
+</ul>
+<h2>Common mistakes to avoid</h2>
+<div class="callout callout--stop"><span class="callout__icon" aria-hidden="true">&#215;</span><div><p><strong>Do not give a service account more access than it needs.</strong> Broad permissions turn a small mistake or a leaked key into a large incident. Grant the narrowest role that works and review it regularly.</p></div></div>
+<ul>
+<li><strong>Leaving resources running.</strong> Delete test virtual machines, databases and unused storage when you finish.</li>
+<li><strong>Making a storage bucket public by accident.</strong> Keep buckets private unless a file truly needs to be public.</li>
+<li><strong>Running large queries without a cost check.</strong> In BigQuery, preview how much data a query will process before you run it.</li>
+<li><strong>Storing keys in code.</strong> Use service accounts and secret management instead of committing keys to a repository.</li>
+<li><strong>Ignoring region choice.</strong> Pick a region near your users and confirm it offers the services you need.</li>
+</ul>
+<h2>A safe 5-step plan for your first Google Cloud project</h2>
+<ol>
+<li><strong>Create a project and secure the account.</strong> Turn on two-step verification and avoid using the owner account for daily work.</li>
+<li><strong>Set a budget alert.</strong> Choose a small monthly limit and email alerts to yourself.</li>
+<li><strong>Deploy one small thing.</strong> For example, package a small web app in a container and run it on Cloud Run.</li>
+<li><strong>Add storage.</strong> Upload a few files to Cloud Storage and keep the bucket private.</li>
+<li><strong>Clean up.</strong> Delete the resources, check the billing page and rebuild it once from your notes.</li>
+</ol>
+<p>If you work from a terminal, our <a href="./linux-commands-cheat-sheet.html">Linux commands cheat sheet</a> covers the commands you will use over SSH and in scripts.</p>
+<hr>
+<p>Google Cloud computing is a strong choice for analytics, containers and AI work, and its core services map closely to those on other clouds. Learn the five building blocks, set a budget alert, build one small project and delete it when you finish. The skills carry across providers.</p>

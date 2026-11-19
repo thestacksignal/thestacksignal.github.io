@@ -681,6 +681,78 @@ const POSTS = [
       ['Can an open-source agent run without an internet connection?', 'Yes, if you run a local model and keep the tools limited to local files and services. Smaller local models handle short, specific tasks better than long multi-step plans.'],
       ['How do I stop an AI agent from doing something harmful?', 'Grant only the tools it needs, require approval for irreversible actions, set a maximum number of steps, log every tool call and run risky actions in a sandbox.']
     ]
+  },
+  {
+    slug: 'ai-assistant-guide',
+    category: 'ai',
+    title: 'AI Assistant: What It Is and How to Choose the Best One',
+    seoTitle: 'AI Assistant: What It Is and How to Choose (2026)',
+    description: 'AI assistant guide for 2026: what it is, the four main types, how to compare ChatGPT, Claude and Gemini, and a simple test to pick the best one for your work.',
+    date: '2026-11-19',
+    updated: '2026-11-19',
+    read: 7,
+    tags: ['AI Assistant', 'ChatGPT', 'LLM', 'Productivity'],
+    keywords: 'ai assistant, best ai assistant, chatgpt ai assistant, claude vs chatgpt, gemini vs chatgpt, ai like chatgpt, how to use ai',
+    image: 'assets/img/ai-assistant-guide.png',
+    imageAlt: 'AI assistant guide: what it is, the main types and how to choose, on a violet neural network background',
+    hero: 'An AI assistant is software that uses a language model to answer questions, draft text, write code and handle small tasks on request. Pick one by the job you need done, not by the brand name.',
+    body: '',
+    faq: [
+      ['What is an AI assistant?', 'An AI assistant is software that uses a language model to respond to requests in plain language. It can answer questions, draft and edit text, summarise documents, explain code and help with routine tasks.'],
+      ['What is the best AI assistant?', 'There is no single best option. ChatGPT, Claude and Gemini each perform well on general tasks, and their strengths differ by task and change with each release. Test two or three on your own prompts and choose the one whose answers need the least editing.'],
+      ['Is there a free AI assistant like ChatGPT?', 'Yes. Several major assistants offer a free tier with limits on usage and features, and open models can run locally for free apart from hardware and electricity. Free tiers change often, so check each provider\'s current terms.'],
+      ['What is the difference between an AI assistant and an AI agent?', 'An AI assistant answers a request and waits for your next message. An AI agent receives a goal and takes several steps, using tools and reading their results, until the goal is met or it gets stuck.'],
+      ['Can I trust what an AI assistant tells me?', 'Trust it for drafts and explanations, and verify facts, numbers, citations and code before you rely on them. Assistants can produce wrong answers that sound confident.'],
+      ['Is it safe to share work documents with an AI assistant?', 'It depends on the plan and the data. Avoid pasting confidential or personal data into consumer accounts, read the provider\'s data policy and prefer business plans with clear data controls for work content.']
+    ]
+  },
+  {
+    slug: 'cloud-computing-and-aws',
+    category: 'tech',
+    title: 'Cloud Computing and AWS: Core Services and How to Start',
+    seoTitle: 'Cloud Computing and AWS: Core Services to Start (2026)',
+    description: 'Cloud computing and AWS explained: the three service models, the core AWS services, how billing works and a safe 5-step plan to launch your first project.',
+    date: '2026-11-19',
+    updated: '2026-11-19',
+    read: 7,
+    tags: ['AWS', 'Cloud Computing', 'Cloud Storage', 'DevOps'],
+    keywords: 'cloud computing and aws, aws cloud computing, amazon web services cloud computing, aws cloud services, cloud computing file storage, iaas paas saas',
+    image: 'assets/img/cloud-computing-and-aws.png',
+    imageAlt: 'Cloud computing and AWS guide: core services and how to start, on a green circuit background',
+    hero: 'Cloud computing means renting computing power, storage and databases over the internet instead of buying and running your own servers. Amazon Web Services (AWS) is one of the largest providers, and a handful of its services cover most first projects.',
+    body: '',
+    faq: [
+      ['What is cloud computing in simple words?', 'Cloud computing means using servers, storage and software that someone else runs, over the internet, and paying only for what you use. You do not buy or maintain the hardware yourself.'],
+      ['What is the difference between cloud computing and AWS?', 'Cloud computing is the general idea of renting computing resources over the internet. AWS is one company\'s cloud platform, alongside others such as Google Cloud and Microsoft Azure.'],
+      ['Is AWS good for beginners?', 'Yes, if you start with a few core services and set a budget alert first. The platform is broad, so beginners should avoid exploring everything at once and build one small project instead.'],
+      ['What is Amazon S3 used for?', 'Amazon S3 stores files and objects in the cloud. People use it for backups, images, downloads, logs and static websites.'],
+      ['How much does AWS cost?', 'It depends on what you run. You pay for compute time, storage, data transfer and some managed services. Costs for a small test project can be low, but pricing and free tier terms change, so check the current AWS pricing page.'],
+      ['Do I need to know how to code to use AWS?', 'Not to begin. You can create servers and storage through the web console. Coding and command-line skills become useful when you automate tasks or deploy applications.']
+    ]
+  },
+  {
+    slug: 'google-cloud-computing',
+    category: 'tech',
+    title: 'Google Cloud Computing: Core Services, Pricing and Who It Fits',
+    seoTitle: 'Google Cloud Computing: Services, Pricing and Fit (2026)',
+    description: 'Google Cloud computing explained: core services, how pricing works, how it compares with AWS and a simple 5-step plan to launch your first project.',
+    date: '2026-11-19',
+    updated: '2026-11-19',
+    read: 7,
+    tags: ['Google Cloud', 'Cloud Computing', 'BigQuery', 'DevOps'],
+    keywords: 'google cloud computing, google cloud computing platform, google cloud computing pricing, google cloud computing cost, google cloud computing certification',
+    image: 'assets/img/google-cloud-computing.png',
+    imageAlt: 'Google Cloud computing guide: core services, pricing and who it fits, on a green circuit background',
+    hero: 'Google Cloud computing is Google\'s platform for renting servers, storage, databases and data tools over the internet. It is strongest for data analytics, containers and machine learning, and it covers the same basics as AWS.',
+    body: '',
+    faq: [
+      ['What is Google Cloud computing?', 'Google Cloud computing is Google\'s platform for renting servers, storage, databases and data tools over the internet. You pay for what you use instead of buying and running your own hardware.'],
+      ['What is the Google Cloud computing platform used for?', 'Teams use it to host websites and apps, run containers, store files, manage databases, analyse large datasets with BigQuery and train or serve machine learning models.'],
+      ['How much does Google Cloud computing cost?', 'It depends on what you run. You pay for compute, storage, network egress and managed services. New accounts often get a free tier or trial credits, but terms change, so check Google Cloud\'s current pricing page and use its pricing calculator.'],
+      ['Is Google Cloud better than AWS?', 'Neither is better for every case. Google Cloud is often chosen for data analytics, Kubernetes and machine learning, while AWS offers the broadest range of services. Choose based on your workload, your team\'s skills and current pricing.'],
+      ['Is Google Cloud good for beginners?', 'Yes. The console is straightforward and services like Cloud Run make it easy to deploy a small app. Beginners should set a budget alert first and learn the core services before exploring the rest.'],
+      ['Is a Google Cloud certification worth it?', 'It can help when you apply for cloud roles, because it shows structured knowledge of the platform. Pair it with real projects, since employers also look for hands-on experience.']
+    ]
   }
 ];
 
@@ -699,7 +771,7 @@ const sorted = [...POSTS].sort(byDate);
 const inCat = (c) => sorted.filter((p) => p.category === c);
 
 /* ===== 4. SHARED MARKUP =================================================== */
-function head({ title, description, canonical, base, theme, keywords = '', jsonld = [], noindex = false, ogType = 'website', published = '', modified = '' }) {
+function head({ title, description, canonical, base, theme, keywords = '', jsonld = [], noindex = false, ogType = 'website', published = '', modified = '', image = '', imageAlt = '' }) {
   return `<!DOCTYPE html>
 <html lang="${SITE.lang}" data-theme="${theme}">
 <head>
@@ -755,14 +827,14 @@ ${ogType === 'article' ? `<meta property="article:published_time" content="${pub
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${SITE.url}/${canonical}">
 <meta property="og:locale" content="${SITE.locale}">
-<meta property="og:image" content="${SITE.url}/assets/img/og-${theme}.png">
+<meta property="og:image" content="${image ? SITE.url + '/' + image : SITE.url + '/assets/img/og-' + theme + '.png'}">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="${esc(SITE.name)} — ${esc(SITE.tagline)}">
+<meta property="og:image:alt" content="${imageAlt ? esc(imageAlt) : esc(SITE.name) + ' — ' + esc(SITE.tagline)}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="${SITE.url}/assets/img/og-${theme}.png">
-<meta name="twitter:image:alt" content="${esc(SITE.name)} — ${esc(SITE.tagline)}">
+<meta name="twitter:image" content="${image ? SITE.url + '/' + image : SITE.url + '/assets/img/og-' + theme + '.png'}">
+<meta name="twitter:image:alt" content="${imageAlt ? esc(imageAlt) : esc(SITE.name) + ' — ' + esc(SITE.tagline)}">
 <meta name="twitter:creator" content="${SITE.twitter}">
 <meta name="twitter:site" content="${SITE.twitter}">
 <meta name="twitter:title" content="${esc(title)}">
@@ -889,7 +961,7 @@ function postPage(p) {
       publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: `${SITE.url}/assets/img/favicon.svg` } },
       mainEntityOfPage: { '@type': 'WebPage', '@id': url },
       articleSection: c.name, keywords: p.tags.join(', '), wordCount: p.body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length,
-      inLanguage: SITE.lang, image: `${SITE.url}/assets/img/og-${c.theme}.png`
+      inLanguage: SITE.lang, image: p.image ? `${SITE.url}/${p.image}` : `${SITE.url}/assets/img/og-${c.theme}.png`
     },
     {
       '@context': 'https://schema.org', '@type': 'BreadcrumbList',
@@ -908,7 +980,7 @@ function postPage(p) {
   // Paragraph cards are applied automatically by .prose > p in style.css, so every new post inherits the same treatment.
   const base = p.seoTitle || p.title;
   const titleTag = (base + ' | ' + SITE.name).length <= 60 ? base + ' | ' + SITE.name : base;
-  return `${head({ title: titleTag, description: p.description, canonical: postUrl(p), base: '../', theme: c.theme, keywords: p.keywords, jsonld, ogType: 'article', published: p.date, modified: p.updated || p.date })}
+  return `${head({ title: titleTag, description: p.description, canonical: postUrl(p), base: '../', theme: c.theme, keywords: p.keywords, jsonld, ogType: 'article', published: p.date, modified: p.updated || p.date, image: p.image || '', imageAlt: p.imageAlt || '' })}
 <div class="progress" aria-hidden="true"></div>
 ${header('../', p.category)}
 <main id="main">
@@ -925,7 +997,7 @@ ${header('../', p.category)}
         <span>Updated ${fmt(p.updated || p.date)}</span>
         <button class="save-btn" type="button" data-save="${postUrl(p)}" aria-pressed="false">☆ Save</button>
       </div>
-      <div class="article-path"><strong>Suggested path:</strong> ${c.name === 'AI' ? 'AI Systems' : 'Performance Engineering'} · <a href="../paths.html">View path →</a></div>
+      <div class="article-path"><strong>Suggested path:</strong> ${(PATHS.find((x) => x.steps.includes(p.slug)) || { title: c.name === 'AI' ? 'AI Systems Engineering' : 'Performance Engineering' }).title} · <a href="../paths.html">View path →</a></div>
       <p class="article__lede">${esc(p.hero)}</p>
       <div class="prose">${p.body}
       ${p.faq?.length ? `<h2 id="faq">Frequently asked questions</h2><div class="faq">${p.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div>` : ''}
@@ -1054,13 +1126,14 @@ ${footer('./')}`;
 /* ===== 8.5. LEARNING PLATFORM PAGES ===================================== */
 const PATHS = [
   { slug:'performance', level:'Intermediate', title:'Performance Engineering', description:'Diagnose slow pages, reduce main-thread work and make static sites fast on real devices.', steps:['why-is-my-website-slow','core-web-vitals-checklist-2026','browser-rendering-explained','image-optimization-for-web','cut-javascript-bundle-size','caching-and-cdn-strategies'], skills:['Core Web Vitals','rendering','images','bundle budgets','caching','measurement'] },
-  { slug:'ai-systems', level:'Intermediate', title:'AI Systems Engineering', description:'Move from model choice to retrieval architecture and local inference without skipping production constraints.', steps:['which-ai-model-should-i-use','why-does-chatgpt-forget','rag-vs-fine-tuning','embeddings-explained','vector-databases-explained','ai-agents-vs-rag','local-llm-8gb-vram-setup','llm-inference-optimization','prompt-engineering-for-production','prompt-engineering-jobs-2026','hipaa-compliant-chatbot-rag'], skills:['RAG','embeddings','agents','local LLMs','inference','prompt design'] },
+  { slug:'ai-systems', level:'Intermediate', title:'AI Systems Engineering', description:'Move from model choice to retrieval architecture and local inference without skipping production constraints.', steps:['ai-assistant-guide','which-ai-model-should-i-use','why-does-chatgpt-forget','rag-vs-fine-tuning','embeddings-explained','vector-databases-explained','ai-agents-vs-rag','local-llm-8gb-vram-setup','llm-inference-optimization','prompt-engineering-for-production','prompt-engineering-jobs-2026','hipaa-compliant-chatbot-rag'], skills:['RAG','embeddings','agents','local LLMs','inference','prompt design'] },
+  { slug:'cloud', level:'Foundations', title:'Cloud Foundations', description:'Learn what cloud computing is, compare AWS and Google Cloud, and ship a first project safely with budget alerts and least-privilege access.', steps:['cloud-computing-and-aws','google-cloud-computing','self-hosting-vs-serverless','caching-and-cdn-strategies'], skills:['IaaS / PaaS / SaaS','AWS','Google Cloud','cloud storage','cost control','serverless'] },
   { slug:'search', level:'Foundations', title:'Search & AI Visibility', description:'Build topic authority, structure content for modern search and connect SEO work to technical execution.', steps:['ai-seo-topical-authority','technical-seo-for-ai-websites','internal-linking-for-topical-authority','answer-engine-optimization-ai-overviews','core-web-vitals-checklist-2026'], skills:['topical authority','internal linking','technical SEO','answer engine optimization','performance'] }
 ];
 const getPostsBySlugs = (slugs) => slugs.map((slug)=>sorted.find((p)=>p.slug===slug)).filter(Boolean);
 const pathDuration = (slugs) => { const posts = getPostsBySlugs(slugs); const minutes = posts.reduce((sum,p)=>sum+p.read,0); const rounded = Math.max(10, Math.round((minutes*1.25)/5)*5); return `${posts.length} articles · ~${rounded}m`; };
-function pathsPage(){ const jsonld=[{'@context':'https://schema.org','@type':'CollectionPage',name:'StackSignal Learning Paths',url:`${SITE.url}/paths.html`}]; return `${head({title:`Learning Paths — Tech, AI & Performance | ${SITE.name}`,description:'Structured learning paths across performance engineering, AI systems and search.',canonical:'paths.html',base:'./',theme:'default',jsonld})}${header('./','paths')}<main id="main"><section class="hero hero--platform"><canvas class="hero__canvas" data-shape="network" aria-hidden="true"></canvas><div class="wrap hero__in"><span class="kicker">LEARNING SYSTEM · 03 PATHS</span><h1>Pick a path. <span class="grad">Build real skill.</span></h1><p class="lede">StackSignal is evolving from a blog into a connected engineering library: focused guides and production-minded learning paths.</p><div class="cta-row"><a class="btn btn--primary" href="#paths">Explore paths</a></div></div></section><section id="paths"><div class="wrap"><div class="sec-head"><div><span class="eyebrow">01 — Choose your route</span><h2>Three tracks, one engineering mindset</h2><p>Read the existing guides in a useful sequence instead of browsing randomly.</p></div></div><div class="path-grid">${PATHS.map((x,i)=>`<article class="path-card reveal path-card--${i+1}"><div class="path-card__top"><span class="path-num">0${i+1}</span><span class="badge">${x.level}</span><span class="path-time">${pathDuration(x.steps)}</span></div><h3>${x.title}</h3><p>${esc(x.description)}</p><div class="chip-row">${x.skills.map(t=>`<span>${esc(t)}</span>`).join('')}</div><ol class="path-steps">${getPostsBySlugs(x.steps).map((p,j)=>`<li><span>${j+1}</span><a href="./${postUrl(p)}">${esc(p.title)}</a></li>`).join('')}</ol><a class="btn btn--primary" href="./${postUrl(getPostsBySlugs(x.steps)[0])}">Start path →</a></article>`).join('')}</div></div></section><section class="platform-band"><div class="wrap platform-band__grid"><div><span class="eyebrow">02 — Learn → Build → Measure → Ship</span><h2>Every page should leave you with something you can test.</h2></div><div class="steps-row"><div><b>Learn</b><span>Understand the constraint</span></div><div><b>Build</b><span>Copy the pattern</span></div><div><b>Measure</b><span>Use real signals</span></div><div><b>Ship</b><span>Keep the trade-off</span></div></div></div></section></main>${footer('./')}`; }
-function topicsPage(){ const groups=[['AI Systems',['RAG','LLM','Embeddings','Vector Database','AI Agents','Local LLM','Prompt Engineering']],['Web Engineering',['Performance','Core Web Vitals','JavaScript','Browser','Images','Caching']],['Search & Visibility',['SEO','Technical SEO','Internal Linking','AI','Content Strategy']]]; const cards=groups.map(([name,tags])=>`<section class="topic-group"><div class="topic-group__head"><span class="eyebrow">Topic hub</span><h2>${name}</h2><p>Follow the thread across related guides.</p></div><div class="topic-grid">${tags.map(tag=>{const matches=sorted.filter(p=>p.tags.some(t=>t.toLowerCase()===tag.toLowerCase()||t.toLowerCase().includes(tag.toLowerCase()))).slice(0,3);return `<article class="topic-card reveal"><div class="topic-card__icon">${tag.slice(0,1)}</div><h3>${esc(tag)}</h3><span>${matches.length} ${matches.length===1?'guide':'guides'}</span><div>${matches.map(p=>`<a href="./${postUrl(p)}">${esc(p.title)}</a>`).join('')}</div></article>`;}).join('')}</div></section>`).join(''); return `${head({title:`Topics — AI, Performance & Search | ${SITE.name}`,description:'Browse StackSignal topics by engineering theme.',canonical:'topics.html',base:'./',theme:'default',jsonld:[{'@context':'https://schema.org','@type':'CollectionPage',name:'StackSignal Topics',url:`${SITE.url}/topics.html`}]})}${header('./','topics')}<main id="main"><section class="hero hero--compact"><canvas class="hero__canvas" data-shape="grid" aria-hidden="true"></canvas><div class="wrap hero__in"><span class="kicker">TOPIC MAP</span><h1>Browse by <span class="grad">engineering problem.</span></h1><p class="lede">No giant taxonomy. Just the concepts that connect your current StackSignal guides.</p>${searchBox('','Search the topic library…')}</div></section><div class="wrap topics-wrap">${cards}</div></main>${footer('./')}`; }
+function pathsPage(){ const jsonld=[{'@context':'https://schema.org','@type':'CollectionPage',name:'StackSignal Learning Paths',url:`${SITE.url}/paths.html`}]; return `${head({title:`Learning Paths — Tech, AI & Performance | ${SITE.name}`,description:'Structured learning paths across performance engineering, AI systems and search.',canonical:'paths.html',base:'./',theme:'default',jsonld})}${header('./','paths')}<main id="main"><section class="hero hero--platform"><canvas class="hero__canvas" data-shape="network" aria-hidden="true"></canvas><div class="wrap hero__in"><span class="kicker">LEARNING SYSTEM · 0${PATHS.length} PATHS</span><h1>Pick a path. <span class="grad">Build real skill.</span></h1><p class="lede">StackSignal is evolving from a blog into a connected engineering library: focused guides and production-minded learning paths.</p><div class="cta-row"><a class="btn btn--primary" href="#paths">Explore paths</a></div></div></section><section id="paths"><div class="wrap"><div class="sec-head"><div><span class="eyebrow">01 — Choose your route</span><h2>${['Zero','One','Two','Three','Four','Five','Six'][PATHS.length]} tracks, one engineering mindset</h2><p>Read the existing guides in a useful sequence instead of browsing randomly.</p></div></div><div class="path-grid">${PATHS.map((x,i)=>`<article class="path-card reveal path-card--${i+1}"><div class="path-card__top"><span class="path-num">0${i+1}</span><span class="badge">${x.level}</span><span class="path-time">${pathDuration(x.steps)}</span></div><h3>${x.title}</h3><p>${esc(x.description)}</p><div class="chip-row">${x.skills.map(t=>`<span>${esc(t)}</span>`).join('')}</div><ol class="path-steps">${getPostsBySlugs(x.steps).map((p,j)=>`<li><span>${j+1}</span><a href="./${postUrl(p)}">${esc(p.title)}</a></li>`).join('')}</ol><a class="btn btn--primary" href="./${postUrl(getPostsBySlugs(x.steps)[0])}">Start path →</a></article>`).join('')}</div></div></section><section class="platform-band"><div class="wrap platform-band__grid"><div><span class="eyebrow">02 — Learn → Build → Measure → Ship</span><h2>Every page should leave you with something you can test.</h2></div><div class="steps-row"><div><b>Learn</b><span>Understand the constraint</span></div><div><b>Build</b><span>Copy the pattern</span></div><div><b>Measure</b><span>Use real signals</span></div><div><b>Ship</b><span>Keep the trade-off</span></div></div></div></section></main>${footer('./')}`; }
+function topicsPage(){ const groups=[['AI Systems',['RAG','LLM','Embeddings','Vector Database','AI Agents','AI Assistant','Local LLM','Prompt Engineering']],['Cloud & Infrastructure',['Cloud Computing','AWS','Google Cloud','DevOps']],['Web Engineering',['Performance','Core Web Vitals','JavaScript','Browser','Images','Caching']],['Search & Visibility',['SEO','Technical SEO','Internal Linking','AI','Content Strategy']]]; const cards=groups.map(([name,tags])=>`<section class="topic-group"><div class="topic-group__head"><span class="eyebrow">Topic hub</span><h2>${name}</h2><p>Follow the thread across related guides.</p></div><div class="topic-grid">${tags.map(tag=>{const matches=sorted.filter(p=>p.tags.some(t=>t.toLowerCase()===tag.toLowerCase()||t.toLowerCase().includes(tag.toLowerCase()))).slice(0,3);return `<article class="topic-card reveal"><div class="topic-card__icon">${tag.slice(0,1)}</div><h3>${esc(tag)}</h3><span>${matches.length} ${matches.length===1?'guide':'guides'}</span><div>${matches.map(p=>`<a href="./${postUrl(p)}">${esc(p.title)}</a>`).join('')}</div></article>`;}).join('')}</div></section>`).join(''); return `${head({title:`Topics — AI, Performance & Search | ${SITE.name}`,description:'Browse StackSignal topics by engineering theme.',canonical:'topics.html',base:'./',theme:'default',jsonld:[{'@context':'https://schema.org','@type':'CollectionPage',name:'StackSignal Topics',url:`${SITE.url}/topics.html`}]})}${header('./','topics')}<main id="main"><section class="hero hero--compact"><canvas class="hero__canvas" data-shape="grid" aria-hidden="true"></canvas><div class="wrap hero__in"><span class="kicker">TOPIC MAP</span><h1>Browse by <span class="grad">engineering problem.</span></h1><p class="lede">No giant taxonomy. Just the concepts that connect your current StackSignal guides.</p>${searchBox('','Search the topic library…')}</div></section><div class="wrap topics-wrap">${cards}</div></main>${footer('./')}`; }
 function blogIndexPage() {
   return `${head({ title: `All Articles — Tech & AI Guides | ${SITE.name}`, description: `Browse all ${POSTS.length} ${SITE.name} articles on web performance, architecture, LLMs and AI-era SEO.`, canonical: 'blog/index.html', base: '../', theme: 'default', keywords: 'tech and ai articles, engineering blog archive', jsonld: [{ '@context': 'https://schema.org', '@type': 'Blog', name: SITE.name, url: `${SITE.url}/blog/index.html`, blogPost: sorted.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: `${SITE.url}/${postUrl(p)}`, datePublished: p.date })) }] })}
 ${header('../', 'blog')}
